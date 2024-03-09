@@ -22,5 +22,4 @@ public class SelectedContribution {
     @ManyToOne
     @JoinColumn(name = "article")
     private Article article;
-
 }
