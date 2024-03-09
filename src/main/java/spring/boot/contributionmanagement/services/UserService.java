@@ -1,11 +1,15 @@
 package spring.boot.contributionmanagement.services;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
 import spring.boot.contributionmanagement.entities.SelectedContribution;
 import spring.boot.contributionmanagement.entities.User;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
+
+    public User findByUsername(String username);
+
     public List<User> findAll();
 
     public User findById(Long id);
