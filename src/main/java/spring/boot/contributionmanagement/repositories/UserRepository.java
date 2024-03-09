@@ -6,5 +6,5 @@ import spring.boot.contributionmanagement.entities.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    public User findUserByUserName(String username);
+    public User findUserByUsername(String email);
 }

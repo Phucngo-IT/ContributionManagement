@@ -20,4 +20,54 @@ public class Comment {
             CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "article_id")
     private Article article;
+
+
+    public Comment() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Comment setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Comment setContent(String content) {
+        this.content = content;
+        return this;
+    }
+
+    public Date getDateComment() {
+        return dateComment;
+    }
+
+    public Comment setDateComment(Date dateComment) {
+        this.dateComment = dateComment;
+        return this;
+    }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public Comment setArticle(Article article) {
+        this.article = article;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", dateComment=" + dateComment +
+                ", article=" + article +
+                '}';
+    }
 }

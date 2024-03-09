@@ -16,6 +16,9 @@ public class User {
     @Column(name = "full_name")
     private String fullName;
 
+    @Column(name = "username")
+    private String username;
+
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
@@ -78,6 +81,24 @@ public class User {
 
     public User setFullName(String fullName) {
         this.fullName = fullName;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public User setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public List<SelectedContribution> getSelectedContributions() {
+        return selectedContributions;
+    }
+
+    public User setSelectedContributions(List<SelectedContribution> selectedContributions) {
+        this.selectedContributions = selectedContributions;
         return this;
     }
 
