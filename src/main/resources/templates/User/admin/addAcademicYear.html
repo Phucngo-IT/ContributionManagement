@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Academic Year</title>
+</head>
+<body>
+<form action="#" th:action="@{/addAcademic}" th:object="${academic_year}" method="post">
+    <div>
+        <input type="hidden" class="input" th:field="*{id}">
+    </div>
+
+    <div>
+        <input type="text" class="input" th:field="*{title}" placeholder="Name">
+    </div>
+
+    <div>
+        <input type="text" class="input" th:field="*{closure_date}" placeholder="Email">
+    </div>
+    <div>
+        <input type="text" class="input" th:field="*{discription}" placeholder="Address">
+    </div>
+    <div>
+        <input type="text" class="input" th:field="*{final_closure_date}" placeholder="Address">
+    </div>
+
+    <!--        Button-->
+    <div>
+        <button class="form-btn">Add</button>
+    </div>
+
+</form>
+</body>
+</html>
