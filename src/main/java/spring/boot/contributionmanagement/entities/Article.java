@@ -61,6 +61,15 @@ public class Article {
         return this;
     }
 
+    public List<SelectedContribution> getSelectedContributions() {
+        return selectedContributions;
+    }
+
+    public Article setSelectedContributions(List<SelectedContribution> selectedContributions) {
+        this.selectedContributions = selectedContributions;
+        return this;
+    }
+
     public String getTitle() {
         return title;
     }

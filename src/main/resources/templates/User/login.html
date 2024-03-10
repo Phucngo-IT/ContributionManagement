@@ -8,22 +8,30 @@
     <title>Login Form in HTML and CSS | Codehal</title>
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link th:href="@{/css/user.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/user.css}">
 
 </head>
 
 <body>
     <div class="wrapper">
-        <from  action="#" >
+        <form  action="#" th:action="@{/authenticateTheUser}" method="post">
             <h1>Login</h1>
+            <!-- show error message when login failed-->
+
+            <div th:if="${param.error}">
+                <span style="color: red">Login failed</span>
+            </div>
+
             <div class="input-box">
-                <input type="text" placeholder="Email" required>
+                <input type="text" name="username"  placeholder="Username">
                 <box-icon type='solid' name='user'></box-icon>
             </div>
+
             <div class="input-box">
-                <input type="password" placeholder="Password"required>
+                <input type="password" name="password" placeholder="Password">
                 <box-icon type='solid' name='lock-open-alt'></box-icon>
             </div>
+
             <div class="remeber-forgot">
                 <label>
                     <input type="checkbox"> Remeber me
@@ -31,11 +39,12 @@
                 <a href="#"> Forgot Password?</a>
             </div>
 
-            <button type="submit" class="btn"> Login</button>
+            <button class="btn"> Login</button>
+
             <div class="register-link">
                 <p> Don't have an account?<a href="register.html"> Register </a></p>
             </div>
-        </from>
+        </form>
     </div>
 
 

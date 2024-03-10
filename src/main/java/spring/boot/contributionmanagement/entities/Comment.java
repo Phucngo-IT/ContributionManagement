@@ -21,6 +21,10 @@ public class Comment {
     @JoinColumn(name = "article_id")
     private Article article;
 
+
+    public Comment() {
+    }
+
     public Long getId() {
         return id;
     }
@@ -43,26 +47,7 @@ public class Comment {
         return dateComment;
     }
 
-    public void setDateComment(Date dateComment) {
-        this.dateComment = dateComment;
-    }
 
-    public Article getArticle() {
-        return article;
-    }
 
-    public Comment setArticle(Article article) {
-        this.article = article;
-        return this;
-    }
 
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", content='" + content + '\'' +
-                ", dateComment=" + dateComment +
-                ", article=" + article +
-                '}';
-    }
 }

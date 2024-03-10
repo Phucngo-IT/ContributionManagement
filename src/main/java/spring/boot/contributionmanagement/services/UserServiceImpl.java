@@ -11,8 +11,7 @@ import spring.boot.contributionmanagement.entities.User;
 import spring.boot.contributionmanagement.repositories.RoleRepository;
 import spring.boot.contributionmanagement.repositories.UserRepository;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,24 +26,25 @@ public class UserServiceImpl implements UserService {
         this.roleRepository = roleRepository;
     }
 
-
     //security
     @Override
     public User findByUsername(String username) {
-        return this.userRepository.findUserByUserName(username);
+        return this.userRepository.findUserByUsername(username);
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByUserName(username);
+        User user = userRepository.findUserByUsername(username);
         if(user == null){
-            throw new UsernameNotFoundException("Invalid username or password.");
+            throw new UsernameNotFoundException("Invalid email or password.");
         }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getRoleToAuthorities(user.getRoles()));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getRoleToAuthorities(user.getRole()));
     }
 
-    private Collection<? extends GrantedAuthority> getRoleToAuthorities(Collection<Role> roles){
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
+    private Collection<? extends GrantedAuthority> getRoleToAuthorities(Role role){
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getRoleName());
+        return Collections.singleton(authority);
     }
 
 

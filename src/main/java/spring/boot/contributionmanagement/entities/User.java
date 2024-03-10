@@ -1,6 +1,8 @@
 package spring.boot.contributionmanagement.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.Date;
 import java.util.List;
@@ -14,30 +16,39 @@ public class User {
     private Long id;
 
     @Column(name = "full_name")
+    @NotBlank(message = "You cannot leave this section blank")
     private String fullName;
+
+    @Column(name = "username")
+    @NotBlank(message = "You cannot leave this section blank")
+    private String username;
 
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
 
     @Column(name = "address")
+    @NotBlank(message = "You cannot leave this section blank")
     private String address;
 
     @Column(name = "email")
+    @NotBlank(message = "You cannot leave this section blank")
     private String email;
 
     @Column(name = "password")
+    @Size(min = 8, message = "Minimum length is eight characters")
     private String password;
 
     @Column(name = "image")
+    @NotBlank(message = "You cannot leave this section blank")
     private String image;
 
     //role
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles;
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     //faculty
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
@@ -78,6 +89,24 @@ public class User {
 
     public User setFullName(String fullName) {
         this.fullName = fullName;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public User setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public List<SelectedContribution> getSelectedContributions() {
+        return selectedContributions;
+    }
+
+    public User setSelectedContributions(List<SelectedContribution> selectedContributions) {
+        this.selectedContributions = selectedContributions;
         return this;
     }
 
@@ -126,12 +155,12 @@ public class User {
         return this;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public User setRoles(List<Role> roles) {
-        this.roles = roles;
+    public User setRole(Role role) {
+        this.role = role;
         return this;
     }
 
@@ -163,7 +192,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", image='" + image + '\'' +
-                ", roles=" + roles +
+                ", role=" + role +
                 ", faculty=" + faculty +
                 ", articles=" + articles +
                 '}';

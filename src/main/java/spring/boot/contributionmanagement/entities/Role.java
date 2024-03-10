@@ -16,10 +16,7 @@ public class Role {
     private String roleName;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @OneToMany(mappedBy = "role")
     private List<User> users;
 
 
