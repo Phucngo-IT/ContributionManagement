@@ -40,19 +40,16 @@ public class User {
     private String password;
 
     @Column(name = "image")
-    @NotBlank(message = "You cannot leave this section blank")
     private String image;
 
     //role
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "role_id")
     private Role role;
 
     //faculty
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-                                                CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
@@ -62,7 +59,7 @@ public class User {
     private List<Article> articles;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.DETACH})
+            CascadeType.REFRESH})
     @JoinTable(name = "log_download",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "selected_contribution_id"))
