@@ -1,63 +1,121 @@
 <!DOCTYPE html>
-<html>
-
-    
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
     <head>
         <title>Registration Form</title>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login Form in HTML and CSS | Codehal</title>
-        <link rel="stylesheet" href="style.css">
+
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" th:href="@{/css/user.css}">
     </head>
   
   <body>
     <div class="wrapper">
-        <from  action="">
+        <form  action="#" th:action="@{/register/save}" th:object="${user}" method="POST" enctype="multipart/form-data">
             <h1>Register</h1>
+            <input type="hidden" th:field="*{id}" >
+
+            <div th:if="${userExisted}" class="alert alert-danger">
+                <span th:text="${userExisted}"></span>
+            </div>
+
             <div class="input-box">
-                <input type="text" placeholder="Fullname" required>
+                <input type="text" th:field="*{fullName}" placeholder="Fullname" >
+<!--                validation-->
+                <div th:if="${#fields.hasErrors('fullName')}">
+                    <ul>
+                        <li th:each="e: ${#fields.errors('fullName')}" th:text="${e}"> </li>
+                    </ul>
+                </div>
+
                 <box-icon type='solid' name='user'></box-icon>
             </div>
 
             <div class="input-box">
-                <input type="password" placeholder="Password"required>
+                <input type="text" th:field="*{username}" placeholder="Username">
+                <!--                validation-->
+                <div th:if="${#fields.hasErrors('username')}">
+                    <ul>
+                        <li th:each="e: ${#fields.errors('username')}" th:text="${e}"> </li>
+                    </ul>
+                </div>
+
                 <box-icon type='solid' name='lock-open-alt'></box-icon>
             </div>
 
             <div class="input-box">
-                <input type="comfirm password" placeholder="comfirm Password"required>
+                <input type="password" th:field="*{password}" placeholder="Password">
+                <div th:if="${#fields.hasErrors('password')}">
+                    <ul>
+                        <li th:each="e: ${#fields.errors('password')}" th:text="${e}"> </li>
+                    </ul>
+                </div>
+
+                <box-icon type='solid' name='lock-open-alt'></box-icon>
+            </div>
+
+<!--            <div class="input-box">-->
+<!--                <input type="comfirm password" placeholder="comfirm Password">-->
+<!--                <box-icon type='solid' name='lock-open-alt'></box-icon>-->
+<!--            </div>-->
+
+            <div class="input-box">
+                <input type="text" th:field="*{email}" placeholder="Email">
+                <div th:if="${#fields.hasErrors('email')}">
+                    <ul>
+                        <li th:each="e: ${#fields.errors('email')}" th:text="${e}"> </li>
+                    </ul>
+                </div>
+
                 <box-icon type='solid' name='lock-open-alt'></box-icon>
             </div>
 
             <div class="input-box">
-                <input type="email" placeholder="Email"required>
+                <label for="faculty">Faculty: </label>
+                <select id="faculty" th:field="*{faculty.id}">
+                    <option th:each="faculty : ${faculties}" th:value="${faculty.id}" th:text="${faculty.name}"></option>
+                </select>
+            </div>
+
+            <div class="input-box">
+                <input type="date" th:field="*{dateOfBirth}" placeholder="Date of Brith">
                 <box-icon type='solid' name='lock-open-alt'></box-icon>
             </div>
 
             <div class="input-box">
-                <input type="faculty" placeholder="Faculty"required>
+                <input type="text" th:field="*{address}"  placeholder="Address">
+                <div th:if="${#fields.hasErrors('address')}">
+                    <ul>
+                        <li th:each="e: ${#fields.errors('address')}" th:text="${e}"> </li>
+                    </ul>
+                </div>
+
                 <box-icon type='solid' name='lock-open-alt'></box-icon>
             </div>
 
-            <div class="input-box">
-                <input type="day of brith" placeholder="Date of Brith"required>
-                <box-icon type='solid' name='lock-open-alt'></box-icon>
-            </div>
 
             <div class="input-box">
-                <input type="address" placeholder="Address"required>
-                <box-icon type='solid' name='lock-open-alt'></box-icon>
+                <label for="role">Role: </label>
+                <select id="role" th:field="*{role.id}">
+                    <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.roleName}"></option>
+                </select>
             </div>
-            
+
+            <div>
+                <input type="hidden"  th:field="*{image}" >
+                <label>Avatar</label>
+                <input type="file" name="image" id="image" accept="image/png, image/jpg">
+            </div>
+
             <div class="remeber-forgot">
                 <label>
                     <input type="checkbox"> I agree to the  Terms  and Conditions
                 </label>
             </div>
             <button class="btn"> Register</button>
-        </from>
+        </form>
     </div>
   </body>
 </html>

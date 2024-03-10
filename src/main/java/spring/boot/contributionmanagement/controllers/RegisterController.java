@@ -1,10 +1,21 @@
 package spring.boot.contributionmanagement.controllers;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import spring.boot.contributionmanagement.entities.Faculty;
+import spring.boot.contributionmanagement.entities.Role;
 import spring.boot.contributionmanagement.entities.User;
+import spring.boot.contributionmanagement.services.FacultyService;
+import spring.boot.contributionmanagement.services.FileUpload;
+import spring.boot.contributionmanagement.services.RoleService;
 import spring.boot.contributionmanagement.services.UserService;
 
 
@@ -13,23 +24,88 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import spring.boot.contributionmanagement.repositories.UserRepository;
 import spring.boot.contributionmanagement.repositories.UserRepository;
 
+import java.io.IOException;
+import java.util.List;
+
 @Controller
 @RequestMapping("/register")
 public class RegisterController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final FacultyService facultyService;
+
+    private final RoleService roleService;
 
 
     @Autowired
-    public RegisterController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public RegisterController(UserService userService, FacultyService facultyService, RoleService roleService) {
+        this.userService = userService;
+        this.facultyService = facultyService;
+        this.roleService = roleService;
     }
 
     @GetMapping()
     public String registerForm(Model model){
         User user = new User();
+        List<Faculty> faculties = this.facultyService.findAll();
+        List<Role> roles = this.roleService.findAll();
+
+        model.addAttribute("roles", roles);
+        model.addAttribute("faculties", faculties);
         model.addAttribute("user", user);
         return "User/register";// "/register/create"
     }
+
+    @PostMapping("/save")
+    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result, @RequestParam("image") MultipartFile multipartFile, Model model, HttpSession session) throws IOException{
+        String username = user.getUsername();
+
+        if (result.hasErrors()){
+            return "User/register";//if has any error, return register form
+        }
+
+        User userExisted = this.userService.findByUsername(username);
+
+        if (userExisted == null) {
+
+            BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
+            user.setPassword(bCrypt.encode(user.getPassword()));
+
+            if (!multipartFile.isEmpty()) {
+                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                user.setImage(fileName);
+
+                this.userService.saveAndUpdate(user);
+                String uploadDirectory = "src/main/resources/static/userAvatar/" + user.getId();
+                FileUpload.saveFile(uploadDirectory, fileName, multipartFile);
+            } else {
+                if (user.getImage().isEmpty()) {
+                    user.setImage(null);
+                    this.userService.saveAndUpdate(user);
+                }
+            }
+
+            this.userService.saveAndUpdate(user);
+
+            session.setAttribute("showUser", user);
+
+            return "redirect:/login";
+        }
+
+        //if the user already existed, system will return register page
+        List<Faculty> faculties = this.facultyService.findAll();
+        List<Role> roles = this.roleService.findAll();
+
+        model.addAttribute("roles", roles);
+        model.addAttribute("faculties", faculties);
+        model.addAttribute("user", new User());
+
+        //Send a message to register page
+        model.addAttribute("userExisted", "This user existed, please entering anther information");
+
+        return "User/register";// "/register/create"
+    }
+
+
 
 }
