@@ -35,15 +35,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByUsername(username);
+        User user = this.userRepository.findUserByUsername(username);
         if(user == null){
             throw new UsernameNotFoundException("Invalid email or password.");
+        }else {
+            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getRoleToAuthorities(user.getRole()));
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getRoleToAuthorities(user.getRole()));
     }
 
     private Collection<? extends GrantedAuthority> getRoleToAuthorities(Role role){
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getRoleName());
+        String roleName = role.getRoleName();
+        if (roleName == null || roleName.isEmpty()) {
+            throw new IllegalArgumentException("Role name cannot be null or empty");
+        }
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(roleName);
         return Collections.singleton(authority);
     }
 

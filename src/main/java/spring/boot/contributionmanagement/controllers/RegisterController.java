@@ -50,9 +50,7 @@ public class RegisterController {
     }
 
     @PostMapping("/save")
-    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result, Model model, HttpSession session) {
-
-
+    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result,@RequestParam("image") MultipartFile multipartFile, Model model, HttpSession session) throws IOException {
         if (result.hasErrors()){
             return "User/register";//if has any error, return register form
         }
@@ -65,19 +63,19 @@ public class RegisterController {
             BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
             user.setPassword(bCrypt.encode(user.getPassword()));
 
-//            if (!multipartFile.isEmpty()) {
-//                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-//                user.setImage(fileName);
-//
-//                this.userService.saveAndUpdate(user);
-//                String uploadDirectory = "src/main/resources/static/userAvatar/" + user.getId();
-//                FileUpload.saveFile(uploadDirectory, fileName, multipartFile);
-//            } else {
-//                if (user.getImage().isEmpty()) {
-//                    user.setImage(null);
-//                    this.userService.saveAndUpdate(user);
-//                }
-//            }
+            if (!multipartFile.isEmpty()) {
+                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                user.setAvatar(fileName);
+
+                this.userService.saveAndUpdate(user);
+                String uploadDirectory = "src/main/resources/static/userAvatar/" + user.getId();
+                FileUpload.saveFile(uploadDirectory, fileName, multipartFile);
+            } else {
+                if (user.getAvatar().isEmpty()) {
+                    user.setAvatar(null);
+                    this.userService.saveAndUpdate(user);
+                }
+            }
 
             this.userService.save(user);
 
@@ -95,7 +93,7 @@ public class RegisterController {
         model.addAttribute("user", new User());
 
         //Send a message to register page
-        model.addAttribute("userExisted", "This user existed, please entering anther information");
+        model.addAttribute("userExisted", "This user existed, please entering another information");
 
         return "User/register";// "/register/create"
     }

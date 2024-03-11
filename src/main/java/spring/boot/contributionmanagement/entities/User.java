@@ -39,17 +39,19 @@ public class User {
     @Size(min = 8, message = "Minimum length is eight characters")
     private String password;
 
-    @Column(name = "image")
-    private String image;
+    @Column(name = "avatar")
+    private String avatar;
 
     //role
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH})
     @JoinColumn(name = "role_id")
     private Role role;
 
     //faculty
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH})
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
@@ -143,12 +145,12 @@ public class User {
         return this;
     }
 
-    public String getImage() {
-        return image;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public User setImage(String image) {
-        this.image = image;
+    public User setAvatar(String avatar) {
+        this.avatar = avatar;
         return this;
     }
 
@@ -184,14 +186,16 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", fullName='" + fullName + '\'' +
+                ", username='" + username + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", image='" + image + '\'' +
+                ", avatar='" + avatar + '\'' +
                 ", role=" + role +
                 ", faculty=" + faculty +
                 ", articles=" + articles +
+                ", selectedContributions=" + selectedContributions +
                 '}';
     }
 }

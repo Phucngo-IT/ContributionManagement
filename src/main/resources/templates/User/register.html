@@ -13,7 +13,7 @@
   
   <body>
     <div class="wrapper">
-        <form  action="#" th:action="@{/register/save}" th:object="${user}" method="POST">
+        <form  action="#" th:action="@{/register/save}" th:object="${user}" method="POST" enctype="multipart/form-data">
             <h1>Register</h1>
             <input type="hidden" th:field="*{id}" >
 
@@ -100,11 +100,11 @@
                 </select>
             </div>
 
-<!--            <div class="input-box">-->
-<!--                <input type="hidden"  th:field="*{image}" >-->
-<!--                <label>Avatar</label>-->
-<!--                <input type="file" name="image" id="image" accept="image/png, image/jpg">-->
-<!--            </div>-->
+            <div class="input-box">
+                <input type="hidden"  th:field="*{avatar}" >
+                <label>Avatar</label>
+                <input type="file" name="image" id="image" accept="image/png, image/jpg">
+            </div>
 
             <div class="remeber-forgot">
                 <label>
