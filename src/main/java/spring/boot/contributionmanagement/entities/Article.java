@@ -32,13 +32,13 @@ public class Article {
     private Date uploadDate;
 //
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.DETACH})
+            CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private User user;
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.DETACH})
+            CascadeType.REFRESH})
     @JoinColumn(name = "academic_year_id")
     private AcademicYear academicYear;
 

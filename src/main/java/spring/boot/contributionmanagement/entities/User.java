@@ -39,20 +39,19 @@ public class User {
     @Size(min = 8, message = "Minimum length is eight characters")
     private String password;
 
-    @Column(name = "image")
-    @NotBlank(message = "You cannot leave this section blank")
-    private String image;
+    @Column(name = "avatar")
+    private String avatar;
 
     //role
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.DETACH})
+            CascadeType.REFRESH})
     @JoinColumn(name = "role_id")
     private Role role;
 
     //faculty
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-                                                CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH})
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
@@ -62,7 +61,7 @@ public class User {
     private List<Article> articles;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.DETACH})
+            CascadeType.REFRESH})
     @JoinTable(name = "log_download",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "selected_contribution_id"))
@@ -146,12 +145,12 @@ public class User {
         return this;
     }
 
-    public String getImage() {
-        return image;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public User setImage(String image) {
-        this.image = image;
+    public User setAvatar(String avatar) {
+        this.avatar = avatar;
         return this;
     }
 
@@ -187,14 +186,16 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", fullName='" + fullName + '\'' +
+                ", username='" + username + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", image='" + image + '\'' +
+                ", avatar='" + avatar + '\'' +
                 ", role=" + role +
                 ", faculty=" + faculty +
                 ", articles=" + articles +
+                ", selectedContributions=" + selectedContributions +
                 '}';
     }
 }

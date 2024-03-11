@@ -17,7 +17,7 @@ public class Comment {
     private Date dateComment;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.DETACH})
+            CascadeType.REFRESH})
     @JoinColumn(name = "article_id")
     private Article article;
 

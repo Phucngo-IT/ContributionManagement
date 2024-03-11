@@ -13,7 +13,7 @@ public class SelectedContribution {
     private Long id;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.DETACH})
+            CascadeType.REFRESH})
     @JoinTable(name = "log_download",
             joinColumns = @JoinColumn(name = "selected_contribution_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
