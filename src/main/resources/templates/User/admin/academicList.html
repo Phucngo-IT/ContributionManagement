@@ -9,6 +9,7 @@
 </head>
 <body>
 <h1>List of Academic Year</h1>
+<a th:href="@{/admin/showFormAcademic}" class="btn btn-info">Add</a>
 <table>
     <tr>
         <th>Title</th>
@@ -21,16 +22,17 @@
 
     <tr th:each="aca : ${academic_year}">
         <td th:text="${aca.title}"></td>
-        <td th:text="${aca.closure_date}"></td>
+        <td th:text="${aca.closureDate}"></td>
         <td th:text="${aca.discription}"></td>
-        <td th:text="${aca. final_closure_date}"></td>
+        <td th:text="${aca.finalClosureDate}"></td>
 
-        <td> <a th:href="@{/updateAcademic(id=${aca.id} )}" class="btn btn-info">Update</a> </td>
-        <td> <a th:href="@{/deleteAcademic(id=${aca.id} )}" class="btn btn-danger">Delete</a> </td>  <!--deleteStudent-->
+        <td> <a th:href="@{/admin/updateAcademic(id=${aca.id} )}" class="btn btn-info">Update</a> </td>
+        <td> <a th:href="@{/admin/deleteAcademic(id=${aca.id} )}" class="btn btn-danger">Delete</a> </td>  <!--deleteStudent-->
     </tr>
 
 </table>
-<a th:href="@{/homePage}" class="btn btn-info">Home</a>
+<a th:href="@{/home}" class="btn btn-info">Home</a>
 
 </body>
+
 </html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Article</title>
+</head>
+<body>
+<p>Add Article</p>
+<form action="#" th:action="@{/student/addArticle}"  method="post">
+    <div>
+        <input type="hidden" class="input" th:field="*{article.id}">
+    </div>
+<!--    <div>-->
+<!--        <input type="text" class="input" th:field="*{userId}">-->
+<!--    </div>-->
+    <div>
+        <input type="text" class="input" th:field="*{article.title}" placeholder="Title">
+    </div>
+
+    <div>
+        <input type="text" class="input" th:field="*{article.discription}" placeholder="Discription">
+    </div>
+    <div>
+        <input type="text" class="input" th:field="*{article.fileName}" placeholder="File Name">
+    </div>
+    <div>
+        <input type="text" class="input" th:field="*{article.imageArticle}" placeholder="Image">
+    </div>
+    <div>
+        <input type="text" class="input" th:field="*{article.status}" placeholder="Status">
+    </div>
+    <div>
+        <input type="text" class="input" th:field="*{article.uploadDate}" placeholder="Upload Date">
+    </div>
+
+    <!--        Button-->
+    <div>
+        <button class="form-btn">Add</button>
+    </div>
+
+</form>
+</body>
+</html>
