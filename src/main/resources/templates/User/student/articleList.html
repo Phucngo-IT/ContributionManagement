@@ -9,8 +9,8 @@
 </head>
 <body>
 <h1>List of Articles</h1>
-<a th:href="@{/student/showFormArticle(userId=${userId})}" class="btn btn-info">Add</a>
-<table>
+<a th:href="@{/student/showFormArticle}" class="btn btn-info">Add</a>
+<table class="table table-striped" >
     <tr>
         <th>Image</th>
         <th>Title</th>
@@ -19,8 +19,8 @@
         <th>Status</th>
         <th>Upload Date</th>
 
-        <th>Update</th>
-        <th>Delete</th>
+        <th style="text-align: center">Action</th>
+
     </tr>
 
     <tr th:each="ar : ${article}">
@@ -31,9 +31,9 @@
         <td th:text="${ar.status}"></td>
         <td th:text="${ar.uploadDate}"></td>
 
-        <td> <a th:href="@{/student/updateArticle(id=${ar.id} )}" class="btn btn-info">Update</a> </td>
-        <td> <a th:href="@{/student/deleteArticle(id=${ar.id} )}" class="btn btn-danger">Delete</a> </td>  <!--deleteStudent-->
-        <td> <a th:href="@{/student/viewDetailArticle(id=${ar.id} )}" class="btn btn-info">View Detail</a> </td>  <!--deleteStudent-->
+        <td style="text-align: center"> <a th:href="@{/student/updateArticle(id=${ar.id} )}" class="btn btn-info">Update</a>
+        <a th:href="@{/student/deleteArticle(id=${ar.id} )}" class="btn btn-danger">Delete</a>  <!--deleteStudent-->
+        <a th:href="@{/student/viewDetailArticle(id=${ar.id} )}" class="btn btn-info">View Detail</a> </td>  <!--deleteStudent-->
 
     </tr>
 

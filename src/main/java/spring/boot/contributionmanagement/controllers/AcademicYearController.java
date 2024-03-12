@@ -51,9 +51,6 @@ public class AcademicYearController {
         return "User/admin/addAcademic";
     }
 
-    @GetMapping("/homePage")
-    public String home(){
-        return "Home/home";
-    }
+
 
 }

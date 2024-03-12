@@ -9,6 +9,7 @@ import java.util.List;
 public interface UserService extends UserDetailsService {
 
     public User findByUsername(String username);
+    public Long findUserIdByUsername(String username);
     //security
 
     public List<User> findAll();
