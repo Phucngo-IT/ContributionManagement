@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Role</title>
+</head>
+<body>
+<p>Add Role</p>
+<form action="#" th:action="@{/admin/addRole}" th:object="${role}" method="post">
+    <div>
+        <input type="hidden" class="input" th:field="*{id}">
+    </div>
+
+    <div>
+        <input type="text" class="input" th:field="*{roleName}" placeholder="Name">
+    </div>
+
+    <!--        Button-->
+    <div>
+        <button class="form-btn">Add</button>
+    </div>
+
+</form>
+</body>
+</html>
