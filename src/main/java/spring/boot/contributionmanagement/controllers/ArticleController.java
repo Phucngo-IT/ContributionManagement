@@ -71,7 +71,7 @@ public class ArticleController {
     @PostMapping("/save")
     public String addArticle(@ModelAttribute("article") Article article){
         this.articleService.saveAndUpdate(article);
-        return "redirect:/student/articleList";
+        return "redirect:/article";
     }
 //
     @GetMapping("/delete")
