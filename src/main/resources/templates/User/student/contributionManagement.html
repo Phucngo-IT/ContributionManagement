@@ -58,65 +58,18 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
+        <tr th:each="article : ${articles}">
           <th scope="row"></th>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
+          <td th:text="${article.title}"></td>
+          <td th:text="${article.discription}"></td>
+          <td th:text="${article.uploadDate}"></td>
+          <td th:text="${article.status}"></td>
 
           <td><a href=""><button class="btn btn-primary">Edit</button></a>
             <a href=""><button class="btn btn-danger">Delete</button></a>
             <a href=""><button class="btn btn-info">View Detail</button></a></td>
           </td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
 
-          <td><a href=""><button class="btn btn-primary">Edit</button></a>
-            <a href=""><button class="btn btn-danger">Delete</button></a>
-            <a href=""><button class="btn btn-info">View Detail</button></a></td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-
-          <td><a href=""><button class="btn btn-primary">Edit</button></a>
-            <a href=""><button class="btn btn-danger">Delete</button></a>
-            <a href=""><button class="btn btn-info">View Detail</button></a></td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-
-          <td><a href=""><button class="btn btn-primary">Edit</button></a>
-            <a href=""><button class="btn btn-danger">Delete</button></a>
-            <a href=""><button class="btn btn-info">View Detail</button></a></td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-
-          <td><a href=""><button class="btn btn-primary">Edit</button></a>
-            <a href=""><button class="btn btn-danger">Delete</button></a>
-            <a href=""><button class="btn btn-info">View Detail</button></a></td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td><a href=""><button class="btn btn-primary">Edit</button></a>
-            <a href=""><button class="btn btn-danger">Delete</button></a>
-            <a href=""><button class="btn btn-info">View Detail</button></a></td>
         </tr>
         </tbody>
       </table>
