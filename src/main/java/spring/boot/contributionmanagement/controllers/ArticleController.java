@@ -7,10 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import spring.boot.contributionmanagement.entities.AcademicYear;
 import spring.boot.contributionmanagement.entities.Article;
@@ -27,6 +24,7 @@ import java.util.List;
 
 
 @Controller
+@RequestMapping("/article")
 public class ArticleController {
     private final ArticleService articleService;
     private final UserService userService;
@@ -39,14 +37,14 @@ public class ArticleController {
         this.academicYearService = academicYearService;
     }
 //
-    @GetMapping("student/articleList")
+    @GetMapping
     public String list(Model model){
             List<Article> article = articleService.findAll();
             model.addAttribute("article", article);
-            return "User/student/articleList";
+            return "User/student/contributionManagement";
     }
 //
-        @GetMapping("/student/showFormArticle")
+        @GetMapping("/showForm")
         public String showFormArticle(Model model){
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
@@ -70,18 +68,18 @@ public class ArticleController {
             }
         }
 ////    //
-    @PostMapping("/student/addArticle")
+    @PostMapping("/save")
     public String addArticle(@ModelAttribute("article") Article article){
         this.articleService.saveAndUpdate(article);
         return "redirect:/student/articleList";
     }
 //
-    @GetMapping("/student/deleteArticle")
+    @GetMapping("/delete")
     public String deleteArticle(@RequestParam("id")Long id){
         this.articleService.deleteById(id);
         return "redirect:/student/articleList";
     }
-    @GetMapping("/student/updateArticle")
+    @GetMapping("/update")
 
     public String updateArticle(@RequestParam("id")Long id, Model model){
         Article article = this.articleService.findById(id);
