@@ -40,7 +40,7 @@ public class ArticleController {
     @GetMapping
     public String list(Model model){
             List<Article> article = articleService.findAll();
-            model.addAttribute("article", article);
+            model.addAttribute("articles", article);
             return "User/student/contributionManagement";
     }
 //
