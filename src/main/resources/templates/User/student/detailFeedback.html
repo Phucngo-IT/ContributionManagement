@@ -57,11 +57,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <tr th:each=" comment : ${comments}">
                     <th scope="row"></th>
-                    <td>...</td>
-                    <td>...</td>
-
+                    <td th:text="${comment.article.user.fullName}"></td>
+                    <td th:text="${comment.article.title}"></td>
+                    <td th:text="${comment.article.fileName}"></td>
                     <td><a href=""><button class="btn btn-primary">Download</button></a></td>
                     </td>
                 </tr>

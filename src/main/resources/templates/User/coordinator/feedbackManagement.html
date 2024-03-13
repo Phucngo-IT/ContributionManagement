@@ -46,7 +46,7 @@
 
             <table class="table bg-white rounded shadow-sm  table-hover">
                 <thead>
-                <tr>
+                <tr >
                     <th scope="col" >Student Name</th>
                     <th scope="col"> Article Title</th>
                     <th scope="col">Upload date</th>
@@ -58,12 +58,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <tr th:each=" comment : ${comments}">
                     <th scope="row"></th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-
+                    <td th:text="${comment.article.user.fullName}"></td>
+                    <td th:text="${comment.article.title}"></td>
+                    <td th:text="${comment.article.uploadDate}"></td>
+                    <td th:text="${comment.article.status}"></td>
                     <td>
                         <a href=""><button class="btn btn-info">View Detail</button></a></td>
                     </td>

@@ -30,6 +30,7 @@ public class ArticleController {
     private final UserService userService;
     private final AcademicYearService academicYearService;
 
+
     @Autowired
     public ArticleController(ArticleService articleService, UserService userService, AcademicYearService academicYearService) {
         this.articleService = articleService;
@@ -37,6 +38,12 @@ public class ArticleController {
         this.academicYearService = academicYearService;
     }
 //
+@GetMapping("/Viewdetail")
+    public String showdetail(Model model){
+    List<Article> article = articleService.findAll();
+    model.addAttribute("articles", article);
+    return "User/student/contributionManagement";
+}
     @GetMapping
     public String list(Model model){
             List<Article> article = articleService.findAll();
