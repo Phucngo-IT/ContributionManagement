@@ -10,7 +10,7 @@ import spring.boot.contributionmanagement.services.AcademicYearService;
 import java.util.List;
 
 @Controller
-//@RequestMapping("/academic_year")
+@RequestMapping("/academic_year")
 public class AcademicYearController {
     private final AcademicYearService academicYearService;
 
@@ -19,31 +19,31 @@ public class AcademicYearController {
         this.academicYearService = academicYearService;
     }
 
-    @GetMapping("/admin/academicList")
+    @GetMapping
     public String list(Model model){
         List<AcademicYear> academic_year = this.academicYearService.findAll();
         model.addAttribute("academic_year", academic_year);
         return "User/admin/academicList";
     }
 
-    @GetMapping("/admin/showFormAcademic")
+    @GetMapping("/showForm")
     public String showFormAcademic(Model model){
         model.addAttribute("academic_year", new AcademicYear());
         return "User/admin/addAcademic";
     }
 //
-    @PostMapping("/admin/addAcademic")
+    @PostMapping("/save")
     public String addAcademic(@ModelAttribute("academic_year") AcademicYear academic_year){
         this.academicYearService.saveAndUpdate(academic_year);
         return "redirect:/admin/academicList";
     }
 
-    @GetMapping("/admin/deleteAcademic")
+    @GetMapping("/delete")
     public String deleteAcademic(@RequestParam("id")Long id){
         this.academicYearService.deleteById(id);
         return "redirect:/admin/academicList";
     }
-    @GetMapping("/admin/updateAcademic")
+    @GetMapping("/update")
 
     public String updateAcademic(@RequestParam("id")Long id, Model model){
         AcademicYear academic_year = this.academicYearService.findById(id);

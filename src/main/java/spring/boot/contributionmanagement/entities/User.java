@@ -50,7 +50,7 @@ public class User {
 
     //faculty
     @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "faculty_id", referencedColumnName = "id")
+    @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
 
