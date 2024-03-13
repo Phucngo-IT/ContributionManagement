@@ -44,12 +44,12 @@ public class User {
 
     //role
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "role_id")
     private Role role;
 
     //faculty
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
