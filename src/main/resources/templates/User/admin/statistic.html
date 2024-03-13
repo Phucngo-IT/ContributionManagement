@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Khoa A', 'Khoa B', 'Khoa C'], // Tên các khoa
+            datasets: [{
+                label: 'Năm 1', // Tên của năm 1
+                data: [20, 30, 25], // Số liệu của năm 1 cho mỗi khoa
+                borderWidth: 1
+            }, {
+                label: 'Năm 2', // Tên của năm 2
+                data: [15, 25, 20], // Số liệu của năm 2 cho mỗi khoa
+                borderWidth: 1
+            }, {
+                label: 'Năm 3', // Tên của năm 3
+                data: [10, 20, 15], // Số liệu của năm 3 cho mỗi khoa
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+<p>o	Number of contributions within each Faculty for each academic year</p>
+
+
+<p>o	Percentage of contributions by each Faculty for any academic year</p>
+
+
+
+<p>o	Number of contributors within each Faculty for each academic year</p>
+</body>
+</html>

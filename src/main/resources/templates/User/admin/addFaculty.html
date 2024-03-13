@@ -6,7 +6,7 @@
 </head>
 <body>
 <p>Add Faculty</p>
-<form action="#" th:action="@{/admin/addFaculty}" th:object="${faculty}" method="post">
+<form action="#" th:action="@{/faculty/save}" th:object="${faculty}" method="post">
     <div>
         <input type="hidden" class="input" th:field="*{id}">
     </div>

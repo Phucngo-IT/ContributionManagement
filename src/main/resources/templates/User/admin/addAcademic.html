@@ -6,7 +6,7 @@
 </head>
 <body>
 <p>Add Academic Year</p>
-<form action="#" th:action="@{/admin/addAcademic}" th:object="${academic_year}" method="post">
+<form action="#" th:action="@{/academic_year/save}" th:object="${academic_year}" method="post">
     <div>
         <input type="hidden" class="input" th:field="*{id}">
     </div>

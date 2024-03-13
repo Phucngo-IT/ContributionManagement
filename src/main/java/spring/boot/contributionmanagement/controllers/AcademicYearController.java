@@ -35,13 +35,13 @@ public class AcademicYearController {
     @PostMapping("/save")
     public String addAcademic(@ModelAttribute("academic_year") AcademicYear academic_year){
         this.academicYearService.saveAndUpdate(academic_year);
-        return "redirect:/admin/academicList";
+        return "redirect:/academic_year";
     }
 
     @GetMapping("/delete")
     public String deleteAcademic(@RequestParam("id")Long id){
         this.academicYearService.deleteById(id);
-        return "redirect:/admin/academicList";
+        return "redirect:/academic_year";
     }
     @GetMapping("/update")
 

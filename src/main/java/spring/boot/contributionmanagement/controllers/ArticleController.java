@@ -41,7 +41,7 @@ public class ArticleController {
     public String list(Model model){
             List<Article> article = articleService.findAll();
             model.addAttribute("articles", article);
-            return "User/student/contributionManagement";
+            return "User/student/articleList";
     }
 //
         @GetMapping("/showForm")
@@ -71,13 +71,13 @@ public class ArticleController {
     @PostMapping("/save")
     public String addArticle(@ModelAttribute("article") Article article){
         this.articleService.saveAndUpdate(article);
-        return "redirect:/student/articleList";
+        return "redirect:/article";
     }
 //
     @GetMapping("/delete")
     public String deleteArticle(@RequestParam("id")Long id){
         this.articleService.deleteById(id);
-        return "redirect:/student/articleList";
+        return "redirect:/article";
     }
     @GetMapping("/update")
 
