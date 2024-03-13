@@ -3,16 +3,13 @@ package spring.boot.contributionmanagement.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import spring.boot.contributionmanagement.entities.Faculty;
 import spring.boot.contributionmanagement.services.FacultyService;
 
 import java.util.List;
 @Controller
-
+@RequestMapping("/faculty")
 public class FacultyController {
     private final FacultyService facultyService;
 
@@ -20,32 +17,31 @@ public class FacultyController {
     public FacultyController(FacultyService facultyService){
         this.facultyService = facultyService;
     }
-    @GetMapping("/admin/facultyList")
-    public String list(Model model){
+    @GetMapping
+    public String listFaculty(Model model){
         List<Faculty> faculty = this.facultyService.findAll();
         model.addAttribute("faculty", faculty);
         return "User/admin/facultyList";
     }
 
-    @GetMapping("/admin/showFormFaculty")
+    @GetMapping("/showForm")
     public String showFormFaculty(Model model){
         model.addAttribute("faculty", new Faculty());
         return "User/admin/addFaculty";
     }
     //
-    @PostMapping("/admin/addFaculty")
+    @PostMapping("/save")
     public String addFaculty(@ModelAttribute("faculty") Faculty faculty){
         this.facultyService.saveAndUpdate(faculty);
         return "redirect:/admin/facultyList";
     }
 
-    @GetMapping("/admin/deleteFaculty")
+    @GetMapping("/delete")
     public String deleteFaculty(@RequestParam("id")Long id){
         this.facultyService.deleteById(id);
         return "redirect:/admin/facultyList";
     }
-    @GetMapping("/admin/updateFaculty")
-
+    @GetMapping("/update")
     public String updateFaculty(@RequestParam("id")Long id, Model model){
         Faculty faculty = this.facultyService.findById(id);
         model.addAttribute("faculty", faculty);
