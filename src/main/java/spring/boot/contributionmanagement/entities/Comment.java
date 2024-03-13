@@ -47,27 +47,7 @@ public class Comment {
         return dateComment;
     }
 
-    public Comment setDateComment(Date dateComment) {
-        this.dateComment = dateComment;
-        return this;
-    }
 
-    public Article getArticle() {
-        return article;
-    }
 
-    public Comment setArticle(Article article) {
-        this.article = article;
-        return this;
-    }
 
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", content='" + content + '\'' +
-                ", dateComment=" + dateComment +
-                ", article=" + article +
-                '}';
-    }
 }
