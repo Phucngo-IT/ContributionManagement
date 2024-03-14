@@ -35,6 +35,7 @@
                 <tr>
 
                     <th scope="col">Magazine Title</th>
+                    <th scope="col">Description</th>
                     <th scope="col">Closure Date</th>
                     <th scope="col"> Final Closure Date</th>
                     <th scope="col">Action</th>
@@ -45,11 +46,11 @@
                 <tbody>
                 <tr th:each="academic : ${academic_year}">
                     <td th:text="${academic.title}"> </td>
+                    <td th:text="${academic.discription}"> </td>
                     <td th:text="${academic.closureDate}"></td>
                     <td th:text="${academic.finalClosureDate}"></td>
 
-                    <td><a href="@{/academic_year/update(id=${academic.id})}"> <button class="btn btn-primary">Edit</button></a>
-                        <a href="@{/academic_year/delete(id=${academic.id})}"> <button class="btn btn-danger">Delete</button></a>
+                    <td><a th:href="@{/academic_year/update(id=${academic.id})}"> <button class="btn btn-primary">Edit</button></a>
                     </td>
                 </tr>
 

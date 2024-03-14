@@ -29,26 +29,25 @@ public class AcademicYearController {
     @GetMapping("/showForm")
     public String showFormAcademic(Model model){
         model.addAttribute("academic_year", new AcademicYear());
-        return "User/admin/addAcademic";
+        return "User/manager/Addacademicyear";
     }
 //
     @PostMapping("/save")
     public String addAcademic(@ModelAttribute("academic_year") AcademicYear academic_year){
         this.academicYearService.saveAndUpdate(academic_year);
-        return "redirect:/admin/academicList";
+        return "redirect:/academic_year";
     }
 
     @GetMapping("/delete")
     public String deleteAcademic(@RequestParam("id")Long id){
         this.academicYearService.deleteById(id);
-        return "redirect:/admin/academicList";
+        return "redirect:/academic_year";
     }
     @GetMapping("/update")
-
     public String updateAcademic(@RequestParam("id")Long id, Model model){
         AcademicYear academic_year = this.academicYearService.findById(id);
         model.addAttribute("academic_year", academic_year);
-        return "User/admin/addAcademic";
+        return "User/admin/Addacademicyear";
     }
 
 

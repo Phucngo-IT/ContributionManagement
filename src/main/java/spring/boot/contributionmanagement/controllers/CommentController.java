@@ -50,8 +50,10 @@ public class CommentController {
 //        }else if (user.getAuthorities() == roleService.findById(2L)){
             Article article = this.articleService.findById(id);
 
+            List<Comment> comments = article.getComments();
 
-            model.addAttribute("article",article);
+
+            model.addAttribute("comments",comments);
             return "User/student/detailFeedback";
 //        }else {
 //            return null;

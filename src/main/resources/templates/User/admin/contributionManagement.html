@@ -58,7 +58,7 @@
                     <td th:text="${article.fileName}"></td>
                     <td th:text="${article.uploadDate}"></td>
                     <td th:text="${article.status}"></td>
-                    <td><a href=""> <button class="btn btn-info">View Detail</button></a>
+                    <td><a th:href="@{/article/showdetail(id=${article.id})}"> <button class="btn btn-info">View Detail</button></a>
                         <a href=""> <button class="btn btn-success">Download</button></a>
                     </td>
                 </tr>

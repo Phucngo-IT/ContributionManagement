@@ -27,7 +27,7 @@ public class FacultyController {
     @GetMapping("/showForm")
     public String showFormFaculty(Model model){
         model.addAttribute("faculty", new Faculty());
-        return "User/admin/addFaculty";
+        return "User/manager/addFaculty";
     }
     //
     @PostMapping("/save")
@@ -45,7 +45,7 @@ public class FacultyController {
     public String updateFaculty(@RequestParam("id")Long id, Model model){
         Faculty faculty = this.facultyService.findById(id);
         model.addAttribute("faculty", faculty);
-        return "User/admin/addFaculty";
+        return "User/manager/addFaculty";
     }
 
 }
