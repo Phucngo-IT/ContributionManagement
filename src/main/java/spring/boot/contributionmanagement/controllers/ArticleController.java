@@ -37,43 +37,56 @@ public class ArticleController {
         this.userService = userService;
         this.academicYearService = academicYearService;
     }
-//
-@GetMapping("/Viewdetail")
-    public String showdetail(Model model){
-    List<Article> article = articleService.findAll();
-    model.addAttribute("articles", article);
-    return "User/student/contributionManagement";
-}
+    //
+    //@GetMapping("/Viewdetail")
+    //    public String showdetail(Model model){
+    //    List<Article> article = articleService.findAll();
+    //    model.addAttribute("articles", article);
+    //    return "User/student/contributionManagement";
+    //}
     @GetMapping
     public String list(Model model){
-            List<Article> article = articleService.findAll();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails user = (UserDetails) authentication.getPrincipal();
+
+        if (user!=null){
+            String username = user.getUsername();
+            User userObj = this.userService.findByUsername(username);
+
+            List<Article> article = userObj.getArticles();
+
             model.addAttribute("articles", article);
             return "User/student/contributionManagement";
+        }else {
+            model.addAttribute("articles", new Article());
+            return "User/student/contributionManagement";
+        }
+
     }
 //
-        @GetMapping("/showForm")
-        public String showFormArticle(Model model){
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
-                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                String username = userDetails.getUsername();
+    @GetMapping("/showForm")
+    public String showFormArticle(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
 //                Long userId = userService.findUserIdByUsername(username);
 //                model.addAttribute("userId", userId);
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                String currentDate = (LocalDate.now().format(formatter));
-                List<AcademicYear> academicYears = academicYearService.findAll();
-                Article article = new Article();
-                article.setUploadDate(Date.valueOf(currentDate));
-                article.setUser(userService.findByUsername(username));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String currentDate = (LocalDate.now().format(formatter));
+            List<AcademicYear> academicYears = academicYearService.findAll();
+            Article article = new Article();
+            article.setUploadDate(Date.valueOf(currentDate));
+            article.setUser(userService.findByUsername(username));
 //                model.addAttribute("currentDate", currentDate);
-                model.addAttribute("academicYears", academicYears);
-                model.addAttribute("article", article);
-                return "User/student/addArticle";
-            } else {
-                // Chưa đăng nhập
-                return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
-            }
+            model.addAttribute("academicYears", academicYears);
+            model.addAttribute("article", article);
+            return "User/student/addArticle";
+        } else {
+            // Chưa đăng nhập
+            return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
         }
+    }
 ////    //
     @PostMapping("/save")
     public String addArticle(@ModelAttribute("article") Article article){

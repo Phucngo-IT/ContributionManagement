@@ -48,67 +48,35 @@
             <table class="table bg-white rounded shadow-sm  table-hover">
                 <thead>
                 <tr>
-
-                    <th scope="col">Student Name </th>
                     <th scope="col">Article title </th>
                     <th scope="col">File Name</th>
+                    <th scope="col">Comment date</th>
+                    <th><a href=""><button class="btn btn-primary">Download</button></a></th>
+
+
 
 
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each=" comment : ${comments}">
-                    <th scope="row"></th>
-                    <td th:text="${comment.article.user.fullName}"></td>
-                    <td th:text="${comment.article.title}"></td>
-                    <td th:text="${comment.article.fileName}"></td>
-                    <td><a href=""><button class="btn btn-primary">Download</button></a></td>
-                    </td>
-                </tr>
                 <tr>
                     <th scope="row"></th>
-                    <td>...</td>
-                    <td>...</td>
+                    <td th:text="${article.title}"></td>
+                    <td th:text="${article.fileName}"></td>
+<!--                    <td th:text="${article.comment.dateComment}"></td>-->
 
-                    <td><a href=""><button class="btn btn-primary">Download</button></a></td>
                 </tr>
-                <tr>
-                    <th scope="row"></th>
-                    <td>...</td>
-                    <td>...</td>
 
-                    <td><a href=""><button class="btn btn-primary">Download</button></a></td>
-                </tr>
-                <tr>
-                    <th scope="row"></th>
-                    <td>...</td>
-                    <td>...</td>
-
-                    <td><a href=""><button class="btn btn-primary">Download</button></a></td>
-                </tr>
-                <tr>
-                    <th scope="row"></th>
-                    <td>...</td>
-                    <td>...</td>
-
-                    <td><a href=""><button class="btn btn-primary">Download</button></a></td>
-                </tr>
-                <tr>
-                    <th scope="row"></th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""><button class="btn btn-primary">Download</button></a></td>
-                </tr>
                 </tbody>
             </table>
             <h2>Content</h2>
 
-            <textarea class="content" name="content" rows="2" id="dlg-content-65ef480e554d8" aria-label="Add a comment..."
-                      cols="20" ></textarea>
+<!--            <textarea th:text="${article.comment.content}" class="content" name="content" rows="2" id="dlg-content-65ef480e554d8" aria-label="Add a comment..."-->
+<!--                      cols="20" ></textarea>-->
             <div class="dropdown">
 
-                <button class="btn btn-primary " type="button"  aria-expanded="false">
-                    Approved
+                <button th:href="@{/comment}" class="btn btn-primary " type="button"  aria-expanded="false">
+                    Return
                 </button>
             </div>
         </div>
