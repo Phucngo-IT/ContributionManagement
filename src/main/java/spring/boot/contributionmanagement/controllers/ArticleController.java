@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import spring.boot.contributionmanagement.entities.AcademicYear;
 import spring.boot.contributionmanagement.entities.Article;
 import spring.boot.contributionmanagement.entities.User;
+import spring.boot.contributionmanagement.mailService.MailService;
+import spring.boot.contributionmanagement.mailService.MailStructure;
 import spring.boot.contributionmanagement.services.AcademicYearService;
 import spring.boot.contributionmanagement.services.ArticleService;
 import spring.boot.contributionmanagement.services.UserService;
@@ -29,13 +31,17 @@ public class ArticleController {
     private final ArticleService articleService;
     private final UserService userService;
     private final AcademicYearService academicYearService;
+    private final MailService mailService;
+    private final MailStructure mailStructure;
 
 
     @Autowired
-    public ArticleController(ArticleService articleService, UserService userService, AcademicYearService academicYearService) {
+    public ArticleController(ArticleService articleService, UserService userService, AcademicYearService academicYearService, MailService mailService, MailStructure mailStructure) {
         this.articleService = articleService;
         this.userService = userService;
         this.academicYearService = academicYearService;
+        this.mailService = mailService;
+        this.mailStructure = mailStructure;
     }
     //
     //@GetMapping("/Viewdetail")
@@ -63,6 +69,8 @@ public class ArticleController {
         }
 
     }
+
+
 //
     @GetMapping("/showForm")
     public String showFormArticle(Model model){
@@ -81,7 +89,7 @@ public class ArticleController {
 //                model.addAttribute("currentDate", currentDate);
             model.addAttribute("academicYears", academicYears);
             model.addAttribute("article", article);
-            return "User/student/addArticle";
+            return "addArticleOld";
         } else {
             // Chưa đăng nhập
             return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
@@ -91,6 +99,7 @@ public class ArticleController {
     @PostMapping("/save")
     public String addArticle(@ModelAttribute("article") Article article){
         this.articleService.saveAndUpdate(article);
+        this.mailService.sendMail("phucnhgcc210017@fpt.edu.vn", mailStructure);
         return "redirect:/article";
     }
 //
@@ -104,7 +113,7 @@ public class ArticleController {
     public String updateArticle(@RequestParam("id")Long id, Model model){
         Article article = this.articleService.findById(id);
         model.addAttribute("article", article);
-        return "User/student/addArticle";
+        return "addArticleOld";
     }
 
 

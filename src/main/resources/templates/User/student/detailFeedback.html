@@ -63,7 +63,7 @@
                     <th scope="row"></th>
                     <td th:text="${article.title}"></td>
                     <td th:text="${article.fileName}"></td>
-<!--                    <td th:text="${article.comment.dateComment}"></td>-->
+                    <td th:text="${article.comment.dateComment}"></td>
 
                 </tr>
 
@@ -71,10 +71,11 @@
             </table>
             <h2>Content</h2>
 
-<!--            <textarea th:text="${article.comment.content}" class="content" name="content" rows="2" id="dlg-content-65ef480e554d8" aria-label="Add a comment..."-->
-<!--                      cols="20" ></textarea>-->
-            <div class="dropdown">
+            <textarea th:text="${article.comment.content}" class="content" name="content" rows="2" id="dlg-content-65ef480e554d8" aria-label="Add a comment..."
+                      cols="20" >
+            </textarea>
 
+            <div class="dropdown">
                 <button th:href="@{/comment}" class="btn btn-primary " type="button"  aria-expanded="false">
                     Return
                 </button>
