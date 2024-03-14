@@ -1,47 +1,39 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.com">
-<head>
-    <meta charset="UTF-8">
-    <title>Add Article</title>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
-</head>
-<body>
-<p>Add Article</p>
-<form action="#" th:action="@{/student/addArticle}"  method="post">
-    <div>
-        <input type="hidden" class="input" th:field="*{article.id}">
-    </div>
-    <div>
-        <input type="hidden" class="input" th:value="*{article.user.id}" name="user" placeholder="UserID">
-    </div>
-    <div>
-        <input type="text" class="input" th:field="*{article.title}" placeholder="Title">
-    </div>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: "Poppins", sans-serif;
+}
+body{
+display:flex ;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+background-size: cover;
+background-position:center;
 
-    <div>
-        <input type="text" class="input" th:field="*{article.discription}" placeholder="Discription">
-    </div>
-    <div>
-        <input type="text" class="input" th:field="*{article.fileName}" placeholder="File Name">
-    </div>
-    <div>
-        <input type="text" class="input" th:field="*{article.imageArticle}" placeholder="Image">
-    </div>
-    <div>
-        <input type="hidden" class="input" th:field="*{article.status}" placeholder="Status">
-    </div>
-    <div>
-        <input type="date" class="input" th:value="*{article.uploadDate}" name="uploadDate" placeholder="Upload Date">
-    </div>
-    <select class="input" th:field="*{article.academicYear}">
-        <option th:each="aca : ${academicYears}" th:value="${aca.id}"  th:text="${#strings.substring(aca.closureDate, 0, 4)} + '-' + ${#strings.substring(aca.finalClosureDate, 0, 4)}+' : '+${aca.title}"></option>
-    </select>
+}
+.wrapper{
+width: 420px;
+background: transparent;
+border: 2px solid rgba(120, 16, 16, 0.2);
+backdrop-filter: blur(20px);
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+color: #000000;
+border-radius: 10px;
+padding: 30px 40px;
+}
 
-    <!--        Button-->
-    <div>
-        <button class="form-btn">Add</button>
-    </div>
+.input-box input::placeholder{
+color: #000000;
+}
+.input-box i{
+position: absolute;
+right: 20px;
+top: 50%;
+transform: translate(-50%);
+font-size: 20px;
+}
 
-</form>
-</body>
-</html>
