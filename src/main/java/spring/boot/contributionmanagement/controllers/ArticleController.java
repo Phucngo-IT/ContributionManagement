@@ -89,7 +89,7 @@ public class ArticleController {
 //                model.addAttribute("currentDate", currentDate);
             model.addAttribute("academicYears", academicYears);
             model.addAttribute("article", article);
-            return "User/student/addArticle";
+            return "addArticleOld";
         } else {
             // Chưa đăng nhập
             return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
@@ -113,7 +113,7 @@ public class ArticleController {
     public String updateArticle(@RequestParam("id")Long id, Model model){
         Article article = this.articleService.findById(id);
         model.addAttribute("article", article);
-        return "User/student/addArticle";
+        return "addArticleOld";
     }
 
 }
