@@ -107,4 +107,17 @@ public class ArticleController {
         return "User/student/addArticle";
     }
 
+
+    @GetMapping("/feedback_management")
+    public String showFeedbackManagement(Model model){
+       List<Article> article = this.articleService.findAll();
+        model.addAttribute("articles",article);
+        return "User/coordinator/feedbackManagement";
+    }
+
+
+
+
+
+
 }

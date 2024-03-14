@@ -12,29 +12,7 @@
 </head>
 
 <body>
-<div class="d-flex" id="wrapper">
-    <!-- Sidebar -->
-    <div class="bg-white" id="sidebar-wrapper">
-        <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"><i
-                class="fas fa-user-secret me-2"></i>Admin</div>
-        <div class="list-group list-group-flush my-3">
-            <a href="#"
-               class="list-group-item list-group-item-action bg-transparent second-text active"></i>Home</a>
-            <a href="facultyManagement.html"
-               class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Faculty</a>
-            <a href="magazinManagement.html" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Annual
-                Magazine</a>
-            <a href="contributionManagement.html"
-               class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Contribution</a>
-            <a href="feedbackManagement.html"
-               class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Feedback</a>
-            <a href="approvedAdmin.html"
-               class="list-group-item list-group-item-action bg-transparent second-text fw-bold"></i>Approved
-                Article</a>
-            <a href="../manager/statisticManagement.html"
-               class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Statistic</a>
-        </div>
-    </div>
+
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
@@ -46,7 +24,7 @@
             </div>
         </nav>
 
-        <button type="button" class="btn btn-info">Add Addcademic Year</button>
+        <a th:href="@{/academic_year/showForm}"> <button type="button" class="btn btn-info">Add Addcademic Year</button></a>
 
         <br>
         <br>
@@ -55,8 +33,7 @@
             <table class="table bg-white rounded shadow-sm  table-hover">
                 <thead>
                 <tr>
-                    <th scope="col" width="50">#</th>
-                    <th scope="col">Academic Year </th>
+
                     <th scope="col">Magazine Title</th>
                     <th scope="col">Closure Date</th>
                     <th scope="col"> Final Closure Date</th>
@@ -66,66 +43,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
+                <tr th:each="academic : ${academic_year}">
+                    <td th:text="${academic.title}"> </td>
+                    <td th:text="${academic.closureDate}"></td>
+                    <td th:text="${academic.finalClosureDate}"></td>
+
+                    <td><a href="@{/academic_year/update(id=${academic.id})}"> <button class="btn btn-primary">Edit</button></a>
+                        <a href="@{/academic_year/delete(id=${academic.id})}"> <button class="btn btn-danger">Delete</button></a>
                     </td>
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""><button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">4</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">5</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">6</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
+
                 </tbody>
             </table>
         </div>

@@ -12,21 +12,9 @@
 </head>
 
 <body>
-<div class="d-flex" id="wrapper">
+
     <!-- Sidebar -->
-    <div class="bg-white" id="sidebar-wrapper">
-        <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"><i
-                class="fas fa-user-secret me-2"></i>Marketing coordinator</div>
-        <div class="list-group list-group-flush my-3">
-            <a href="#"
-               class="list-group-item list-group-item-action bg-transparent second-text active"></i>Home</a>
 
-
-
-            <a href="feedbackManagement.html"
-               class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Feedback</a>
-        </div>
-    </div>
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
@@ -58,14 +46,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each=" comment : ${comments}">
-                    <th scope="row"></th>
-                    <td th:text="${comment.article.user.fullName}"></td>
-                    <td th:text="${comment.article.title}"></td>
-                    <td th:text="${comment.article.uploadDate}"></td>
-                    <td th:text="${comment.article.status}"></td>
+                <tr th:each=" article : ${articles}">
+                    <td th:text="${article.user.fullName}"></td>
+                    <td th:text="${article.title}"></td>
+                    <td th:text="${article.uploadDate}"></td>
+                    <td th:text="${article.status}"></td>
                     <td>
-                        <a href=""><button class="btn btn-info">View Detail</button></a></td>
+                        <a href=""><button class="btn btn-info">View Detail</button></a>
                     </td>
                 </tr>
 
