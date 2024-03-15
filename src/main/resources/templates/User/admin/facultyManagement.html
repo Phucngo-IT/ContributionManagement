@@ -13,29 +13,6 @@
 
 <body>
 <div class="d-flex" id="wrapper">
-    <!-- Sidebar -->
-    <div class="bg-white" id="sidebar-wrapper">
-        <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"><i
-                class="fas fa-user-secret me-2"></i>Admin</div>
-        <div class="list-group list-group-flush my-3">
-            <a href="#"
-               class="list-group-item list-group-item-action bg-transparent second-text active"></i>Home</a>
-            <a href="facultyManagement.html"
-               class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Faculty</a>
-            <a href="magazinManagement.html" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Annual
-                Magazine</a>
-            <a href="contributionManagement.html"
-               class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Contribution</a>
-            <a href="feedbackManagement.html"
-               class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Feedback</a>
-            <a href="approvedAdmin.html"
-               class="list-group-item list-group-item-action bg-transparent second-text fw-bold"></i>Approved
-                Article</a>
-            <a href="../manager/statisticManagement.html"
-               class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Statistic</a>
-        </div>
-    </div>
-    <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
@@ -46,7 +23,7 @@
             </div>
         </nav>
 
-        <button type="button" class="btn btn-info">Add Faculty</button>
+       <a th:href="@{/faculty/showForm}"><button type="button" class="btn btn-info">Add Faculty</button></a>
 
         <br>
         <br>
@@ -55,59 +32,18 @@
             <table class="table bg-white rounded shadow-sm  table-hover">
                 <thead>
                 <tr>
-                    <th scope="col" width="50">#</th>
+<!--                    <th scope="col" width="50">#</th>-->
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""><button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">4</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">5</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">6</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
+                <tr th:each="faculty : ${faculties}">
+                    <td th:text="${faculty.id}"></td>
+                    <td th:text="${faculty.name}"></td>
+                    <td><a th:href="@{/faculty/update(id=${faculty.id})}"> <button class="btn btn-primary">Edit</button></a>
+                        <a th:href="@{/faculty/delete(id=${faculty.id})}"> <button class="btn btn-danger">Delete</button></a>
                     </td>
                 </tr>
                 </tbody>

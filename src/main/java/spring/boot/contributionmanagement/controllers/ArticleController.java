@@ -1,5 +1,6 @@
 package spring.boot.contributionmanagement.controllers;
 
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -7,8 +8,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.multipart.MultipartFile;
 import spring.boot.contributionmanagement.entities.AcademicYear;
 import spring.boot.contributionmanagement.entities.Article;
 import spring.boot.contributionmanagement.entities.User;
@@ -43,14 +46,8 @@ public class ArticleController {
         this.mailService = mailService;
         this.mailStructure = mailStructure;
     }
-    //
-    //@GetMapping("/Viewdetail")
-    //    public String showdetail(Model model){
-    //    List<Article> article = articleService.findAll();
-    //    model.addAttribute("articles", article);
-    //    return "User/student/contributionManagement";
-    //}
-    @GetMapping
+
+    @GetMapping()
     public String list(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails user = (UserDetails) authentication.getPrincipal();
@@ -69,6 +66,14 @@ public class ArticleController {
         }
 
     }
+
+    @GetMapping("/showdetail")
+        public String showdetail(@PathParam("id") Long id, Model model){
+        Article article = articleService.findById(id);
+        model.addAttribute("article", article);
+        return "User/manager/ViewdetailContribution";
+    }
+
 
 
 //
@@ -89,7 +94,7 @@ public class ArticleController {
 //                model.addAttribute("currentDate", currentDate);
             model.addAttribute("academicYears", academicYears);
             model.addAttribute("article", article);
-            return "addArticleOld";
+            return "User/student/addArticle";
         } else {
             // Chưa đăng nhập
             return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
@@ -97,7 +102,18 @@ public class ArticleController {
     }
 ////    //
     @PostMapping("/save")
-    public String addArticle(@ModelAttribute("article") Article article){
+    public String addArticle(@ModelAttribute("article") Article article, @RequestParam("files")MultipartFile multipartFile){
+
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        article.setFileName(fileName);
+        this.articleService.save(article);
+
+
+        String uploadDirectory = DIRECTORY;
+        FileUpload.saveFile(uploadDirectory, fileName, multipartFile);
+
+        this.articleService.save(article);
+
         this.articleService.saveAndUpdate(article);
         this.mailService.sendMail("phucnhgcc210017@fpt.edu.vn", mailStructure);
         return "redirect:/article";
@@ -113,7 +129,20 @@ public class ArticleController {
     public String updateArticle(@RequestParam("id")Long id, Model model){
         Article article = this.articleService.findById(id);
         model.addAttribute("article", article);
-        return "addArticleOld";
+        return "addArticle";
     }
+
+
+    @GetMapping("/feedback_management")
+    public String showFeedbackManagement(Model model){
+       List<Article> article = this.articleService.findAll();
+        model.addAttribute("articles",article);
+        return "User/coordinator/feedbackManagement";
+    }
+
+
+
+
+
 
 }
