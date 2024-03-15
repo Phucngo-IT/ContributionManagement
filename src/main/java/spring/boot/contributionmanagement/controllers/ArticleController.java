@@ -1,5 +1,6 @@
 package spring.boot.contributionmanagement.controllers;
 
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -43,14 +44,14 @@ public class ArticleController {
         this.mailService = mailService;
         this.mailStructure = mailStructure;
     }
-    //
-    //@GetMapping("/Viewdetail")
-    //    public String showdetail(Model model){
-    //    List<Article> article = articleService.findAll();
-    //    model.addAttribute("articles", article);
-    //    return "User/student/contributionManagement";
-    //}
-    @GetMapping
+
+    @GetMapping("/showdetail")
+        public String showdetail(@PathParam("id") Long id, Model model){
+        Article article = articleService.findById(id);
+        model.addAttribute("article", article);
+        return "User/manager/ViewdetailContribution";
+    }
+    @GetMapping("/contribution")
     public String list(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails user = (UserDetails) authentication.getPrincipal();
@@ -89,7 +90,7 @@ public class ArticleController {
 //                model.addAttribute("currentDate", currentDate);
             model.addAttribute("academicYears", academicYears);
             model.addAttribute("article", article);
-            return "addArticleOld";
+            return "addArticle";
         } else {
             // Chưa đăng nhập
             return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
@@ -113,7 +114,20 @@ public class ArticleController {
     public String updateArticle(@RequestParam("id")Long id, Model model){
         Article article = this.articleService.findById(id);
         model.addAttribute("article", article);
-        return "addArticleOld";
+        return "addArticle";
     }
+
+
+    @GetMapping("/feedback_management")
+    public String showFeedbackManagement(Model model){
+       List<Article> article = this.articleService.findAll();
+        model.addAttribute("articles",article);
+        return "User/coordinator/feedbackManagement";
+    }
+
+
+
+
+
 
 }

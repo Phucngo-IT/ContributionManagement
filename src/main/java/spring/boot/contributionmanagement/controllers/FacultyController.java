@@ -20,32 +20,32 @@ public class FacultyController {
     @GetMapping
     public String listFaculty(Model model){
         List<Faculty> faculty = this.facultyService.findAll();
-        model.addAttribute("faculty", faculty);
-        return "User/admin/facultyList";
+        model.addAttribute("faculties", faculty);
+        return "User/admin/facultyManagement";
     }
 
     @GetMapping("/showForm")
     public String showFormFaculty(Model model){
         model.addAttribute("faculty", new Faculty());
-        return "User/admin/addFaculty";
+        return "User/manager/addFaculty";
     }
     //
     @PostMapping("/save")
     public String addFaculty(@ModelAttribute("faculty") Faculty faculty){
         this.facultyService.saveAndUpdate(faculty);
-        return "redirect:/admin/facultyList";
+        return "redirect:/faculty";
     }
 
     @GetMapping("/delete")
     public String deleteFaculty(@RequestParam("id")Long id){
         this.facultyService.deleteById(id);
-        return "redirect:/admin/facultyList";
+        return "redirect:/faculty";
     }
     @GetMapping("/update")
     public String updateFaculty(@RequestParam("id")Long id, Model model){
         Faculty faculty = this.facultyService.findById(id);
         model.addAttribute("faculty", faculty);
-        return "User/admin/addFaculty";
+        return "User/manager/addFaculty";
     }
 
 }

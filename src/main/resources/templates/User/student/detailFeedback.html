@@ -51,6 +51,7 @@
                     <th scope="col">Article title </th>
                     <th scope="col">File Name</th>
                     <th scope="col">Comment date</th>
+                    <th scope="col">Content</th>
                     <th><a href=""><button class="btn btn-primary">Download</button></a></th>
 
 
@@ -59,11 +60,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <tr th:each="comment : ${comments}">
                     <th scope="row"></th>
-                    <td th:text="${article.title}"></td>
-                    <td th:text="${article.fileName}"></td>
-                    <td th:text="${article.comment.dateComment}"></td>
+                    <td th:text="${comment.article.title}"></td>
+                    <td th:text="${comment.article.fileName}"></td>
+                    <td th:text="${comment.dateComment}"></td>
+
+                    <td><textarea th:text="${comment.content}" class="content" name="content" rows="2" id="dlg-content-65ef480e554d8" aria-label="Add a comment..."
+                              cols="20" >
+            </textarea></td>
 
                 </tr>
 
@@ -71,9 +76,7 @@
             </table>
             <h2>Content</h2>
 
-            <textarea th:text="${article.comment.content}" class="content" name="content" rows="2" id="dlg-content-65ef480e554d8" aria-label="Add a comment..."
-                      cols="20" >
-            </textarea>
+
 
             <div class="dropdown">
                 <button th:href="@{/comment}" class="btn btn-primary " type="button"  aria-expanded="false">

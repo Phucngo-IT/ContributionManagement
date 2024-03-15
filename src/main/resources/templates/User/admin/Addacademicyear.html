@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.com">
 
 <head>
     <meta charset="UTF-8" />
@@ -7,51 +7,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <link rel="stylesheet" href="AddacademicYear.css" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" th:href="@{/css/AddacademicYear.css}" />
+<!--    <link rel="stylesheet" th:href="@{/css/style.css}">-->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<<<<<<< HEAD:src/main/resources/templates/User/manager/addFaculty.html
+=======
     <title>Add Faculty</title>
+>>>>>>> 964623fe9f7720514f6490033132cfabd424c384:src/main/resources/templates/User/admin/Addacademicyear.html
 </head>
 
 <body>
     <!-- /#sidebar-wrapper -->
-
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <!-- Page Content -->
     <div id="page-content-wrapper">
         <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
             <div class="d-flex align-items-center">
                 <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
+<<<<<<< HEAD:src/main/resources/templates/User/manager/addFaculty.html
+                <h2 class="fs-2 m-0">Add Faculty </h2>
+=======
                 <h2 class="fs-2 m-0">Add Academic Year</h2>
 
 
+>>>>>>> 964623fe9f7720514f6490033132cfabd424c384:src/main/resources/templates/User/admin/Addacademicyear.html
             </div>
         </nav>
         <br>
         <div class="wrapper">
-            <form class=" g-3">
+            <form class="g-3" action="#" th:action="@{/academic_year/save}" th:object="${academic_year}" method="post">
                 <div class="form-group row">
-                    <label for="article">Title</label>
+
                     <div class="col-sm-10">
-                        <input type="" class="form-control" id="article" placeholder="Title">
+                        <input type="hidden"  th:field="*{id}" >
                     </div>
+
+
+                <div class="col-sm-10">
+                    <label for="description">Title</label>
+                    <input type="text"  th:field="*{title}" class="input" placeholder="title">
                 </div>
 
                 <div class="col-sm-10">
                     <label for="description">Description</label>
-                    <input type="" class="form-control" id="description" placeholder="Description">
+                    <input type="text"  th:field="*{discription}" class="form-control" id="description" placeholder="Description">
                 </div>
 
                 <div class="row">
                     <div class="col-sm-10">
                         <label for="inputClosuredate" class="form-label">Closure date</label>
-                        <input type="date" class="form-control" id="inputClosuredate">
+                        <input type="date" th:field="*{closureDate}" class="form-control" id="inputClosuredate">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-sm-10">
                         <label for="inputFinalClosuredate" class="form-label">Final Closure date</label>
-                        <input type="date" class="form-control" id="inputFinalClosuredate">
+                        <input type="date" th:field="*{finalClosureDate}"  class="form-control" id="inputFinalClosuredate">
                     </div>
                 </div>
                 <div class="row pt-4">
@@ -60,8 +72,9 @@
                         <button type="button" class="btn btn-secondary">Close</button>
                     </div>
                 </div>
+                </div>
             </form>
-        </div>
+
 
     </div>
     <br>
