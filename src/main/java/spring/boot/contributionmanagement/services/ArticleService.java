@@ -10,5 +10,7 @@ public interface ArticleService {
 
     public void saveAndUpdate(Article article);
 
+    public void save(Article article);
+
     public void deleteById(Long id);
 }

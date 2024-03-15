@@ -33,6 +33,11 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public void save(Article article) {
+        this.articleRepository.save(article);
+    }
+
+    @Override
     public void deleteById(Long id) {
         this.articleRepository.deleteById(id);
     }
