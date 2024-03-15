@@ -1,11 +1,20 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link ref="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" th:href="@{AddArticle.css}" />
+    <link rel="stylesheet" th:href="@{style.css}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Add Article</title>
-
 </head>
+
 <body>
+<!--<<<<<<< HEAD-->
 <p>Add Article</p>
 <form action="#" th:action="@{/article/save}"  method="post">
     <div>
@@ -17,31 +26,83 @@
     <div>
         <input type="text" class="input" th:field="*{article.title}" placeholder="Title">
     </div>
+<!--=======-->
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <!-- /#sidebar-wrapper -->
+<!--&gt;>>>>>> 964623fe9f7720514f6490033132cfabd424c384-->
 
-    <div>
-        <input type="text" class="input" th:field="*{article.discription}" placeholder="Discription">
-    </div>
-    <div>
-        <input type="text" class="input" th:field="*{article.fileName}" placeholder="File Name">
-    </div>
-    <div>
-        <input type="text" class="input" th:field="*{article.imageArticle}" placeholder="Image">
-    </div>
-    <div>
-        <input type="hidden" class="input" th:field="*{article.status}" placeholder="Status">
-    </div>
-    <div>
-        <input type="date" class="input" th:value="*{article.uploadDate}" name="uploadDate" placeholder="Upload Date">
-    </div>
-    <select class="input" th:field="*{article.academicYear}">
-        <option th:each="aca : ${academicYears}" th:value="${aca.id}"  th:text="${#strings.substring(aca.closureDate, 0, 4)} + '-' + ${#strings.substring(aca.finalClosureDate, 0, 4)}+' : '+${aca.title}"></option>
-    </select>
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
+                <h2 class="fs-2 m-0">Add Article </h2>
+            </div>
+        </nav>
+        <br>
+        <div class="wrapper">
+            <form action="#" th:action="@{/article/save}"  method="post">
+                <div>
+                    <input type="hidden"  th:field="*{article.user.id}">
+                </div>
+                <div>
+                    <input type="hidden"  th:value="*{article.user.id}" name="user" placeholder="UserID">
+                </div>
 
-    <!--        Button-->
-    <div>
-        <button class="form-btn">Add</button>
-    </div>
+                <div class="form-group row">
+                    <label for="article">Article Title </label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" th:field="*{article.title}" id="article" placeholder="Enter article file">
+                    </div>
+                </div>
 
-</form>
+                <label >Article Description </label>
+                <div class="col-sm-10">
+                    <input type="text"  th:field="*{article.discription}" class="form-control" placeholder="Enter article Description ">
+                </div>
+
+                <label >Article Word File</label>
+                <div class="col-sm-10">
+                    <input type="text"  th:field="*{article.fileName}" class="form-control"  placeholder="">
+                </div>
+
+                <label >Article Image</label>
+                <div class="col-sm-10">
+                    <input type="text"  th:field="*{article.imageArticle}" class="form-control"  placeholder="">
+                </div>
+
+                <label >Academic Year</label>
+                <div>
+                    <select  th:field="*{article.academicYear}">
+                        <option th:each="aca : ${academicYears}" th:value="${aca.id}"  th:text="${#strings.substring(aca.closureDate, 0, 4)} + '-' + ${#strings.substring(aca.finalClosureDate, 0, 4)}+' : '+${aca.title}"></option>
+                    </select>
+                </div>
+
+                <div class="row pt-4">
+                    <div class="">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <br>
+    <br>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var el = document.getElementById("wrapper");
+    var toggleButton = document.getElementById("menu-toggle");
+
+    toggleButton.onclick = function () {
+        el.classList.toggle("toggled");
+    };
+</script>
+
+
 </body>
 </html>

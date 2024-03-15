@@ -23,13 +23,13 @@ public class AcademicYearController {
     public String list(Model model){
         List<AcademicYear> academic_year = this.academicYearService.findAll();
         model.addAttribute("academic_year", academic_year);
-        return "User/admin/academicList";
+        return "User/admin/magazineManagement";
     }
 
     @GetMapping("/showForm")
     public String showFormAcademic(Model model){
         model.addAttribute("academic_year", new AcademicYear());
-        return "User/admin/addAcademic";
+        return "User/admin/Addacademicyear";
     }
 //
     @PostMapping("/save")
@@ -44,11 +44,10 @@ public class AcademicYearController {
         return "redirect:/academic_year";
     }
     @GetMapping("/update")
-
     public String updateAcademic(@RequestParam("id")Long id, Model model){
         AcademicYear academic_year = this.academicYearService.findById(id);
         model.addAttribute("academic_year", academic_year);
-        return "User/admin/addAcademic";
+        return "User/admin/Addacademicyear";
     }
 
 

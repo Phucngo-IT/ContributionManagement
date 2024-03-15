@@ -1,5 +1,6 @@
 package spring.boot.contributionmanagement.controllers;
 
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import spring.boot.contributionmanagement.entities.AcademicYear;
 import spring.boot.contributionmanagement.entities.Article;
 import spring.boot.contributionmanagement.entities.User;
+import spring.boot.contributionmanagement.mailService.MailService;
+import spring.boot.contributionmanagement.mailService.MailStructure;
 import spring.boot.contributionmanagement.services.AcademicYearService;
 import spring.boot.contributionmanagement.services.ArticleService;
 import spring.boot.contributionmanagement.services.UserService;
@@ -29,48 +32,76 @@ public class ArticleController {
     private final ArticleService articleService;
     private final UserService userService;
     private final AcademicYearService academicYearService;
+    private final MailService mailService;
+    private final MailStructure mailStructure;
+
 
     @Autowired
-    public ArticleController(ArticleService articleService, UserService userService, AcademicYearService academicYearService) {
+    public ArticleController(ArticleService articleService, UserService userService, AcademicYearService academicYearService, MailService mailService, MailStructure mailStructure) {
         this.articleService = articleService;
         this.userService = userService;
         this.academicYearService = academicYearService;
+        this.mailService = mailService;
+        this.mailStructure = mailStructure;
     }
-//
-    @GetMapping
+
+    @GetMapping("/showdetail")
+        public String showdetail(@PathParam("id") Long id, Model model){
+        Article article = articleService.findById(id);
+        model.addAttribute("article", article);
+        return "User/admin/ViewdetailContribution";
+    }
+    @GetMapping()
     public String list(Model model){
-            List<Article> article = articleService.findAll();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails user = (UserDetails) authentication.getPrincipal();
+
+        if (user!=null){
+            String username = user.getUsername();
+            User userObj = this.userService.findByUsername(username);
+
+            List<Article> article = userObj.getArticles();
+
             model.addAttribute("articles", article);
-            return "User/student/articleList";
+//            return "User/student/articleList";
+            return "User/student/contributionManagement";
+        }else {
+            model.addAttribute("articles", new Article());
+            return "User/student/contributionManagement";
+        }
+
     }
+
+
 //
-        @GetMapping("/showForm")
-        public String showFormArticle(Model model){
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
-                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                String username = userDetails.getUsername();
+    @GetMapping("/showForm")
+    public String showFormArticle(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
 //                Long userId = userService.findUserIdByUsername(username);
 //                model.addAttribute("userId", userId);
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                String currentDate = (LocalDate.now().format(formatter));
-                List<AcademicYear> academicYears = academicYearService.findAll();
-                Article article = new Article();
-                article.setUploadDate(Date.valueOf(currentDate));
-                article.setUser(userService.findByUsername(username));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String currentDate = (LocalDate.now().format(formatter));
+            List<AcademicYear> academicYears = academicYearService.findAll();
+            Article article = new Article();
+            article.setUploadDate(Date.valueOf(currentDate));
+            article.setUser(userService.findByUsername(username));
 //                model.addAttribute("currentDate", currentDate);
-                model.addAttribute("academicYears", academicYears);
-                model.addAttribute("article", article);
-                return "User/student/addArticle";
-            } else {
-                // Chưa đăng nhập
-                return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
-            }
+            model.addAttribute("academicYears", academicYears);
+            model.addAttribute("article", article);
+            return "addArticle";
+        } else {
+            // Chưa đăng nhập
+            return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
         }
+    }
 ////    //
     @PostMapping("/save")
     public String addArticle(@ModelAttribute("article") Article article){
-        this.articleService.saveAndUpdate(article);
+
+        this.mailService.sendMail("phucnhgcc210017@fpt.edu.vn", mailStructure);
         return "redirect:/article";
     }
 //
@@ -84,7 +115,20 @@ public class ArticleController {
     public String updateArticle(@RequestParam("id")Long id, Model model){
         Article article = this.articleService.findById(id);
         model.addAttribute("article", article);
-        return "User/student/addArticle";
+        return "addArticle";
     }
+
+
+    @GetMapping("/feedback_management")
+    public String showFeedbackManagement(Model model){
+       List<Article> article = this.articleService.findAll();
+        model.addAttribute("articles",article);
+        return "User/coordinator/feedbackManagement";
+    }
+
+
+
+
+
 
 }

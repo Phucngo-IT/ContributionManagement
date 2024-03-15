@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Article</title>
+
+</head>
+<body>
+<p>Add Article</p>
+<form action="#" th:action="@{/student/addArticle}"  method="post">
+    <div>
+        <input type="hidden" class="input" th:field="*{article.id}">
+    </div>
+    <div>
+        <input type="hidden" class="input" th:value="*{article.user.id}" name="user" placeholder="UserID">
+    </div>
+    <div>
+        <input type="text" class="input" th:field="*{article.title}" placeholder="Title">
+    </div>
+
+    <div>
+        <input type="text" class="input" th:field="*{article.discription}" placeholder="Discription">s
+    </div>
+    <div>
+        <input type="text" class="input" th:field="*{article.fileName}" placeholder="File Name">
+    </div>
+    <div>
+        <input type="text" class="input" th:field="*{article.imageArticle}" placeholder="Image">
+    </div>
+    <div>
+        <input type="hidden" class="input" th:field="*{article.status}" placeholder="Status">
+    </div>
+    <div>
+        <input type="date" class="input" th:value="*{article.uploadDate}" name="uploadDate" placeholder="Upload Date">
+    </div>
+    <select class="input" th:field="*{article.academicYear}">
+        <option th:each="aca : ${academicYears}" th:value="${aca.id}"  th:text="${#strings.substring(aca.closureDate, 0, 4)} + '-' + ${#strings.substring(aca.finalClosureDate, 0, 4)}+' : '+${aca.title}"></option>
+    </select>
+
+    <!--        Button-->
+    <div>
+        <button class="form-btn">Add</button>
+    </div>
+
+</form>
+</body>
+</html>

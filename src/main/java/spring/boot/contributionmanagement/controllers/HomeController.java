@@ -21,5 +21,9 @@ public class HomeController {
         return "Home/home";
     }
 
+    @GetMapping("/header")
+    public  String showHeader(){
+        return "header";
+    }
 
 }
