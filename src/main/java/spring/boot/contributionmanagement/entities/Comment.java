@@ -16,7 +16,7 @@ public class Comment {
 
     private Date dateComment;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+    @ManyToOne(cascade = {CascadeType.MERGE,
             CascadeType.REFRESH})
     @JoinColumn(name = "article_id")
     private Article article;

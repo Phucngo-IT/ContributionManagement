@@ -2,6 +2,7 @@ package spring.boot.contributionmanagement.controllers;
 
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.security.core.Authentication;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -55,17 +57,37 @@ public class ArticleController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails user = (UserDetails) authentication.getPrincipal();
 
-        if (user!=null){
-            String username = user.getUsername();
-            User userObj = this.userService.findByUsername(username);
 
-            List<Article> article = userObj.getArticles();
+        if (user != null) {
+            Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
-            model.addAttribute("articles", article);
-            return "User/student/contributionManagement";
+            boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
+
+            boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
+
+
+
+            if (isStudent) {
+                String username = user.getUsername();
+                User userObj = this.userService.findByUsername(username);
+
+                List<Article> articles = userObj.getArticles();
+
+                model.addAttribute("articles", articles);
+                return "User/student/contributionManagement";
+
+            } else if (isCoordinator) {
+
+                List<Article> articles = this.articleService.findAll();
+                model.addAttribute("articles", articles);
+                return "User/coordinator/feedbackManagement";
+
+            } else {
+                model.addAttribute("articles", new Article());
+                return "User/student/contributionManagement";
+            }
         }else {
-            model.addAttribute("articles", new Article());
-            return "User/student/contributionManagement";
+            return null;
         }
 
     }

@@ -1,7 +1,9 @@
+
 .content{
     color: grey;
-    width: 100%;
-    height: 20%;
+    width: 673px;
+    height: 150px;
+    border-radius: 5px;
 }
 :root {
     --main-bg-color: #009d63;

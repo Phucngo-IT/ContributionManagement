@@ -54,13 +54,16 @@
                     </p>
                     <span>></span>
                 </a>
-                <a th:href="@{/logout}" class="sub-menu-link">
-                    <img src="log-out.png" />
-                    <p>
-                        Logout
-                    </p>
-                    <span>></span>
-                </a>
+                <form th:action="@{/logout}" method="post">
+                    <button class="sub-menu-link">
+                        <img src="log-out.png" />
+                        <p>
+                            Logout
+                        </p>
+
+                    </button>
+                </form>
+
 
             </div>
         </div>
