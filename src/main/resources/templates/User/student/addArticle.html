@@ -27,7 +27,7 @@
         </nav>
         <br>
         <div class="wrapper">
-            <form action="#" th:action="@{/article/save}"  method="post">
+            <form action="#" th:action="@{/article/save}"  method="post" enctype="multipart/form-data">
                 <div>
                     <input type="hidden"  th:field="*{article.user.id}">
                 </div>

@@ -58,13 +58,13 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Article> articles;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH})
-    @JoinTable(name = "log_download",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "selected_contribution_id"))
-    private List<SelectedContribution> selectedContributions;
+    //comment
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
 
+
+    @OneToMany(mappedBy = "user")
+    private List<LogDownload> logDownloads;
     //
 
 
@@ -98,14 +98,7 @@ public class User {
         return this;
     }
 
-    public List<SelectedContribution> getSelectedContributions() {
-        return selectedContributions;
-    }
 
-    public User setSelectedContributions(List<SelectedContribution> selectedContributions) {
-        this.selectedContributions = selectedContributions;
-        return this;
-    }
 
     public Date getDateOfBirth() {
         return dateOfBirth;
@@ -179,6 +172,24 @@ public class User {
         return this;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public User setComments(List<Comment> comments) {
+        this.comments = comments;
+        return this;
+    }
+
+    public List<LogDownload> getLogDownloads() {
+        return logDownloads;
+    }
+
+    public User setLogDownloads(List<LogDownload> logDownloads) {
+        this.logDownloads = logDownloads;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -193,7 +204,8 @@ public class User {
                 ", role=" + role +
                 ", faculty=" + faculty +
                 ", articles=" + articles +
-                ", selectedContributions=" + selectedContributions +
+                ", comments=" + comments +
+                ", logDownloads=" + logDownloads +
                 '}';
     }
 }

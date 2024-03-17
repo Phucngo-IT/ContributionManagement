@@ -19,8 +19,10 @@ import spring.boot.contributionmanagement.mailService.MailService;
 import spring.boot.contributionmanagement.mailService.MailStructure;
 import spring.boot.contributionmanagement.services.AcademicYearService;
 import spring.boot.contributionmanagement.services.ArticleService;
+import spring.boot.contributionmanagement.services.FileUpload;
 import spring.boot.contributionmanagement.services.UserService;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -36,6 +38,7 @@ public class ArticleController {
     private final AcademicYearService academicYearService;
     private final MailService mailService;
     private final MailStructure mailStructure;
+    public static final String DIRECTORY = System.getProperty("user.home") + "/OneDrive - Phucngocomputer/Desktop/ContributionManagement/src/main/resources/static/wordFiles/";
 
 
     @Autowired
@@ -102,7 +105,7 @@ public class ArticleController {
     }
 ////    //
     @PostMapping("/save")
-    public String addArticle(@ModelAttribute("article") Article article, @RequestParam("files")MultipartFile multipartFile){
+    public String addArticle(@ModelAttribute("article") Article article, @RequestParam("files")MultipartFile multipartFile) throws IOException {
 
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         article.setFileName(fileName);
@@ -115,6 +118,7 @@ public class ArticleController {
         this.articleService.save(article);
 
         this.articleService.saveAndUpdate(article);
+
         this.mailService.sendMail("phucnhgcc210017@fpt.edu.vn", mailStructure);
         return "redirect:/article";
     }
@@ -122,14 +126,14 @@ public class ArticleController {
     @GetMapping("/delete")
     public String deleteArticle(@RequestParam("id")Long id){
         this.articleService.deleteById(id);
-        return "redirect:/student/articleList";
+        return "redirect:/article";
     }
     @GetMapping("/update")
-
     public String updateArticle(@RequestParam("id")Long id, Model model){
         Article article = this.articleService.findById(id);
+//        List<AcademicYear> academicYears = academicYearService.findAll();
         model.addAttribute("article", article);
-        return "addArticle";
+        return "User/student/addArticle";
     }
 
 
