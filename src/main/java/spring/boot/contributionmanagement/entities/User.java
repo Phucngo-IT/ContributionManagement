@@ -15,6 +15,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //show image
+    @Transient
+    public String getAvatarPath(){
+        if (avatar == null || id == null) return null;
+        return "/src/main/resources/static/userAvatar/" + id +"/" +avatar;
+        //<img th:src="@{ ${user.avatarPath} }" alt="" width="500px" height="250px">
+    }
+
     @Column(name = "full_name")
     @NotBlank(message = "You cannot leave this section blank")
     private String fullName;

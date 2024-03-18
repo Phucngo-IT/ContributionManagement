@@ -19,20 +19,18 @@
                     class="fas fa-user-secret me-2"></i>Admin
             </div>
             <div class="list-group list-group-flush my-3">
-                <a th:href="@{/home}"
-                   class="list-group-item list-group-item-action bg-transparent second-text active"></i>Home</a>
-                <a th:href="@{/faculty}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Faculty</a>
-                <a th:href="@{/academic_year}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Annual
-                    Magazine</a>
-                <a th:href="@{/article}"
-                   class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Contribution</a>
-                <a th:href="@{/article}"
-                   class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Feedback</a>
-    <!--            <a th:href="approvedAdmin.html"-->
-    <!--               class="list-group-item list-group-item-action bg-transparent second-text fw-bold"></i>Approved-->
-    <!--                Article</a>-->
-    <!--            <a th:href="../manager/statisticManagement.html"-->
-    <!--               class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Statistic</a>-->
+                <a th:href="@{/home}" class="list-group-item list-group-item-action bg-transparent second-text active">Home</a>
+
+                <a th:href="@{/faculty}" sec:authorize="hasAnyRole('ADMIN')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Faculty</a>
+
+                <a th:href="@{/academic_year}" sec:authorize="hasAnyRole('ADMIN')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Annual Magazine Management</a>
+
+                <a th:href="@{/article}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Contribution Management</a>
+
+                <a th:href="@{/}" sec:authorize="hasAnyRole('MANAGER')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Statistic Management</a>
+
+                <a th:href="@{/login?logout}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Log out</a>
+
             </div>
         </div>
 

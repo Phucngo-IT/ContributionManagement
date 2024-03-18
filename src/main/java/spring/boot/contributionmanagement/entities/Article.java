@@ -13,6 +13,13 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //get image
+    @Transient
+    public String getArticleImagePath(){
+        if (imageArticle == null || id == null ) return null;
+        return "/src/main/resources/static/articleImage/" + id +"/" +imageArticle;
+    }
+
     @Column(name = "title")
     private String title;
 

@@ -54,6 +54,7 @@ public class ArticleController {
         this.mailStructure = mailStructure;
     }
 
+    //show role Student, Admin, Manager and Coordinator
     @GetMapping()
     public String list(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -65,6 +66,7 @@ public class ArticleController {
             boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
             boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
             boolean isAdmin = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+            boolean isManager = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_MANAGER"));
 
             if (isStudent) {
                 String username = userAuth.getUsername();
@@ -85,6 +87,30 @@ public class ArticleController {
                 List<Article> articles = this.articleService.findAll();
                 model.addAttribute("articles", articles);
                 return "User/admin/contributionManagement";
+            } else if (isManager) {
+                List<Article> articles = this.articleService.findAll();
+
+                List<Article> approvedArticle = new ArrayList<>();
+
+                String facultyName = null;
+
+                User coordinatorUser = null;
+
+                for (Article article : articles) {
+
+                    if (article.isStatus())
+                        approvedArticle.add(article);
+
+                    facultyName =  article.getUser().getFaculty().getName();
+                    Long userId = this.userService.findUserByFacultyAndRole(facultyName);
+                    coordinatorUser = this.userService.findById(userId);
+
+                }
+                model.addAttribute("articles", approvedArticle);
+                model.addAttribute("coordinatorUser", coordinatorUser);
+
+                return "User/manager/approvalArticleManagement";
+
             } else {
                 return "User/student/contributionManagement";//show error page
             }
@@ -101,44 +127,6 @@ public class ArticleController {
         return "User/admin/ViewdetailContribution";
     }
 
-    @GetMapping("/manager/approval_article")
-    public String showApprovalArticle(Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userAuth = (UserDetails) authentication.getPrincipal();
-
-        if (userAuth != null) {
-            Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
-
-            boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
-            boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
-
-            List<Article> articles = this.articleService.findAll();
-
-            List<Article> approvedArticle = new ArrayList<>();
-
-            String facultyName = null;
-
-            User coordinatorUser = null;
-
-            for (Article article : articles) {
-
-                if (article.isStatus())
-                    approvedArticle.add(article);
-
-                    facultyName =  article.getUser().getFaculty().getName();
-                    Long userId = this.userService.findUserByFacultyAndRole(facultyName);
-                    coordinatorUser = this.userService.findById(userId);
-
-            }
-            model.addAttribute("articles", approvedArticle);
-            model.addAttribute("coordinatorUser", coordinatorUser);
-
-            return "User/manager/approvalArticleManagement";
-
-        }
-
-        return null;
-    }
 
     @GetMapping("/manager/detail_approval")
     public String showDetail(@PathParam("id") Long id,  Model model){
@@ -151,7 +139,6 @@ public class ArticleController {
 
 
 
-//
     @GetMapping("/showForm")
     public String showFormArticle(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
