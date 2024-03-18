@@ -177,15 +177,23 @@ public class ArticleController {
     }
 ////    //
     @PostMapping("/save")
-    public String addArticle(@ModelAttribute("article") Article article, @RequestParam("files")MultipartFile multipartFile) throws IOException {
+    public String addArticle(@ModelAttribute("article") Article article, @RequestParam("files")MultipartFile wordFile, @RequestParam("image") MultipartFile imageFile ) throws IOException {
 
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        article.setFileName(fileName);
+        String wordFileName = StringUtils.cleanPath(wordFile.getOriginalFilename());
+        String imageFileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+
+        //set file into article
+        article.setFileName(wordFileName);
+        article.setImageArticle(imageFileName);
         this.articleService.save(article);
 
-
+        //word file
         String uploadDirectory = DIRECTORY;
-        FileUpload.saveFile(uploadDirectory, fileName, multipartFile);
+        FileUpload.saveFile(uploadDirectory, wordFileName, wordFile);
+
+        //image file
+        String imageDirectory = "src/main/resources/static/articleImage/" + article.getId();
+        FileUpload.saveFile(imageDirectory, imageFileName, imageFile);
 
         this.articleService.save(article);
 
