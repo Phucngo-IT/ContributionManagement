@@ -1,5 +1,7 @@
 package spring.boot.contributionmanagement.services;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,10 +22,13 @@ public class UserServiceImpl implements UserService {
 
     private final RoleRepository roleRepository;
 
+    private final EntityManager entityManager;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, EntityManager entityManager) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.entityManager = entityManager;
     }
 
     //security
@@ -83,6 +88,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Long id) {
         this.userRepository.deleteById(id);
+    }
+
+    @Override
+    public Long findUserByFacultyAndRole(String facultyName) {
+        String jpql = "select u.id from User u " +
+                "join u.role r join u.faculty f where r.roleName='ROLE_COORDINATOR' and f.name =: facultyName";
+        TypedQuery query = this.entityManager.createQuery(jpql, User.class);
+        query.setParameter("facultyName", facultyName);
+        return (Long) query.getSingleResult();
     }
 
 

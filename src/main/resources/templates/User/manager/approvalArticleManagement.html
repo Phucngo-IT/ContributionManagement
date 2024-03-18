@@ -12,29 +12,20 @@
 </head>
 
 <body>
- /#sidebar-wrapper -->
+<div class="d-flex" id="wrapper">
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
         <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
             <div class="d-flex align-items-center">
-                <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
                 <h2 class="fs-2 m-0">Approved Article Management</h2>
-
-
             </div>
         </nav>
         <br>
         <div class="btn-group">
-            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Select Academic Year
-            </button>
-            <div class="dropdown-menu">
-                ...
-            </div>
-            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-left: 30px;">
-                Select Academic Year
-            </button>
+            </a>
             <div class="dropdown-menu">
                 ...
             </div>
@@ -47,76 +38,33 @@
             <table class="table bg-white rounded shadow-sm  table-hover">
                 <thead>
                 <tr>
-                    <th scope="col" width="50">#</th>
+                    <th scope="col" width="50">STT</th>
                     <th scope="col">Description</th>
                     <th scope="col">Student Name</th>
-                    <th scope="col">Approved Date</th>
                     <th scope="col">Coordinator</th>
                     <th scope="col">Action</th>
+
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
+                <tr th:each="article : ${articles}">
+                    <th scope="col" width="50">#</th>
+                    <td th:text="${article.discription}">...</td>
+                    <td th:text="${article.user.fullName}">...</td>
+                    <td th:text="${coordinatorUser.fullName}">...</td>
+
+                    <td>
+                        <a th:href="@{/article/manager/detail_approval(id=${article.id})}" class="btn btn-info"> View Detail </a>
                     </td>
+
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""><button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">4</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">5</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">6</th>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td><a href=""> <button class="btn btn-primary">Edit</button></a>
-                        <a href=""> <button class="btn btn-danger">Delete</button></a>
-                    </td>
-                </tr>
+
                 </tbody>
+                <tr>
+                    <td>
+                        <a href="" class="btn btn-info"> Download </a>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
