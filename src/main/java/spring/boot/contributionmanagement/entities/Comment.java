@@ -16,10 +16,16 @@ public class Comment {
 
     private Date dateComment;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+    @ManyToOne(cascade = {CascadeType.MERGE,
             CascadeType.REFRESH})
     @JoinColumn(name = "article_id")
     private Article article;
+
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH})
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
     public Comment() {
@@ -47,7 +53,37 @@ public class Comment {
         return dateComment;
     }
 
+    public Comment setDateComment(Date dateComment) {
+        this.dateComment = dateComment;
+        return this;
+    }
 
+    public Article getArticle() {
+        return article;
+    }
 
+    public Comment setArticle(Article article) {
+        this.article = article;
+        return this;
+    }
 
+    public User getUser() {
+        return user;
+    }
+
+    public Comment setUser(User user) {
+        this.user = user;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", dateComment=" + dateComment +
+                ", article=" + article +
+                ", user=" + user +
+                '}';
+    }
 }

@@ -14,29 +14,61 @@
 <body>
 <div class="d-flex" id="wrapper">
   <!-- Sidebar -->
-  <div class="bg-white" id="sidebar-wrapper">
-    <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"><i
-            class="fas fa-user-secret me-2"></i>Admin</div>
-    <div class="list-group list-group-flush my-3">
-      <a href="#"
-         class="list-group-item list-group-item-action bg-transparent second-text active"></i>Home</a>
-
-
-      <a href="feedbackManagement.html"
-         class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Feedback</a>
-    </div>
-  </div>
   <!-- /#sidebar-wrapper -->
 
   <!-- Page Content -->
   <div id="page-content-wrapper">
-    <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
-      <div class="d-flex align-items-center">
-        <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
-        <h2 class="fs-2 m-0">Feedback Management</h2>
-      </div>
-    </nav>
+      <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+        <div class="d-flex align-items-center">
+          <h2 class="fs-2 m-0">Feedback Management</h2>
+        </div>
+      </nav>
 
+
+
+      <br>
+      <br>
+      <div class="col">
+          <table class="table bg-white rounded shadow-sm  table-hover">
+            <thead>
+            <tr>
+              <th scope="col">Article title </th>
+              <th scope="col">File Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr >
+              <td th:text="${article.title}"></td>
+              <td th:text="${article.fileName}"></td>
+
+              <td><a th:href="@{'/file/download/' + ${article.fileName} }"><button class="btn btn-primary">Download</button></a></td>
+            </tr>
+
+            </tbody>
+          </table>
+
+          <h2>Give Feedback</h2>
+          <form action="#" th:action="@{'/comment/save/' + ${article.id}}" th:object="${comment}" method="post">
+            <input type="text" th:field="*{content}" class="content"  ></input>
+
+            <button class="btn btn-primary"> Send feedback </button>
+          </form>
+
+          <h2>Feedback Histories</h2>
+          <div th:each="comment : ${comments}" >
+          <div th:text="${comment.dateComment}">  </div>
+          <textarea th:text="${comment.content}" class="content" name="content" rows="2" id="dlg-content-65ef480e554d8" aria-label="Add a comment..."
+                    cols="20" ></textarea>
+            </div>
+
+          <div class="dropdown">
+            <button class="btn btn-primary " type="button"  aria-expanded="false">
+              Approved
+            </button>
+          </div>
+      </div>
+
+<<<<<<< HEAD
 
 
     <br>
@@ -77,9 +109,11 @@
       </div>
     </div>
   </div>
+=======
+    </div>
+>>>>>>> d14c6e52a328bbbcdb9a148e910e82c3335f9b26
 </div>
 <!-- /#page-content-wrapper -->
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
 <script>

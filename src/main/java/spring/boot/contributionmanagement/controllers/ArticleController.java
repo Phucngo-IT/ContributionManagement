@@ -2,26 +2,34 @@ package spring.boot.contributionmanagement.controllers;
 
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.multipart.MultipartFile;
 import spring.boot.contributionmanagement.entities.AcademicYear;
 import spring.boot.contributionmanagement.entities.Article;
+import spring.boot.contributionmanagement.entities.Comment;
 import spring.boot.contributionmanagement.entities.User;
 import spring.boot.contributionmanagement.mailService.MailService;
 import spring.boot.contributionmanagement.mailService.MailStructure;
 import spring.boot.contributionmanagement.services.AcademicYearService;
 import spring.boot.contributionmanagement.services.ArticleService;
+import spring.boot.contributionmanagement.services.FileUpload;
 import spring.boot.contributionmanagement.services.UserService;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -34,6 +42,7 @@ public class ArticleController {
     private final AcademicYearService academicYearService;
     private final MailService mailService;
     private final MailStructure mailStructure;
+    public static final String DIRECTORY = System.getProperty("user.home") + "/OneDrive - Phucngocomputer/Desktop/ContributionManagement/src/main/resources/static/wordFiles/";
 
 
     @Autowired
@@ -45,31 +54,101 @@ public class ArticleController {
         this.mailStructure = mailStructure;
     }
 
-    @GetMapping("/showdetail")
-        public String showdetail(@PathParam("id") Long id, Model model){
-        Article article = articleService.findById(id);
-        model.addAttribute("article", article);
-        return "User/manager/ViewdetailContribution";
-    }
-    @GetMapping("/contribution")
+    @GetMapping()
     public String list(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails user = (UserDetails) authentication.getPrincipal();
+        UserDetails userAuth = (UserDetails) authentication.getPrincipal();
 
-        if (user!=null){
-            String username = user.getUsername();
-            User userObj = this.userService.findByUsername(username);
+        if (userAuth != null) {
+            Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
 
-            List<Article> article = userObj.getArticles();
+            boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
+            boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
+            boolean isAdmin = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
 
-            model.addAttribute("articles", article);
-            return "User/student/contributionManagement";
+            if (isStudent) {
+                String username = userAuth.getUsername();
+                User user = this.userService.findByUsername(username);
+
+                List<Article> articles = user.getArticles();
+
+                model.addAttribute("articles", articles);
+                return "User/student/contributionManagement";
+
+            } else if (isCoordinator) {
+
+                List<Article> articles = this.articleService.findAll();
+                model.addAttribute("articles", articles);
+                return "User/coordinator/feedbackManagement";
+
+            } else if (isAdmin) {
+                List<Article> articles = this.articleService.findAll();
+                model.addAttribute("articles", articles);
+                return "User/admin/contributionManagement";
+            } else {
+                return "User/student/contributionManagement";//show error page
+            }
         }else {
-            model.addAttribute("articles", new Article());
-            return "User/student/contributionManagement";
+            return null; //show error page
         }
 
     }
+
+    @GetMapping("/admin/showDetail")
+        public String showdetail(@PathParam("id") Long id, Model model){
+        Article article = articleService.findById(id);
+        model.addAttribute("article", article);
+        return "User/admin/ViewdetailContribution";
+    }
+
+    @GetMapping("/manager/approval_article")
+    public String showApprovalArticle(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userAuth = (UserDetails) authentication.getPrincipal();
+
+        if (userAuth != null) {
+            Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
+
+            boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
+            boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
+
+            List<Article> articles = this.articleService.findAll();
+
+            List<Article> approvedArticle = new ArrayList<>();
+
+            String facultyName = null;
+
+            User coordinatorUser = null;
+
+            for (Article article : articles) {
+
+                if (article.isStatus())
+                    approvedArticle.add(article);
+
+                    facultyName =  article.getUser().getFaculty().getName();
+                    Long userId = this.userService.findUserByFacultyAndRole(facultyName);
+                    coordinatorUser = this.userService.findById(userId);
+
+            }
+            model.addAttribute("articles", approvedArticle);
+            model.addAttribute("coordinatorUser", coordinatorUser);
+
+            return "User/manager/approvalArticleManagement";
+
+        }
+
+        return null;
+    }
+
+    @GetMapping("/manager/detail_approval")
+    public String showDetail(@PathParam("id") Long id,  Model model){
+        Article article = this.articleService.findById(id);
+
+        model.addAttribute("article", article);
+
+        return "User/manager/viewdetailApproval";
+    }
+
 
 
 //
@@ -90,7 +169,7 @@ public class ArticleController {
 //                model.addAttribute("currentDate", currentDate);
             model.addAttribute("academicYears", academicYears);
             model.addAttribute("article", article);
-            return "addArticle";
+            return "User/student/addArticle";
         } else {
             // Chưa đăng nhập
             return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
@@ -98,8 +177,22 @@ public class ArticleController {
     }
 ////    //
     @PostMapping("/save")
-    public String addArticle(@ModelAttribute("article") Article article){
+    public String addArticle(@ModelAttribute("article") Article article, @RequestParam("files")MultipartFile multipartFile) throws IOException {
+
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        article.setFileName(fileName);
+        this.articleService.save(article);
+
+
+        String uploadDirectory = DIRECTORY;
+        FileUpload.saveFile(uploadDirectory, fileName, multipartFile);
+
+        this.articleService.save(article);
+
         this.articleService.saveAndUpdate(article);
+
+//        article.getUser().getFaculty().getName();
+
         this.mailService.sendMail("phucnhgcc210017@fpt.edu.vn", mailStructure);
         return "redirect:/article";
     }
@@ -107,26 +200,15 @@ public class ArticleController {
     @GetMapping("/delete")
     public String deleteArticle(@RequestParam("id")Long id){
         this.articleService.deleteById(id);
-        return "redirect:/student/articleList";
+        return "redirect:/article";
     }
-    @GetMapping("/update")
 
+    @GetMapping("/update")
     public String updateArticle(@RequestParam("id")Long id, Model model){
         Article article = this.articleService.findById(id);
         model.addAttribute("article", article);
-        return "addArticle";
+        return "User/student/addArticle";
     }
-
-
-    @GetMapping("/feedback_management")
-    public String showFeedbackManagement(Model model){
-       List<Article> article = this.articleService.findAll();
-        model.addAttribute("articles",article);
-        return "User/coordinator/feedbackManagement";
-    }
-
-
-
 
 
 

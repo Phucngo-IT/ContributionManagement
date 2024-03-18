@@ -42,11 +42,14 @@ public class Article {
     @JoinColumn(name = "academic_year_id")
     private AcademicYear academicYear;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH})
+    @JoinTable(name = "download_histories", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "log_download_id"))
+    private List<LogDownload> logDownloads;
+
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "article")
-    private List<SelectedContribution> selectedContributions;
 
 
     public Article() {
@@ -61,12 +64,12 @@ public class Article {
         return this;
     }
 
-    public List<SelectedContribution> getSelectedContributions() {
-        return selectedContributions;
+    public List<LogDownload> getLogDownloads() {
+        return logDownloads;
     }
 
-    public Article setSelectedContributions(List<SelectedContribution> selectedContributions) {
-        this.selectedContributions = selectedContributions;
+    public Article setLogDownloads(List<LogDownload> logDownloads) {
+        this.logDownloads = logDownloads;
         return this;
     }
 
@@ -163,6 +166,8 @@ public class Article {
                 ", uploadDate=" + uploadDate +
                 ", user=" + user +
                 ", academicYear=" + academicYear +
+                ", logDownloads=" + logDownloads +
+                ", comments=" + comments +
                 '}';
     }
 }
