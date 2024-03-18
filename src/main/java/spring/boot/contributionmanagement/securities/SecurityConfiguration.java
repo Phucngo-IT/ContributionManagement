@@ -31,6 +31,8 @@ public class SecurityConfiguration {
             configurer -> configurer
                     .requestMatchers("/register").permitAll()
                     .requestMatchers("/register/save").permitAll()
+                    .requestMatchers("/login").permitAll()
+                    .requestMatchers("/logout").permitAll()
                     .anyRequest().authenticated()
 
 

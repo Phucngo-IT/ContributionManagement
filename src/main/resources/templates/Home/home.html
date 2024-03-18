@@ -24,7 +24,10 @@
         <img th:src="@{/backgroundImage/Greenwich.jpg}" class="user-pic" onclick="toggleMenu()">
         <div class="sub-menu-wrap" id="subMenu">
             <div class="sub-menu">
-                <div class="user-info"><h2 sec:authentication="principal.username"></h2>
+                <div class="user-info">
+                    <h2 sec:authentication="principal.username"></h2>
+                    <br>
+                    <h2 sec:authentication="principal.authorities"></h2>
                     <img src="logo.png" alt="" />
 
                 </div>
@@ -51,13 +54,16 @@
                     </p>
                     <span>></span>
                 </a>
-                <a th:href="@{/logout}" class="sub-menu-link">
-                    <img src="log-out.png" />
-                    <p>
-                        Logout
-                    </p>
-                    <span>></span>
-                </a>
+                <form th:action="@{/logout}" method="post">
+                    <button class="sub-menu-link">
+                        <img src="log-out.png" />
+                        <p>
+                            Logout
+                        </p>
+
+                    </button>
+                </form>
+
 
             </div>
         </div>

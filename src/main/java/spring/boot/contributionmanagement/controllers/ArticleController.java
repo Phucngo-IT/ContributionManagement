@@ -2,6 +2,7 @@ package spring.boot.contributionmanagement.controllers;
 
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.security.core.Authentication;
@@ -19,11 +20,14 @@ import spring.boot.contributionmanagement.mailService.MailService;
 import spring.boot.contributionmanagement.mailService.MailStructure;
 import spring.boot.contributionmanagement.services.AcademicYearService;
 import spring.boot.contributionmanagement.services.ArticleService;
+import spring.boot.contributionmanagement.services.FileUpload;
 import spring.boot.contributionmanagement.services.UserService;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -36,6 +40,7 @@ public class ArticleController {
     private final AcademicYearService academicYearService;
     private final MailService mailService;
     private final MailStructure mailStructure;
+    public static final String DIRECTORY = System.getProperty("user.home") + "/OneDrive - Phucngocomputer/Desktop/ContributionManagement/src/main/resources/static/wordFiles/";
 
 
     @Autowired
@@ -52,17 +57,37 @@ public class ArticleController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails user = (UserDetails) authentication.getPrincipal();
 
-        if (user!=null){
-            String username = user.getUsername();
-            User userObj = this.userService.findByUsername(username);
 
-            List<Article> article = userObj.getArticles();
+        if (user != null) {
+            Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
-            model.addAttribute("articles", article);
-            return "User/student/contributionManagement";
+            boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
+
+            boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
+
+
+
+            if (isStudent) {
+                String username = user.getUsername();
+                User userObj = this.userService.findByUsername(username);
+
+                List<Article> articles = userObj.getArticles();
+
+                model.addAttribute("articles", articles);
+                return "User/student/contributionManagement";
+
+            } else if (isCoordinator) {
+
+                List<Article> articles = this.articleService.findAll();
+                model.addAttribute("articles", articles);
+                return "User/coordinator/feedbackManagement";
+
+            } else {
+                model.addAttribute("articles", new Article());
+                return "User/student/contributionManagement";
+            }
         }else {
-            model.addAttribute("articles", new Article());
-            return "User/student/contributionManagement";
+            return null;
         }
 
     }
@@ -102,7 +127,7 @@ public class ArticleController {
     }
 ////    //
     @PostMapping("/save")
-    public String addArticle(@ModelAttribute("article") Article article, @RequestParam("files")MultipartFile multipartFile){
+    public String addArticle(@ModelAttribute("article") Article article, @RequestParam("files")MultipartFile multipartFile) throws IOException {
 
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         article.setFileName(fileName);
@@ -115,6 +140,7 @@ public class ArticleController {
         this.articleService.save(article);
 
         this.articleService.saveAndUpdate(article);
+
         this.mailService.sendMail("phucnhgcc210017@fpt.edu.vn", mailStructure);
         return "redirect:/article";
     }
@@ -122,14 +148,14 @@ public class ArticleController {
     @GetMapping("/delete")
     public String deleteArticle(@RequestParam("id")Long id){
         this.articleService.deleteById(id);
-        return "redirect:/student/articleList";
+        return "redirect:/article";
     }
     @GetMapping("/update")
-
     public String updateArticle(@RequestParam("id")Long id, Model model){
         Article article = this.articleService.findById(id);
+//        List<AcademicYear> academicYears = academicYearService.findAll();
         model.addAttribute("article", article);
-        return "addArticle";
+        return "User/student/addArticle";
     }
 
 

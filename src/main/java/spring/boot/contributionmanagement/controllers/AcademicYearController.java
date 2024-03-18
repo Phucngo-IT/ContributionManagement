@@ -29,7 +29,7 @@ public class AcademicYearController {
     @GetMapping("/showForm")
     public String showFormAcademic(Model model){
         model.addAttribute("academic_year", new AcademicYear());
-        return "User/manager/Addacademicyear";
+        return "User/admin/Addacademicyear";
     }
 //
     @PostMapping("/save")

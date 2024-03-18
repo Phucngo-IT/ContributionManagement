@@ -30,93 +30,60 @@
 
   <!-- Page Content -->
   <div id="page-content-wrapper">
-    <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
-      <div class="d-flex align-items-center">
-        <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
-        <h2 class="fs-2 m-0">Feedback Management</h2>
+      <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
+          <h2 class="fs-2 m-0">Feedback Management</h2>
+        </div>
+      </nav>
+
+
+
+      <br>
+      <br>
+      <div class="col">
+          <table class="table bg-white rounded shadow-sm  table-hover">
+            <thead>
+            <tr>
+              <th scope="col">Article title </th>
+              <th scope="col">File Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr >
+              <td th:text="${article.title}"></td>
+              <td th:text="${article.fileName}"></td>
+
+              <td><a th:href="@{'/file/download/' + ${article.fileName} }"><button class="btn btn-primary">Download</button></a></td>
+            </tr>
+
+            </tbody>
+          </table>
+
+          <h2>Give Feedback</h2>
+          <form action="#" th:action="@{'/comment/save/' + ${article.id}}" th:object="${comment}" method="post">
+            <input type="text" th:field="*{content}" class="content"  ></input>
+
+            <button class="btn btn-primary"> Send feedback </button>
+          </form>
+
+          <h2>Feedback Histories</h2>
+          <div th:each="comment : ${comments}" >
+          <div th:text="${comment.dateComment}">  </div>
+          <textarea th:text="${comment.content}" class="content" name="content" rows="2" id="dlg-content-65ef480e554d8" aria-label="Add a comment..."
+                    cols="20" ></textarea>
+            </div>
+
+          <div class="dropdown">
+            <button class="btn btn-primary " type="button"  aria-expanded="false">
+              Approved
+            </button>
+          </div>
       </div>
-    </nav>
 
-
-
-    <br>
-    <br>
-    <div class="col">
-
-      <table class="table bg-white rounded shadow-sm  table-hover">
-        <thead>
-        <tr>
-
-          <th scope="col">Student Name </th>
-          <th scope="col">Article title </th>
-          <th scope="col">File Name</th>
-
-
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <th scope="row"></th>
-          <td>...</td>
-          <td>...</td>
-
-          <td><a href=""><button class="btn btn-primary">Download</button></a></td>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td>...</td>
-          <td>...</td>
-
-          <td><a href=""><button class="btn btn-primary">Download</button></a></td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td>...</td>
-          <td>...</td>
-
-          <td><a href=""><button class="btn btn-primary">Download</button></a></td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td>...</td>
-          <td>...</td>
-
-          <td><a href=""><button class="btn btn-primary">Download</button></a></td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td>...</td>
-          <td>...</td>
-
-          <td><a href=""><button class="btn btn-primary">Download</button></a></td>
-        </tr>
-        <tr>
-          <th scope="row"></th>
-          <td>...</td>
-          <td>...</td>
-          <td><a href=""><button class="btn btn-primary">Download</button></a></td>
-        </tr>
-        </tbody>
-      </table>
-      <h2>Content</h2>
-
-      <textarea class="content" name="content" rows="2" id="dlg-content-65ef480e554d8" aria-label="Add a comment..."
-                cols="20" ></textarea>
-      <div class="dropdown">
-        <button class="btn btn-primary " type="button" aria-expanded="false">
-          Recheck
-        </button>
-        <button class="btn btn-primary " type="button"  aria-expanded="false">
-          Approved
-        </button>
-      </div>
     </div>
-
-  </div>
 </div>
 <!-- /#page-content-wrapper -->
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
 <script>

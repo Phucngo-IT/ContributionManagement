@@ -21,8 +21,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 @RestController
 @RequestMapping("/file")
 public class DownloadService {
-    public static final String DIRECTORY = System.getProperty("user.home") + "/OneDrive - Phucngocomputer/Desktop/DownloadAndUploadAnyFiles/src/main/resources/static/wordFiles/";
-
+    public static final String DIRECTORY = System.getProperty("user.home") + "/OneDrive - Phucngocomputer/Desktop/ContributionManagement/src/main/resources/static/wordFiles/";
 
     @GetMapping("/download/{fileName}")
     public ResponseEntity<Resource> downloadFiles(@PathVariable("fileName") String fileName) throws IOException {

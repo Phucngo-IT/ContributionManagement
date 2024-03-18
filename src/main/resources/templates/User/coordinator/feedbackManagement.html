@@ -52,7 +52,7 @@
                     <td th:text="${article.uploadDate}"></td>
                     <td th:text="${article.status}"></td>
                     <td>
-                        <a href=""><button class="btn btn-info">View Detail</button></a>
+                        <a th:href="@{/comment(id=${article.id})}"><button class="btn btn-info">View Detail</button></a>
                     </td>
                 </tr>
 

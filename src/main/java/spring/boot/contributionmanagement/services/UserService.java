@@ -1,7 +1,6 @@
 package spring.boot.contributionmanagement.services;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
-import spring.boot.contributionmanagement.entities.SelectedContribution;
 import spring.boot.contributionmanagement.entities.User;
 
 import java.util.List;
