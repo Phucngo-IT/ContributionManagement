@@ -8,6 +8,7 @@
 </head>
 <body>
 <div class="hero">
+
     <nav>
         <img th:src="@{/backgroundImage/Greenwich.jpg}" class=" logo" />
         <ul>
@@ -68,9 +69,22 @@
             </div>
         </div>
     </nav>
+
 </div>
+<div class="d-flex" id="wrapper">
+    <div th:replace="header :: header"></div>
+    </div>
 
 <script  th:src="@{/js/homepage.js}" > </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var el = document.getElementById("wrapper");
+    var toggleButton = document.getElementById("menu-toggle");
+
+    toggleButton.onclick = function () {
+        el.classList.toggle("toggled");
+    };
+</script>
     <h1>Home Page 1234</h1>
 </body>
 

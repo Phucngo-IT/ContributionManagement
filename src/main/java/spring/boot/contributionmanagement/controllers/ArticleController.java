@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import spring.boot.contributionmanagement.entities.AcademicYear;
 import spring.boot.contributionmanagement.entities.Article;
+import spring.boot.contributionmanagement.entities.Comment;
 import spring.boot.contributionmanagement.entities.User;
 import spring.boot.contributionmanagement.mailService.MailService;
 import spring.boot.contributionmanagement.mailService.MailStructure;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -55,23 +57,20 @@ public class ArticleController {
     @GetMapping()
     public String list(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails user = (UserDetails) authentication.getPrincipal();
+        UserDetails userAuth = (UserDetails) authentication.getPrincipal();
 
-
-        if (user != null) {
-            Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+        if (userAuth != null) {
+            Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
 
             boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
-
             boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
-
-
+            boolean isAdmin = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
 
             if (isStudent) {
-                String username = user.getUsername();
-                User userObj = this.userService.findByUsername(username);
+                String username = userAuth.getUsername();
+                User user = this.userService.findByUsername(username);
 
-                List<Article> articles = userObj.getArticles();
+                List<Article> articles = user.getArticles();
 
                 model.addAttribute("articles", articles);
                 return "User/student/contributionManagement";
@@ -82,21 +81,72 @@ public class ArticleController {
                 model.addAttribute("articles", articles);
                 return "User/coordinator/feedbackManagement";
 
+            } else if (isAdmin) {
+                List<Article> articles = this.articleService.findAll();
+                model.addAttribute("articles", articles);
+                return "User/admin/contributionManagement";
             } else {
-                model.addAttribute("articles", new Article());
-                return "User/student/contributionManagement";
+                return "User/student/contributionManagement";//show error page
             }
         }else {
-            return null;
+            return null; //show error page
         }
 
     }
 
-    @GetMapping("/showdetail")
+    @GetMapping("/admin/showDetail")
         public String showdetail(@PathParam("id") Long id, Model model){
         Article article = articleService.findById(id);
         model.addAttribute("article", article);
-        return "User/manager/ViewdetailContribution";
+        return "User/admin/ViewdetailContribution";
+    }
+
+    @GetMapping("/manager/approval_article")
+    public String showApprovalArticle(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userAuth = (UserDetails) authentication.getPrincipal();
+
+        if (userAuth != null) {
+            Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
+
+            boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
+            boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
+
+            List<Article> articles = this.articleService.findAll();
+
+            List<Article> approvedArticle = new ArrayList<>();
+
+            String facultyName = null;
+
+            User coordinatorUser = null;
+
+            for (Article article : articles) {
+
+                if (article.isStatus())
+                    approvedArticle.add(article);
+
+                    facultyName =  article.getUser().getFaculty().getName();
+                    Long userId = this.userService.findUserByFacultyAndRole(facultyName);
+                    coordinatorUser = this.userService.findById(userId);
+
+            }
+            model.addAttribute("articles", approvedArticle);
+            model.addAttribute("coordinatorUser", coordinatorUser);
+
+            return "User/manager/approvalArticleManagement";
+
+        }
+
+        return null;
+    }
+
+    @GetMapping("/manager/detail_approval")
+    public String showDetail(@PathParam("id") Long id,  Model model){
+        Article article = this.articleService.findById(id);
+
+        model.addAttribute("article", article);
+
+        return "User/manager/viewdetailApproval";
     }
 
 
@@ -141,6 +191,8 @@ public class ArticleController {
 
         this.articleService.saveAndUpdate(article);
 
+//        article.getUser().getFaculty().getName();
+
         this.mailService.sendMail("phucnhgcc210017@fpt.edu.vn", mailStructure);
         return "redirect:/article";
     }
@@ -150,24 +202,13 @@ public class ArticleController {
         this.articleService.deleteById(id);
         return "redirect:/article";
     }
+
     @GetMapping("/update")
     public String updateArticle(@RequestParam("id")Long id, Model model){
         Article article = this.articleService.findById(id);
-//        List<AcademicYear> academicYears = academicYearService.findAll();
         model.addAttribute("article", article);
         return "User/student/addArticle";
     }
-
-
-    @GetMapping("/feedback_management")
-    public String showFeedbackManagement(Model model){
-       List<Article> article = this.articleService.findAll();
-        model.addAttribute("articles",article);
-        return "User/coordinator/feedbackManagement";
-    }
-
-
-
 
 
 

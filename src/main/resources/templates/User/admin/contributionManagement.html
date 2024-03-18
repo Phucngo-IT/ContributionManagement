@@ -12,6 +12,7 @@
 </head>
 
 <body>
+<div class="d-flex" id="wrapper">
     <!-- Sidebar -->
 
     <!-- /#sidebar-wrapper -->
@@ -20,7 +21,6 @@
     <div id="page-content-wrapper">
         <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
             <div class="d-flex align-items-center">
-                <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
                 <h2 class="fs-2 m-0">Contribution Management</h2>
             </div>
         </nav>
@@ -35,12 +35,9 @@
                 <thead>
                 <tr>
                     <th scope="col" width="50">#</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Image</th>
                     <th scope="col">Student Name</th>
                     <th scope="col">Title</th>
                     <th scope="col">Description</th>
-                    <th scope="col">File Name</th>
                     <th scope="col">Upload Date</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
@@ -51,14 +48,12 @@
                 <tbody>
                 <tr th:each="article : ${articles}">
                     <th scope="row">1</th>
-                    <td th:text="${article.user.id}"></td>
-                    <td >Image</td>
                     <td th:text="${article.user.fullName}"></td>
                     <td th:text="${article.title}"></td>
-                    <td th:text="${article.fileName}"></td>
-                    <td th:text="${article.uploadDate}"></td>
+                    <td th:text="${article.discription}"></td>
+                    <td th:text="${article.uploadDate}">Upload Date</td>
                     <td th:text="${article.status}"></td>
-                    <td><a th:href="@{/article/showdetail(id=${article.id})}"> <button class="btn btn-info">View Detail</button></a>
+                    <td><a th:href="@{/article/admin/showDetail(id=${article.id})}"> <button class="btn btn-info">View Detail</button></a>
                         <a href=""> <button class="btn btn-success">Download</button></a>
                     </td>
                 </tr>

@@ -13,4 +13,6 @@ public interface ArticleService {
     public void save(Article article);
 
     public void deleteById(Long id);
+
+    public List<Article> findAllApprovedArticle(String status);
 }

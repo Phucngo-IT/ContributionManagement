@@ -21,7 +21,9 @@ public class LogDownload {
     private User user;
 
 
-    @OneToMany(mappedBy = "logDownload")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH})
+    @JoinTable(name = "download_histories", joinColumns = @JoinColumn(name = "log_download_id"), inverseJoinColumns = @JoinColumn(name = "article_id"))
    private List<Article> articles;
 
 

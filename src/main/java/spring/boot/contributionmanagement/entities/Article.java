@@ -42,10 +42,10 @@ public class Article {
     @JoinColumn(name = "academic_year_id")
     private AcademicYear academicYear;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH})
-    @JoinColumn(name = "log_download_id")
-    private LogDownload logDownload;
+    @JoinTable(name = "download_histories", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "log_download_id"))
+    private List<LogDownload> logDownloads;
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
@@ -64,12 +64,12 @@ public class Article {
         return this;
     }
 
-    public LogDownload getLogDownload() {
-        return logDownload;
+    public List<LogDownload> getLogDownloads() {
+        return logDownloads;
     }
 
-    public Article setLogDownload(LogDownload logDownload) {
-        this.logDownload = logDownload;
+    public Article setLogDownloads(List<LogDownload> logDownloads) {
+        this.logDownloads = logDownloads;
         return this;
     }
 
@@ -166,7 +166,7 @@ public class Article {
                 ", uploadDate=" + uploadDate +
                 ", user=" + user +
                 ", academicYear=" + academicYear +
-                ", logDownload=" + logDownload +
+                ", logDownloads=" + logDownloads +
                 ", comments=" + comments +
                 '}';
     }

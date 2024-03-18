@@ -20,4 +20,6 @@ public interface UserService extends UserDetailsService {
     public void saveAndUpdate(User user);
 
     public void deleteById(Long id);
+
+    public Long findUserByFacultyAndRole(String facultyName);
 }
