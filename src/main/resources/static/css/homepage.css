@@ -1,10 +1,9 @@
-.hero{
-    width: 100%;
-    min-height: 100vh;
-    background: url('/backgroundImage/Welcome-1.jpg') no-repeat;
-    background-size: cover;
-    background-position:center;
-    color: #525252;
+
+.list-images{
+    border: 1px solid rgb(50, 230, 134);
+}
+.list-images img{
+    width:100%;
 }
 nav{
     background:#ff7200  ;
