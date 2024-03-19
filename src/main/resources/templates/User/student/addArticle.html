@@ -4,11 +4,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link ref="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<!--    <link rel="stylesheet" th:href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"/>-->
+<!--    <link rel="stylesheet" th:href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" th:href="@{/css/AddArticle.css}" />
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
     <title>Add Article</title>
 </head>
 
@@ -22,19 +25,23 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
             <div class="d-flex align-items-center">
                 <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
-                <h2 class="fs-2 m-0">Add Article </h2>
-            </div>
+                <div th:if="${requestUri != null and requestUri.contains('/article/showForm')}">
+                    <h2 class="fs-2 m-0">Add Article </h2>
+                </div>
+                <div th:if="${requestUri != null and requestUri.contains('/article/update')}">
+                    <h2 class="fs-2 m-0">Edit Article </h2>
+                </div>            </div>
         </nav>
         <br>
         <div class="wrapper">
             <form action="#" th:action="@{/article/save}"  method="post" enctype="multipart/form-data">
-                <div>
-                    <input type="hidden"  th:field="*{article.user.id}">
-                </div>
-                <div>
-                    <input type="hidden"  th:value="*{article.user.id}" name="user" placeholder="UserID">
-                </div>
 
+                <div>
+                    <input type="hidden"  th:value="*{article.user.id}" name="user">
+                </div>
+                <div>
+                    <input type="hidden"  th:value="*{article.id}" name="article">
+                </div>
                 <div class="form-group row">
                     <label for="article">Article Title </label>
                     <div class="col-sm-10">
@@ -46,6 +53,10 @@
                 <div class="col-sm-10">
                     <input type="text"  th:field="*{article.discription}" class="form-control" placeholder="Enter article Description ">
                 </div>
+                <div style="display: none;">
+                    <input type="date" class="input" th:value="*{article.uploadDate}" name="uploadDate" placeholder="Upload Date">
+                </div>
+
 
                 <label >Article Word File</label>
                 <div class="col-sm-10">
@@ -61,12 +72,47 @@
                     <input type="text"  th:field="*{article.imageArticle}" class="form-control"  placeholder="">
                 </div>
 
-                <label >Academic Year</label>
-                <div>
-                    <select  th:field="*{article.academicYear}">
-                        <option th:each="aca : ${academicYears}" th:value="${aca.id}"  th:text="${#strings.substring(aca.closureDate, 0, 4)} + '-' + ${#strings.substring(aca.finalClosureDate, 0, 4)}+' : '+${aca.title}"></option>
-                    </select>
+                <div th:if="${requestUri != null and requestUri.contains('/article/showForm')}">
+                    <label >Academic Year</label>
+                    <select  th:field="*{article.academicYear}" >
+                       <option th:each="aca : ${academicYears}" th:value="${aca.id}"  th:text="${#strings.substring(aca.closureDate, 0, 4)} + '-' + ${#strings.substring(aca.finalClosureDate, 0, 4)}+' : '+${aca.title}"></option>
+                  </select>
                 </div>
+
+                <div th:if="${requestUri != null and requestUri.contains('/article/update')}">
+                    <!--                    <label>Academic Year</label>-->
+                    <!--                    <input type="text" th:field="*{article.academicYear.title}" th:value="*{article.academicYear.id}" class="input" placeholder="">-->
+                    <label>Academic Year</label>
+<!--                    <select  th:field="*{article.academicYear}" >-->
+<!--                        <option th:each="aca : ${academicYears}" th:value="${aca.id}"  th:text="${#strings.substring(aca.closureDate, 0, 4)} + '-' + ${#strings.substring(aca.finalClosureDate, 0, 4)}+' : '+${aca.title}"></option>-->
+<!--                    </select>-->
+                    <input type="hidden"  th:value="*{article.academicYear.id}" >
+
+<!--                    <input type="text" readonly="readonly"  th:field="*{article.academicYear.id}" th:text="${#strings.substring(article.academicYear.closureDate, 0, 4)} + '-' + ${#strings.substring(article.academicYear.finalClosureDate, 0, 4)}+' : '+${article.academicYear.title}">-->
+<!--                    <input type="text" th:field="*{article.academicYear.id}"  th:field="*{${#strings.substring(article.academicYear.closureDate, 0, 4)} + '-' + ${#strings.substring(article.academicYear.finalClosureDate, 0, 4)}+' : '+${article.academicYear.title}}" >-->
+
+                </div>
+<!--                <label >Academic Year</label>-->
+<!--                <div class="col-sm-10">-->
+<!--                    <input type="text"  th:field="*{article.academicYears.title}" class="form-control"  placeholder="">-->
+<!--                </div>-->
+
+<!--                <div th:if="${requestUri != null and requestUri.contains('/article/showForm')}">-->
+<!--                    <label>Academic Year</label>-->
+<!--                    <select th:field="*{article.academicYear}">-->
+<!--                        <option th:each="aca : ${academicYears}" th:value="${aca.id}" th:text="${#strings.substring(aca.closureDate, 0, 4)} + '-' + ${#strings.substring(aca.finalClosureDate, 0, 4)} + ' : ' + ${aca.title}"></option>-->
+<!--                    </select>-->
+<!--                </div>-->
+
+
+<!--                <div th:if="${#strings.contains(#httpServletRequest.getRequestURI(), '/article/update') and #httpServletRequest.getParameter('id') != null}">-->
+<!--                    <label>Academic Year</label>-->
+<!--                    <select th:field="*{article.academicYear}">-->
+<!--                        <option th:each="aca : ${academicYears}" th:selected="${aca.title eq article.academicYear.title}" th:value="${aca.id}" th:text="${#strings.substring(aca.closureDate, 0, 4)} + '-' + ${#strings.substring(aca.finalClosureDate, 0, 4)} + ' : ' + ${aca.title}"></option>-->
+<!--                    </select>-->
+<!--                </div>-->
+
+
 
                 <div class="row pt-4">
                     <div class="">

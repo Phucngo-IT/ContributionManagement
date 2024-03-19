@@ -61,11 +61,13 @@
           <td th:text="${article.title}"></td>
           <td th:text="${article.discription}"></td>
           <td th:text="${article.uploadDate}"></td>
-<!--          <td th:if="${article.status == 'FALSE'}" style="color: chocolate">Waiting</td>-->
+<!--          <td th:text="${article.status}"></td>-->
+
+          <!--          <td th:if="${article.status == 'FALSE'}" style="color: chocolate">Waiting</td>-->
 <!--          <td th:if="${article.status == 'TRUE'}"  style="color: aqua">Approved</td>-->
           <td th:text="${article.status}"></td>
-          <td><a th:href="@{/article/update(id=${article.id})  }"><button class="btn btn-primary">Edit</button></a>
-            <a th:href="@{/article/delete(id=${article.id})  }"><button class="btn btn-danger">Delete</button></a>
+          <td><a th:href="@{/article/update(id=${article.id})}"><button class="btn btn-primary">Edit</button></a>
+            <a th:href="@{/article/delete(id=${article.id})}"><button class="btn btn-danger">Delete</button></a>
             <a th:href="@{/comment(id=${article.id})}"><button class="btn btn-info">View Detail</button></a></td>
           </td>
 
