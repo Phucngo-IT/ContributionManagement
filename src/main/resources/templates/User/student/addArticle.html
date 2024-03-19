@@ -13,6 +13,13 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
     <title>Add Article</title>
+
+<!--    <title th:if="${requestUri != null and requestUri.contains('/article/showForm')}">-->
+<!--        <h2 class="fs-2 m-0">Add Article </h2>-->
+<!--    </title>-->
+<!--    <title th:if="${requestUri != null and requestUri.contains('/article/update')}">-->
+<!--        <h2 class="fs-2 m-0">Edit Article </h2>-->
+<!--    </title>-->
 </head>
 
 <body>
@@ -30,7 +37,8 @@
                 </div>
                 <div th:if="${requestUri != null and requestUri.contains('/article/update')}">
                     <h2 class="fs-2 m-0">Edit Article </h2>
-                </div>            </div>
+                </div>
+            </div>
         </nav>
         <br>
         <div class="wrapper">
@@ -82,7 +90,7 @@
                 <div th:if="${requestUri != null and requestUri.contains('/article/update')}">
                     <!--                    <label>Academic Year</label>-->
                     <!--                    <input type="text" th:field="*{article.academicYear.title}" th:value="*{article.academicYear.id}" class="input" placeholder="">-->
-                    <label>Academic Year</label>
+<!--                    <label>Academic Year</label>-->
 <!--                    <select  th:field="*{article.academicYear}" >-->
 <!--                        <option th:each="aca : ${academicYears}" th:value="${aca.id}"  th:text="${#strings.substring(aca.closureDate, 0, 4)} + '-' + ${#strings.substring(aca.finalClosureDate, 0, 4)}+' : '+${aca.title}"></option>-->
 <!--                    </select>-->
