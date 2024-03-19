@@ -22,6 +22,7 @@ public class FacultyController {
         List<Faculty> faculty = this.facultyService.findAll();
         model.addAttribute("faculties", faculty);
         return "User/admin/facultyManagement";
+
     }
 
     @GetMapping("/showForm")

@@ -61,9 +61,14 @@
 
                 </tbody>
                 <tr>
-                    <td>
-                        <a href="" class="btn btn-info"> Download </a>
-                    </td>
+                    <form th:action="@{/file/multi-download}" method="get" enctype="multipart/form-data">
+
+                        <input type="hidden" th:attr="value=${fileNames}" name="fileNames" id="fileNames">
+
+                        <button class="btn btn-info">Download</button>
+                    </form>
+<!--                        <a th:href="@{/article/multi-download}" class="btn btn-info"> Download </a>-->
+
                 </tr>
             </table>
         </div>
