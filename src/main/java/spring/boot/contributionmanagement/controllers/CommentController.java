@@ -50,7 +50,6 @@ public class CommentController {
             Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
             boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
-
             boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
 
             if (isStudent){

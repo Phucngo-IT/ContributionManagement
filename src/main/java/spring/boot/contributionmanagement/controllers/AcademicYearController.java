@@ -24,6 +24,7 @@ public class AcademicYearController {
         List<AcademicYear> academic_year = this.academicYearService.findAll();
         model.addAttribute("academic_year", academic_year);
         return "User/admin/magazineManagement";
+
     }
 
     @GetMapping("/showForm")

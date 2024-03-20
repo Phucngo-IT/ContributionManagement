@@ -29,11 +29,32 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.authorizeHttpRequests(
             configurer -> configurer
+                    //Student
+                    .requestMatchers( "/article").hasAnyRole("STUDENT","COORDINATOR", "MANAGER", "ADMIN")
+                    .requestMatchers( "/article/showForm").hasRole("STUDENT")
+                    .requestMatchers( "/article/save").hasRole("STUDENT")
+                    .requestMatchers( "/article/update").hasRole("STUDENT")
+                    .requestMatchers( "/article/delete").hasRole("STUDENT")
+
+                    //Coordinator
+                    .requestMatchers( "/comment").hasAnyRole("STUDENT", "COORDINATOR")
+                    .requestMatchers( "/comment/save/").hasRole("COORDINATOR")
+
+                    //Manager
+                    .requestMatchers( "/article/manager/detail_approval").hasRole("MANAGER")
+                    .requestMatchers( "/log_download/**").hasRole("MANAGER")
+
+                    //Admin
+                    .requestMatchers( "/article/admin/showDetail").hasRole("ADMIN")
+                    .requestMatchers( "/academic_year/**").hasRole("ADMIN")
+                    .requestMatchers( "/faculty/**").hasRole("ADMIN")
+
                     .requestMatchers("/register").permitAll()
                     .requestMatchers("/register/save").permitAll()
                     .requestMatchers("/login").permitAll()
                     .requestMatchers("/logout").permitAll()
-                    .anyRequest().authenticated()
+//                    .requestMatchers("/home").permitAll()
+                    .anyRequest().permitAll()
 
 
         ).formLogin(

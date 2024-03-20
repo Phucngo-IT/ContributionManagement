@@ -1,19 +1,23 @@
 package spring.boot.contributionmanagement.restful;
 
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static java.nio.file.Paths.get;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
@@ -39,4 +43,39 @@ public class DownloadService {
                 .headers(httpHeaders).body(resource);
 
     }
+
+
+    @GetMapping("/multi-download")
+    public ResponseEntity<Resource> downloadFiles(@RequestParam("fileNames") List<String> fileNames) throws IOException {
+        List<Path> filePaths = new ArrayList<>();
+
+        for (String fileName : fileNames){
+            Path filePath = get(DIRECTORY).toAbsolutePath().normalize().resolve(fileName);
+
+            if (!Files.exists(filePath)) {
+                throw new FileNotFoundException(fileName + " was not found on the server");
+            }
+            filePaths.add(filePath);
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ZipOutputStream zos = new ZipOutputStream(baos)) {
+            for (Path filePath : filePaths){
+                ZipEntry zipEntry = new ZipEntry(filePath.getFileName().toString());
+                zos.putNextEntry(zipEntry);
+                Files.copy(filePath, zos);
+            }
+            zos.closeEntry();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        ByteArrayResource arrayResource = new ByteArrayResource(baos.toByteArray());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=articles.zip");
+        return ResponseEntity.ok().headers(httpHeaders).contentType(MediaType.APPLICATION_OCTET_STREAM).body(arrayResource);
+    }
+
+
+
+
+
 }

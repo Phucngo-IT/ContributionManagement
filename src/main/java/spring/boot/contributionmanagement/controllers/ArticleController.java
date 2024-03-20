@@ -54,6 +54,7 @@ public class ArticleController {
         this.mailStructure = mailStructure;
     }
 
+    //show article with Student, Admin, Manager and Coordinator role
     @GetMapping()
     public String list(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -65,93 +66,92 @@ public class ArticleController {
             boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
             boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
             boolean isAdmin = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+            boolean isManager = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_MANAGER"));
 
             if (isStudent) {
                 String username = userAuth.getUsername();
                 User user = this.userService.findByUsername(username);
 
                 List<Article> articles = user.getArticles();
-
                 model.addAttribute("articles", articles);
                 return "User/student/contributionManagement";
 
             } else if (isCoordinator) {
+                String username = userAuth.getUsername();
+                User user = this.userService.findByUsername(username);
+                String facultyName = user.getFaculty().getName();
 
                 List<Article> articles = this.articleService.findAll();
-                model.addAttribute("articles", articles);
+
+                List<Article> articlesWithFacultyAuths = new ArrayList<>();
+
+                for (Article article:articles){
+                    if (article.getUser().getFaculty().getName().equals(facultyName)){
+                        articlesWithFacultyAuths.add(article);
+                    }
+                }
+                model.addAttribute("articles", articlesWithFacultyAuths);
                 return "User/coordinator/feedbackManagement";
 
             } else if (isAdmin) {
                 List<Article> articles = this.articleService.findAll();
                 model.addAttribute("articles", articles);
                 return "User/admin/contributionManagement";
+            } else if (isManager) {
+                List<Article> articles = this.articleService.findAll();
+
+                List<Article> approvedArticles = new ArrayList<>();
+
+                List<String> fileNames = new ArrayList<>();//
+
+
+                String facultyName = null;
+
+                User coordinatorUser = null;
+
+                for (Article article : articles) {
+
+                    if (article.isStatus()) {
+                        approvedArticles.add(article);
+                        fileNames.add(article.getFileName());
+
+                        facultyName = article.getUser().getFaculty().getName();
+                        Long userId = this.userService.findUserByFacultyAndRole(facultyName);
+                        coordinatorUser = this.userService.findById(userId);
+                    }
+                }
+                String fileNamesString = String.join(",", fileNames);//make ArrayList file name into a single string
+
+                model.addAttribute("articles", approvedArticles);
+                model.addAttribute("coordinatorUser", coordinatorUser);
+                model.addAttribute("fileNames", fileNamesString);
+
+                return "User/manager/approvalArticleManagement";
+
             } else {
-                return "User/student/contributionManagement";//show error page
+                return "redirect:/login/403";//show error page
             }
         }else {
-            return null; //show error page
+            return "redirect:/login/404"; //show error page
         }
 
     }
 
-    @GetMapping("/admin/showDetail")
+    @GetMapping("/admin/showDetail")//admin
         public String showdetail(@PathParam("id") Long id, Model model){
         Article article = articleService.findById(id);
         model.addAttribute("article", article);
         return "User/admin/ViewdetailContribution";
     }
 
-    @GetMapping("/manager/approval_article")
-    public String showApprovalArticle(Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userAuth = (UserDetails) authentication.getPrincipal();
 
-        if (userAuth != null) {
-            Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
-
-            boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
-            boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
-
-            List<Article> articles = this.articleService.findAll();
-
-            List<Article> approvedArticle = new ArrayList<>();
-
-            String facultyName = null;
-
-            User coordinatorUser = null;
-
-            for (Article article : articles) {
-
-                if (article.isStatus())
-                    approvedArticle.add(article);
-
-                    facultyName =  article.getUser().getFaculty().getName();
-                    Long userId = this.userService.findUserByFacultyAndRole(facultyName);
-                    coordinatorUser = this.userService.findById(userId);
-
-            }
-            model.addAttribute("articles", approvedArticle);
-            model.addAttribute("coordinatorUser", coordinatorUser);
-
-            return "User/manager/approvalArticleManagement";
-
-        }
-
-        return null;
-    }
-
-    @GetMapping("/manager/detail_approval")
+    @GetMapping("/manager/detail_approval")//manager
     public String showDetail(@PathParam("id") Long id,  Model model){
         Article article = this.articleService.findById(id);
-
         model.addAttribute("article", article);
-
         return "User/manager/viewdetailApproval";
     }
 
-
-
-//
     @GetMapping("/showForm")
     public String showFormArticle(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -196,12 +196,16 @@ public class ArticleController {
         FileUpload.saveFile(imageDirectory, imageFileName, imageFile);
 
         this.articleService.save(article);
-
         this.articleService.saveAndUpdate(article);
 
-//        article.getUser().getFaculty().getName();
+        //get email address to send an email to coordinator of each faculty
 
-        this.mailService.sendMail("phucnhgcc210017@fpt.edu.vn", mailStructure);
+        String facultyName = article.getUser().getFaculty().getName();
+        Long userId = this.userService.findUserByFacultyAndRole(facultyName);
+        User user = this.userService.findById(userId);
+        String email = user.getEmail();
+
+        this.mailService.sendMail(email, mailStructure);
         return "redirect:/article";
     }
 //
