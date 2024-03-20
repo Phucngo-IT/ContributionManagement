@@ -14,7 +14,7 @@
 <body>
 <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
-
+    <div th:replace="header :: header"></div>
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
@@ -24,11 +24,6 @@
                 <h2 class="fs-2 m-0">Contribution Management</h2>
             </div>
         </nav>
-
-        <button type="button" class="btn btn-info">Add Faculty</button>
-
-        <br>
-        <br>
         <div class="col">
 
             <table class="table bg-white rounded shadow-sm  table-hover">
@@ -54,7 +49,7 @@
                     <td th:text="${article.uploadDate}">Upload Date</td>
                     <td th:text="${article.status}"></td>
                     <td><a th:href="@{/article/admin/showDetail(id=${article.id})}"> <button class="btn btn-info">View Detail</button></a>
-                        <a href=""> <button class="btn btn-success">Download</button></a>
+                        <a th:href="@{'/file/download/' + ${article.fileName} }"> <button class="btn btn-success">Download</button></a>
                     </td>
                 </tr>
                 </tbody>
