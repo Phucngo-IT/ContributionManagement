@@ -54,7 +54,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/login").permitAll()
                     .requestMatchers("/logout").permitAll()
 //                    .requestMatchers("/home").permitAll()
-                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
 
 
         ).formLogin(

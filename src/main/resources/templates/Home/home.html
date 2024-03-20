@@ -69,7 +69,21 @@
             </div>
         </div>
     </nav>
+</div>
 
+<div class="container">
+    <div th:each=" article :${articles}" class="row">
+        <div class="col-md-3 pb-3">
+            <div class="card">
+                <img th:src="@{ ${article.articleImagePath} }" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 th:text="${article.title}" class="card-title"></h5>
+                    <a th:href="@{'/file/download/' + ${article.fileName} }" class="btn btn-primary">Download</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <script  th:src="@{/js/homepage.js}" > </script>
@@ -82,25 +96,8 @@
         el.classList.toggle("toggled");
     };
 </script>
-<!--    <div class="container">-->
-<!--        <div class="row">-->
-<!--            <div class="col-md-3 pb-3">-->
-<!--                <h1>Phuc</h1>-->
-<!--            </div>-->
 
-<!--            <div class="col-md-3 pb-3">-->
-<!--                <h1>Phuc</h1>-->
-<!--            </div>-->
 
-<!--            <div class="col-md-3 pb-3">-->
-<!--                <h1>Phuc</h1>-->
-<!--            </div>-->
-
-<!--            <div class="col-md-3 pb-3">-->
-<!--                <h1>Phuc</h1>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
 </body>
 
 </html>
