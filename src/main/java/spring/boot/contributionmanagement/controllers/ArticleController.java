@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import spring.boot.contributionmanagement.entities.AcademicYear;
 import spring.boot.contributionmanagement.entities.Article;
-import spring.boot.contributionmanagement.entities.Comment;
 import spring.boot.contributionmanagement.entities.User;
 import spring.boot.contributionmanagement.mailService.MailService;
 import spring.boot.contributionmanagement.mailService.MailStructure;

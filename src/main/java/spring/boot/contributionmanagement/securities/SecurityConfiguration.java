@@ -3,10 +3,13 @@ package spring.boot.contributionmanagement.securities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import spring.boot.contributionmanagement.services.UserService;
 
 @Configuration
@@ -54,18 +57,23 @@ public class SecurityConfiguration {
                     .requestMatchers("/login").permitAll()
                     .requestMatchers("/logout").permitAll()
 //                    .requestMatchers("/home").permitAll()
-                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
 
 
         ).formLogin(
                 form -> form.loginPage("/login")
                         .loginProcessingUrl("/authenticateTheUser")
+                        .defaultSuccessUrl("/home", true)//after login successfully the system will redirect to home page
                         .permitAll()//change the login page by controller url
 
         ).logout(
                 logout -> logout.permitAll()
         ).exceptionHandling(
-                configurer -> configurer.accessDeniedPage("/login/403")
+                configurer -> configurer
+                        .accessDeniedPage("/login/403")
+                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))// handle requiring authenticate when the user access
+                        .defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.NOT_FOUND), new AntPathRequestMatcher("/**")) // handle 404 error
+
         );
 
         return httpSecurity.build();
