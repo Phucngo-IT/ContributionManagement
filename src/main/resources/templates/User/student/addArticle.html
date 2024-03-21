@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
@@ -23,9 +24,23 @@
 </head>
 
 <body>
+<!--<<<<<<< HEAD-->
+<p>Add Article</p>
+<form action="#" th:action="@{/article/save}"  method="post">
+    <div>
+        <input type="hidden" class="input" th:field="*{article.id}">
+    </div>
+    <div>
+        <input type="hidden" class="input" th:value="*{article.user.id}" name="user" placeholder="UserID">
+    </div>
+    <div>
+        <input type="text" class="input" th:field="*{article.title}" placeholder="Title">
+    </div>
+<!--=======-->
 <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
     <!-- /#sidebar-wrapper -->
+<!--&gt;>>>>>> 964623fe9f7720514f6490033132cfabd424c384-->
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
@@ -151,6 +166,11 @@
         el.classList.toggle("toggled");
     };
 </script>
-</body>
 
+<<<<<<< HEAD
 </html>
+=======
+
+</body>
+</html>
+>>>>>>> d66eeecb854aaff2482a6645008b6cda13aaacb1

@@ -41,8 +41,7 @@ public class FacultyController {
         this.facultyService.deleteById(id);
         return "redirect:/faculty";
     }
-    @GetMapping("/update")
-    public String updateFaculty(@RequestParam("id")Long id, Model model){
+    @GetMapping("/update")    public String updateFaculty(@RequestParam("id")Long id, Model model){
         Faculty faculty = this.facultyService.findById(id);
         model.addAttribute("faculty", faculty);
         return "User/manager/addFaculty";

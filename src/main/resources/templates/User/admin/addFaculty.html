@@ -16,6 +16,11 @@
 </head>
 
 <body>
+<p>Add Faculty</p>
+<form action="#" th:action="@{/faculty/save}" th:object="${faculty}" method="post">
+    <div>
+        <input type="hidden" class="input" th:field="*{id}">
+    </div>
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
@@ -71,6 +76,7 @@
         el.classList.toggle("toggled");
     };
 </script>
-</body>
 
+
+</body>
 </html>
