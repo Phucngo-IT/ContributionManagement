@@ -45,7 +45,7 @@ public class Article {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH})
     @JoinColumn(name = "log_download_id")
-    private LogDownload logDownload;
+        private LogDownload logDownload;
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;

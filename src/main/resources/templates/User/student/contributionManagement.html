@@ -9,9 +9,17 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <link rel="stylesheet" th:href="@{/css/contribution.css}" />
   <title>FeedbackContent</title>
+
 </head>
 
+<!--<style th:inline="text">-->
+<!--  .alert alert-danger[if="${error == null}"] {-->
+<!--    display: none;-->
+<!--  }-->
+<!--</style>-->
+
 <body>
+
 <div class="d-flex" id="wrapper">
   <!-- Sidebar -->
   <div class="bg-white" id="sidebar-wrapper">
@@ -43,8 +51,26 @@
 
     <br>
     <br>
+     <div th:if="${error != null}" class="alert alert-danger" role="alert" style="display: block">
+          <p th:text="${error}"></p>
+     </div>
+
+<!--    <div th:if="${error != null}" class="alert alert-danger" role="alert" style="display: block">-->
+<!--      <ul>-->
+<!--        <li th:each="errorMessage : ${#strings.split(error, '')}" th:text="${errorMessage}"></li>-->
+<!--      </ul>-->
+<!--    </div>-->
+
+
+    <!--    <style inline="text">-->
+<!--      .alert.alert-danger[if="${error != null}"] {-->
+<!--        display: block; /* Hiển thị khi error != null */-->
+<!--      }-->
+<!--    </style>-->
+
     <div class="col">
       <a th:href="@{/article/showForm}"><button class="btn btn-primary">Add Article</button></a>
+
       <table class="table bg-white rounded shadow-sm  table-hover">
         <thead>
         <tr>

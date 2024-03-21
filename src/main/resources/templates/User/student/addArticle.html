@@ -34,12 +34,18 @@
                 <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
                 <div th:if="${requestUri != null and requestUri.contains('/article/showForm')}">
                     <h2 class="fs-2 m-0">Add Article </h2>
+
                 </div>
                 <div th:if="${requestUri != null and requestUri.contains('/article/update')}">
                     <h2 class="fs-2 m-0">Edit Article </h2>
                 </div>
+
+            </div>
+            <div th:if="${error != null}" class="alert alert-danger" role="alert" style="display: block">
+                <p th:text="${error}"></p>
             </div>
         </nav>
+
         <br>
         <div class="wrapper">
             <form action="#" th:action="@{/article/save}"  method="post" enctype="multipart/form-data">

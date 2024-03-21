@@ -15,6 +15,7 @@
     import org.springframework.web.bind.annotation.*;
 
     import org.springframework.web.multipart.MultipartFile;
+    import org.springframework.web.servlet.mvc.support.RedirectAttributes;
     import spring.boot.contributionmanagement.entities.AcademicYear;
     import spring.boot.contributionmanagement.entities.Article;
     import spring.boot.contributionmanagement.entities.Comment;
@@ -26,10 +27,12 @@
     import spring.boot.contributionmanagement.services.FileUpload;
     import spring.boot.contributionmanagement.services.UserService;
 
+    import java.io.Console;
     import java.io.IOException;
     import java.sql.Date;
     import java.time.LocalDate;
     import java.time.format.DateTimeFormatter;
+    import java.util.ArrayList;
     import java.util.Collection;
     import java.util.List;
 
@@ -60,7 +63,6 @@
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails user = (UserDetails) authentication.getPrincipal();
 
-
             if (user != null) {
                 Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
@@ -80,7 +82,6 @@
 
                     model.addAttribute("articles", articles);
     //                System.out.println(articles);
-
                     return "User/student/contributionManagement";
 
                 } else if (isCoordinator) {
@@ -115,7 +116,7 @@
 
     //
         @GetMapping("/showForm")
-        public String showFormArticle(Model model,HttpServletRequest request){
+        public String showFormArticle(Model model,HttpServletRequest request,@ModelAttribute("error")String error){
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -129,6 +130,7 @@
                 article.setUploadDate(Date.valueOf(currentDate));
                 article.setUser(userService.findByUsername(username));
     //                model.addAttribute("currentDate", currentDate);
+                model.addAttribute("error", error);
                 model.addAttribute("academicYears", academicYears);
                 model.addAttribute("article", article);
                 model.addAttribute("requestUri", request.getRequestURI());
@@ -140,20 +142,42 @@
         }
     ////    //
         @PostMapping("/save")
-        public String addArticle(@ModelAttribute("article") Article article, @RequestParam("files")MultipartFile multipartFile) throws IOException {
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-            article.setFileName(fileName);
+        public String addArticle(RedirectAttributes redirectAttributes, @ModelAttribute("article") Article article, @RequestParam("files")MultipartFile multipartFile) throws IOException {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate currentDate = LocalDate.now();
+            String finalClosureDateStr = article.getAcademicYear().getFinalClosureDate().toString();
+            LocalDate finalClosureDate = LocalDate.parse(finalClosureDateStr, formatter);
+            String errors = "";
+                if (finalClosureDate.isBefore(currentDate)) {
+//                    errors +="Final closure date is before current date";
+                    errors +=" Article must be submit before final closure date!";
+                    redirectAttributes.addFlashAttribute("error",errors);
+//                redirectAttributes.addFlashAttribute("error",errors);
 
-            String uploadDirectory = DIRECTORY;
-            FileUpload.saveFile(uploadDirectory, fileName, multipartFile);
+                System.out.println(finalClosureDate);
+                System.out.println("Error!!!!!!!!!");
+//                return "redirect:/article?finalClosureDate=" + finalClosureDate;
 
-    //        this.articleService.save(article);
+                return "redirect:/article/showForm";
 
-            this.articleService.saveAndUpdate(article);
+            }
+//            if (!errors.isEmpty()) {
+//                System.out.println("Error!!!!!!!!!");
+//                model.addAttribute("errors", errors);
+//                return "redirect:/article/showForm";
+//            }
+            else {
+                String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                article.setFileName(fileName);
+                String uploadDirectory = DIRECTORY;
+                FileUpload.saveFile(uploadDirectory, fileName, multipartFile);
+                //        this.articleService.save(article);
+                this.articleService.saveAndUpdate(article);
+                this.mailService.sendMail("phucnhgcc210017@fpt.edu.vn", mailStructure);
+                //    }
+                return "redirect:/article";
 
-            this.mailService.sendMail("phucnhgcc210017@fpt.edu.vn", mailStructure);
-    //    }
-            return "redirect:/article";
+            }
         }
     //
         @GetMapping("/delete")
