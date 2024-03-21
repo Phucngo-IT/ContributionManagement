@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.boot.contributionmanagement.entities.Article;
 import spring.boot.contributionmanagement.entities.Comment;
 import spring.boot.contributionmanagement.entities.User;
@@ -97,6 +98,20 @@ public class CommentController {
         this.commentService.saveAndUpdate(comment);
 
         return "redirect:/article";
+    }
+
+
+    @PostMapping("/approve/{id}")
+    public String approve(@PathVariable("id") Long id, RedirectAttributes redirectAttributes ){
+        Article article = articleService.findById(id);
+        if (article != null) {
+            article.setStatus(true);
+            articleService.save(article);
+            return "redirect:/article";
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy bài viết cần phê duyệt.");
+            return "redirect:/article";
+        }
     }
 
 }
