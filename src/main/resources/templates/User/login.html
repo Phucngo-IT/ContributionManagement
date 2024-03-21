@@ -18,14 +18,15 @@
 
 </head>
 
-<body>
+<body th:style="'background-image: url(' + @{/image/UoG-Office.png} + ')'">
 <!--<div class="list-images">-->
-<!--    <img  th:src="@{/image/University-of-Greenwich.jpg}" >-->
+<!--    <img  th:src="@{/image/University-of-Greenwich_out.png}" >-->
 <!--</div>-->
 
-    <div class="wrapper">
-        <form  action="#" th:action="@{/authenticateTheUser}" method="post">
-            <h1>Login</h1>
+    <div class="wrapper" >
+        <form  action="#" th:action="@{/authenticateTheUser}" method="post" >
+            <div class="logo" th:style="'background-image: url(' + @{/image/Shool-name-Greenwich.png} + ')'"></div>
+            <h1 >Login</h1>
             <!-- show error message when login failed-->
 
             <div class="input-box" th:if="${param.error}">

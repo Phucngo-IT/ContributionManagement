@@ -22,16 +22,7 @@ body.overlay-content {
     padding: 20px; /* Thêm padding nếu cần */
 }
 
-nav{
-    background: #81e5c0;
-    width: 100%;
-    padding: 10px 10%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
 
-}
 
 /*.card {*/
 /*    background-color: rgba(255, 255, 255, 0.8); !* Màu nền với độ mờ *!*/
@@ -78,9 +69,20 @@ nav{
     cursor: pointer;
     margin-left: 30px;
 }
+
+nav{
+    width: 100%;
+    padding: 10px 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+
+}
+
 nav ul{
     width: 100%;
-    text-align: right;
+    text-align: center;
 }
 nav ul li{
     display: inline-block;
@@ -91,6 +93,8 @@ nav ul li a{
     color: #070707;
     text-decoration: none;
 }
+
+
 
 .sub-menu-wrap{
     position: absolute;
@@ -108,7 +112,7 @@ nav ul li a{
 }
 
 .sub-menu{
-    background: #81e5c0;
+    /*background: #81e5c0;*/
     padding: 20px;
     margin: 10px;
 }
@@ -159,20 +163,42 @@ nav ul li a{
     transform: translate(5px);
 }
 
+/*footer{*/
+/*    width: 80%;*/
+/*    padding: 10px 10%;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: space-between;*/
+/*    position: relative;*/
+/*    background:#15ee9f  ;*/
+
+/*}*/
+
+
 footer{
-    width: 80%;
+    width: 100%;
+    height: 200px;
     padding: 10px 10%;
     display: flex;
     align-items: center;
+    text-align: center;
     justify-content: space-between;
     position: relative;
-    background:#15ee9f  ;
+}
 
+footer ul li{
+    display: inline-block;
+    list-style: none;
+    margin: 10px 20px;
+}
+footer ul li a{
+    color: #070707;
+    text-decoration: none;
 }
 
 footer ul{
     width: 100%;
-    text-align: right;
+    text-align: center;
 }
 footer ul li{
     display: inline-block;
@@ -180,6 +206,11 @@ footer ul li{
     margin: 10px 20px;
 }
 footer ul li a{
-    color: #fff;
+    color: #070707;
     text-decoration: none;
+}
+
+.footer-content{
+    display: inline-block;
+    text-align: left;
 }

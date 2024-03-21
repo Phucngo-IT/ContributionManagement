@@ -105,7 +105,6 @@ public class ArticleController {
 
                 List<String> fileNames = new ArrayList<>();//
 
-
                 String facultyName = null;
 
                 User coordinatorUser = null;

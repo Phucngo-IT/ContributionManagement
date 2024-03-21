@@ -18,7 +18,7 @@
 <body>
 <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
-    <div th:replace="header :: header"></div>
+<!--    <div th:replace="header :: header"></div>-->
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
@@ -108,26 +108,6 @@
     toggleButton.onclick = function () {
         el.classList.toggle("toggled");
     };
-
-    // $(document).ready(
-    //     function (){
-    //         $('#image').change(function (){
-    //                 showImageThumbnail(this);
-    //             }
-    //
-    //         )
-    //     });
-    //
-    // function showImageThumbnail(fileInput) {
-    //     file = fileInput.files[0];
-    //     reader = new FileReader();
-    //
-    //     reader.onload = function (e){
-    //         $('#thumbnail').attr('src', e.target.result);
-    //     };
-    //
-    //     reader.readAsDataURL(file);
-    // }
 </script>
 
 <!--<script  th:src="@{/js/showImage.js}" > </script>-->

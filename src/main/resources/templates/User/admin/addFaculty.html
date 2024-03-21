@@ -18,7 +18,7 @@
 <body>
 <div class="d-flex" id="wrapper">
     <!-- /#sidebar-wrapper -->
-    <div th:replace="header :: header"></div>
+<!--    <div th:replace="header :: header"></div>-->
     <!-- Page Content -->
     <div id="page-content-wrapper">
 
@@ -45,7 +45,7 @@
                 <div class="row pt-4">
                     <div class="">
                         <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-secondary">Close</button>
+                        <a type="button" th:href="@{/faculty}" class="btn btn-secondary">Close</a>
                     </div>
                 </div>
             </form>

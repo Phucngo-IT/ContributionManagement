@@ -109,7 +109,7 @@ public class CommentController {
             articleService.save(article);
             return "redirect:/article";
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy bài viết cần phê duyệt.");
+            redirectAttributes.addFlashAttribute("errorMessage", "The article dose not exist!");
             return "redirect:/article";
         }
     }

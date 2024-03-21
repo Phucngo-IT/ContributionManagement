@@ -7,12 +7,6 @@
   font-family: "Poppins", sans-serif;
 }
 
-/*.list-images{*/
-/*  border: 1px solid rgb(50, 230, 134);*/
-/*}*/
-/*.list-images img{*/
-/*  width:100%;*/
-/*}*/
 body{
   display:flex ;
   justify-content: center;
@@ -23,10 +17,10 @@ body{
 
 }
 
-body .list-images{
-  border: 1px solid rgb(50, 230, 134);
+/*body .list-images{*/
+/*  border: 1px solid rgb(50, 230, 134);*/
 
-}
+/*}*/
 
 body .list-images img{
   width:100%;
@@ -40,13 +34,14 @@ body .list-images img{
   border: 2px solid rgba(255, 255, 255, .2);
   backdrop-filter: blur(20px);
   box-shadow: 0 0 10px rgba(0, 0, 0, .2);
-<<<<<<< HEAD
-  color: #bb4848;
-=======
-  color: #fdfdfd;
->>>>>>> thinh
+  color: #410909;
+  /*color: #fdfdfd;*/
   border-radius: 10px;
   padding: 30px 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .wrapper h1 {
@@ -62,16 +57,15 @@ body .list-images img{
   width: 100%;
   height: 100%;
   background: transparent;
-  border: none;
   outline: none;
   border: 2px solid rgba(255, 255,255,.2);
   border-radius: 40px;
   font-size: 16px;
-  color: #b66868;
+  color: #410909;
   padding:20px 45px 20px 20px ;
 }
 .input-box input::placeholder{
-  color: #d21414;
+  color: #252323;
 }
 .input-box i{
   position: absolute;
@@ -87,11 +81,11 @@ body .list-images img{
   margin: -15px 0 15px;
 }
 .remeber-forgot label input{
-  accent-color: #fff;
+  /*accent-color: #fff;*/
   margin-right: 3px;
 }
 .remeber-forgot a{
-  color: #9a1212;
+  color: #410909;
   text-decoration: none;
 }
 .remeber-forgot a:hover{
@@ -100,7 +94,7 @@ body .list-images img{
 .wrapper .btn{
   width: 100%;
   height: 45px;
-  background: #fff;
+  /*background: #fff;*/
   border: none;
   outline: none;
   border-radius: 40px;
@@ -117,7 +111,7 @@ body .list-images img{
   margin: 20px 0 15px;
 }
 .register-link p a {
-  color: #a81515;
+  color: #410909;
   text-decoration: none;
   font-weight: 600;
 }
@@ -126,6 +120,22 @@ body .list-images img{
   text-decoration: underline;
 }
 
+.logo {
+  position: absolute;
+  top: 59px;
+  left: 75px;
+  width: 120px; /* Điều chỉnh kích thước của logo */
+  height: 55px; /* Điều chỉnh kích thước của logo */
+  background-size: contain; /* Đảm bảo hình ảnh logo không bị kéo ra khi thay đổi kích thước */
+  background-repeat: no-repeat; /* Ngăn lặp lại hình ảnh */
+  transform: translate(-50%, -50%);
+}
+
+h1 {
+  margin-top: 0;
+  position: relative;
+  z-index: 1; /* Đảm bảo tiêu đề "Login" hiển thị phía trên logo */
+}
 
 
 

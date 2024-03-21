@@ -54,7 +54,7 @@ public class Article {
     @JoinTable(name = "download_histories", joinColumns = @JoinColumn(name = "article_id"), inverseJoinColumns = @JoinColumn(name = "log_download_id"))
     private List<LogDownload> logDownloads;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY)
     private List<Comment> comments;
 
 

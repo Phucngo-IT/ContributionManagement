@@ -71,8 +71,8 @@ public class SecurityConfiguration {
         ).exceptionHandling(
                 configurer -> configurer
                         .accessDeniedPage("/login/403")
-//                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))// handle requiring authenticate when the user access
-//                        .defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.NOT_FOUND), new AntPathRequestMatcher("/**")) // handle 404 error
+                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))// handle requiring authenticate when the user access
+                        .defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.NOT_FOUND), new AntPathRequestMatcher("/login/404")) // handle 404 error
 
         );
 
