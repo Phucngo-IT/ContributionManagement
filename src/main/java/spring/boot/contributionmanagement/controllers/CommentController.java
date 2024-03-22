@@ -81,7 +81,7 @@ public class CommentController {
 
     }
     @PostMapping("/save/{id}")
-    public String save(@PathVariable("id") Long id, @ModelAttribute("comment") Comment comment){
+        public String save(@PathVariable("id") Long id, @ModelAttribute("comment") Comment comment){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails user = (UserDetails) authentication.getPrincipal();
         //get User by username
@@ -99,7 +99,6 @@ public class CommentController {
 
         return "redirect:/article";
     }
-
 
     @PostMapping("/approve/{id}")
     public String approve(@PathVariable("id") Long id, RedirectAttributes redirectAttributes ){

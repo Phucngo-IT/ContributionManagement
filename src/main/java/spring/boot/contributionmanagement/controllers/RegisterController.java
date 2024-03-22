@@ -62,6 +62,7 @@ public class RegisterController {
 
             BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
             user.setPassword(bCrypt.encode(user.getPassword()));
+//            user.setUsername(bCrypt.encode(username));
 
             if (!multipartFile.isEmpty()) {
                 String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());

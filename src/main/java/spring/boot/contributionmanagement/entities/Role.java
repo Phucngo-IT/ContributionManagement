@@ -50,12 +50,21 @@ public class Role {
         return this;
     }
 
+//    @Override
+//    public String toString() {
+//        return "Role{" +
+//                "id=" + id +
+//                ", roleName='" + roleName + '\'' +
+//                ", users=" + users +
+//                '}';
+//    }
+
     @Override
     public String toString() {
         return "Role{" +
                 "id=" + id +
                 ", roleName='" + roleName + '\'' +
-                ", users=" + users +
                 '}';
     }
+
 }

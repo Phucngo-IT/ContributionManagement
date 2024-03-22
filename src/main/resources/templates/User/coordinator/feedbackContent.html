@@ -21,6 +21,12 @@
       <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
         <div class="d-flex align-items-center">
           <h2 class="fs-2 m-0">Feedback Content</h2>
+          <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
+          <h2 class="fs-2 m-0">Feedback Management</h2>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <p th:text="${errorMessage}"></p>
+            </div>
+
         </div>
       </nav>
 
@@ -60,14 +66,11 @@
           <textarea th:text="${comment.content}" class="content" name="content" rows="2" id="dlg-content-65ef480e554d8" aria-label="Add a comment..."
                     cols="20" ></textarea>
             </div>
+          <form th:action="@{/comment/approve/{id}(id=${article.id})}" method="post">
+              <button class="btn btn-primary" type="submit" aria-expanded="false">Approved</button>
+          </form>
 
-          <div class="dropdown">
-              <form th:action="@{/comment/approve/{id}(id=${article.id})}" method="post">
-                  <button class="btn btn-primary" type="submit" aria-expanded="false">Approved</button>
-                  <a class="btn btn-primary" th:href="@{/article}" type="submit" aria-expanded="false">Close</a>
-              </form>
 
-          </div>
       </div>
 
     </div>
