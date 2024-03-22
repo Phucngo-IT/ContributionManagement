@@ -1,20 +1,59 @@
-.hero{
-    width: 100%;
-    min-height: 100vh;
-    background: url('/static/image/University-of-Greenwich.jpg') no-repeat;
-    background-size: cover;
-    background-position:center;
-    color: #525252;
-}
-nav{
-    background: #81e5c0;
-    width: 80%;
-    padding: 10px 10%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
+/*.list-images{*/
+/*    border: 1px solid rgb(50, 230, 134);*/
+/*}*/
+/*.list-images img{*/
 
+/*    width:100%;*/
+/*}*/
+
+body {
+    position: relative;
+    /*background-image: url('/static/image/University-of-Greenwich.jpg');*/
+    background-size: cover; /* Đảm bảo hình ảnh nền sẽ được phù hợp với kích thước của phần tử cha */
+    width:100%;
+}
+
+body.overlay-content {
+    position: absolute;
+    top: 50%; /* Đặt vị trí dọc của phần tử trên cùng giữa */
+    left: 50%; /* Đặt vị trí ngang của phần tử trên cùng giữa */
+    transform: translate(-50%, -50%); /* Dịch chuyển phần tử đi 50% kích thước của chính nó */
+    background-color: rgba(255, 255, 255, 0.5); /* Màu nền với độ trong suốt 50% */
+    padding: 20px; /* Thêm padding nếu cần */
+}
+
+
+
+/*.card {*/
+/*    background-color: rgba(255, 255, 255, 0.8); !* Màu nền với độ mờ *!*/
+/*    opacity: 0.5; !* Độ mờ của thẻ *!*/
+/*}*/
+.card {
+    /*position: relative; !* Cần thiết để áp dụng position: absolute cho card-background *!*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #cccccc; /* Màu nền với độ mờ */
+    z-index: -1; /* Đặt chỉ số z để nền được vẽ dưới các phần tử con */
+}
+
+.card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #cccccc; /* Màu nền với độ mờ */
+    z-index: -1; /* Đặt chỉ số z để nền được vẽ dưới các phần tử con */
+}
+
+.card-img-top{
+    width: 200px;
+    height: 300px;
+    /*background-color: rgba(255, 255, 255, 0.8); !* Màu nền với độ mờ *!*/
+    /*opacity: 1; !* Độ mờ của thẻ *!*/
 }
 
 .logo{
@@ -30,9 +69,20 @@ nav{
     cursor: pointer;
     margin-left: 30px;
 }
+
+nav{
+    width: 100%;
+    padding: 10px 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+
+}
+
 nav ul{
     width: 100%;
-    text-align: right;
+    text-align: center;
 }
 nav ul li{
     display: inline-block;
@@ -43,6 +93,8 @@ nav ul li a{
     color: #070707;
     text-decoration: none;
 }
+
+
 
 .sub-menu-wrap{
     position: absolute;
@@ -60,7 +112,7 @@ nav ul li a{
 }
 
 .sub-menu{
-    background: #81e5c0;
+    /*background: #81e5c0;*/
     padding: 20px;
     margin: 10px;
 }
@@ -111,20 +163,42 @@ nav ul li a{
     transform: translate(5px);
 }
 
+/*footer{*/
+/*    width: 80%;*/
+/*    padding: 10px 10%;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: space-between;*/
+/*    position: relative;*/
+/*    background:#15ee9f  ;*/
+
+/*}*/
+
+
 footer{
-    width: 80%;
+    width: 100%;
+    height: 200px;
     padding: 10px 10%;
     display: flex;
     align-items: center;
+    text-align: center;
     justify-content: space-between;
     position: relative;
-    background:#15ee9f  ;
+}
 
+footer ul li{
+    display: inline-block;
+    list-style: none;
+    margin: 10px 20px;
+}
+footer ul li a{
+    color: #070707;
+    text-decoration: none;
 }
 
 footer ul{
     width: 100%;
-    text-align: right;
+    text-align: center;
 }
 footer ul li{
     display: inline-block;
@@ -132,6 +206,11 @@ footer ul li{
     margin: 10px 20px;
 }
 footer ul li a{
-    color: #fff;
+    color: #070707;
     text-decoration: none;
+}
+
+.footer-content{
+    display: inline-block;
+    text-align: left;
 }

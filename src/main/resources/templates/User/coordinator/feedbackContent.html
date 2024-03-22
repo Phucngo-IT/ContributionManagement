@@ -15,12 +15,12 @@
 <div class="d-flex" id="wrapper">
   <!-- Sidebar -->
   <!-- /#sidebar-wrapper -->
-    <div th:replace="header :: header"></div>
+<!--    <div th:replace="header :: header"></div>-->
   <!-- Page Content -->
   <div id="page-content-wrapper">
       <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
         <div class="d-flex align-items-center">
-          <h2 class="fs-2 m-0">Feedback Management</h2>
+          <h2 class="fs-2 m-0">Feedback Content</h2>
         </div>
       </nav>
 
@@ -62,9 +62,11 @@
             </div>
 
           <div class="dropdown">
-            <button class="btn btn-primary " type="button"  aria-expanded="false">
-              Approved
-            </button>
+              <form th:action="@{/comment/approve/{id}(id=${article.id})}" method="post">
+                  <button class="btn btn-primary" type="submit" aria-expanded="false">Approved</button>
+                  <a class="btn btn-primary" th:href="@{/article}" type="submit" aria-expanded="false">Close</a>
+              </form>
+
           </div>
       </div>
 
