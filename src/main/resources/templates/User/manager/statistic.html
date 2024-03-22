@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+      <html lang="en" xmlns:th="http://www.thymeleaf.org">
+      <head>
+      <meta charset="UTF-8">
+      <title>Title</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+  <!-- Optional theme -->
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
+
+</head>
+<body>
+<div class="container">
+  <h2 align="center">Number of contributions within each Faculty for each academic year</h2>
+
+  <div id="container"
+       style="width: 550px; height: 400px; margin: 0 auto"></div>
+</div>
+
+
+<div class="container">
+  <h2 align="center">Percentage of contributions by each Faculty for any academic year</h2>
+
+  <div id="container2"
+       style="width: 550px; height: 400px; margin: 0 auto"></div>
+</div>
+<script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+
+<script th:inline="javascript">
+  $(function(){
+
+
+
+
+    // Lấy dữ liệu từ Spring Model
+    var facultyContributions2 = [[${facultyContributions}]] ;
+
+    // Chuẩn bị dữ liệu cho biểu đồ
+    var categories2 = Object.keys(facultyContributions2);
+    var seriesData2 = Object.entries(facultyContributions2).map(([year, contributions]) => {
+      var totalContributions = Object.values(contributions).reduce((acc, val) => acc + val, 0);
+      return {
+        name: year,
+        data: Object.entries(contributions).map(([faculty, count]) => ({ name: faculty, y: (count / totalContributions) * 100 })),
+      };
+    });
+
+    // Tạo biểu đồ cột
+    Highcharts.chart('container2', {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Faculty Contributions by Academic Year'
+      },
+      xAxis: {
+        categories: categories2,
+        crosshair: true
+      },
+      yAxis: {
+        max: 100,
+        min: 0,
+        title: {
+          text: 'Percentage of Contributions'
+        }
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.2f}%</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0
+        }
+      },
+      series: seriesData2
+    });
+
+
+
+
+
+  });
+</script>
+
+
+<script th:inline="javascript">
+  $(function(){
+
+    var facultyContributions = [[${facultyContributions}]]; // Truyền dữ liệu từ Thymeleaf vào biến JavaScript
+
+    var categories = [];
+    var seriesData = [];
+
+    // Lặp qua mỗi năm học trong facultyContributions
+    for (var year in facultyContributions) {
+      if (facultyContributions.hasOwnProperty(year)) {
+        categories.push(year); // Thêm năm học vào danh sách categories
+
+        var data = [];
+
+        // Lặp qua mỗi khoa và số lượng đóng góp tương ứng
+        for (var faculty in facultyContributions[year]) {
+          if (facultyContributions[year].hasOwnProperty(faculty)) {
+            data.push([faculty, facultyContributions[year][faculty]]); // Thêm dữ liệu khoa và số lượng đóng góp vào danh sách data
+          }
+        }
+
+        // Thêm dữ liệu cho mỗi năm vào danh sách seriesData
+        seriesData.push({name: year, data: data});
+      }
+    }
+    Highcharts.chart('container', {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Number of Contributions within each Faculty for each Academic Year'
+      },
+      xAxis: {
+        categories: categories, // Sử dụng danh sách categories làm trục x
+        crosshair: true
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Number of Contributions'
+        }
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
+      series: seriesData // Sử dụng danh sách seriesData để tạo các dữ liệu cho biểu đồ
+    });
+  });
+</script>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>

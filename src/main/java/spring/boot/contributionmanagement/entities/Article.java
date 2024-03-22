@@ -44,9 +44,8 @@ public class Article {
     private User user;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH})
-    @JoinColumn(name = "academic_year_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "academic_year_id", nullable = true)
     private AcademicYear academicYear;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,

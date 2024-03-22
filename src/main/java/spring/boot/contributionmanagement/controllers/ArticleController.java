@@ -151,7 +151,6 @@ public class ArticleController {
         model.addAttribute("article", article);
         return "User/manager/viewdetailApproval";
     }
-
     @GetMapping("/showForm")
     public String showFormArticle(Model model, HttpServletRequest request, @ModelAttribute("error")String error){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -161,14 +160,18 @@ public class ArticleController {
             //                Long userId = userService.findUserIdByUsername(username);
             //                model.addAttribute("userId", userId);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            String currentDate = (LocalDate.now().format(formatter));
+            LocalDate currentDate = (LocalDate.now());
+            java.sql.Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
+
             List<AcademicYear> academicYears = academicYearService.findAll();
             Article article = new Article();
             article.setUploadDate(Date.valueOf(currentDate));
             article.setUser(userService.findByUsername(username));
             //                model.addAttribute("currentDate", currentDate);
+
             model.addAttribute("error", error);
             model.addAttribute("academicYears", academicYears);
+//            redirectAttributes.addFlashAttribute("article",article);
             model.addAttribute("article", article);
             model.addAttribute("requestUri", request.getRequestURI());
             return "User/student/addArticle";
@@ -177,79 +180,178 @@ public class ArticleController {
             return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
         }
     }
-//    public String showFormArticle(Model model){
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
-//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//            String username = userDetails.getUsername();
-////                Long userId = userService.findUserIdByUsername(username);
-////                model.addAttribute("userId", userId);
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//            String currentDate = (LocalDate.now().format(formatter));
-//            List<AcademicYear> academicYears = academicYearService.findAll();
-//            Article article = new Article();
-//            article.setUploadDate(Date.valueOf(currentDate));
-//            article.setUser(userService.findByUsername(username));
-////                model.addAttribute("currentDate", currentDate);
-//            model.addAttribute("academicYears", academicYears);
-//            model.addAttribute("article", article);
-//            return "User/student/addArticle";
-//        } else {
-//            // Chưa đăng nhập
-//            return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
-//        }
-//    }
-////    //
-    @PostMapping("/save")
-    public String addArticle(RedirectAttributes redirectAttributes, @ModelAttribute("article") Article article, @RequestParam("files")MultipartFile wordFile, @RequestParam("image") MultipartFile imageFile ) throws IOException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate currentDate = LocalDate.now();
-        String finalClosureDateStr = article.getAcademicYear().getFinalClosureDate().toString();
-        LocalDate finalClosureDate = LocalDate.parse(finalClosureDateStr, formatter);
-        String errors = "";
 
-        if (finalClosureDate.isBefore(currentDate)) {
-            errors +=" Article must be submit before final closure date!";
-            redirectAttributes.addFlashAttribute("error",errors);
-//                redirectAttributes.addFlashAttribute("error",errors);
+    @GetMapping("/showFormUpdate")
+    public String showFormUpdateArticle(Model model, HttpServletRequest request, @ModelAttribute("error")String error){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate currentDate = (LocalDate.now());
+            java.sql.Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
 
-            System.out.println(finalClosureDate);
-            System.out.println("Error!!!!!!!!!");
-//                return "redirect:/article?finalClosureDate=" + finalClosureDate;
+            List<AcademicYear> academicYears = academicYearService.findAll();
+            Article article = new Article();
+            article.setUploadDate(Date.valueOf(currentDate));
+            article.setUser(userService.findByUsername(username));
+            //                model.addAttribute("currentDate", currentDate);
 
-            return "redirect:/article/showForm";
+            model.addAttribute("error", error);
+            model.addAttribute("academicYears", academicYears);
+//            redirectAttributes.addFlashAttribute("article",article);
+            model.addAttribute("article", article);
+            model.addAttribute("requestUri", request.getRequestURI());
+            return "User/student/updateArticle";
         } else {
-            String wordFileName = StringUtils.cleanPath(wordFile.getOriginalFilename());
-            String imageFileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
-
-            //set file into article
-            article.setFileName(wordFileName);
-            article.setImageArticle(imageFileName);
-            this.articleService.save(article);
-
-            //word file
-            String uploadDirectory = DIRECTORY;
-            FileUpload.saveFile(uploadDirectory, wordFileName, wordFile);
-
-            //image file
-            String imageDirectory = "src/main/resources/static/articleImage/" + article.getId();
-            FileUpload.saveFile(imageDirectory, imageFileName, imageFile);
-
-            this.articleService.save(article);
-            this.articleService.saveAndUpdate(article);
-
-            //get email address to send an email to coordinator of each faculty
-
-            String facultyName = article.getUser().getFaculty().getName();
-            Long userId = this.userService.findUserByFacultyAndRole(facultyName);
-            User user = this.userService.findById(userId);
-            String email = user.getEmail();
-
-            this.mailService.sendMail(email, mailStructure);
-            return "redirect:/article";
+            // Chưa đăng nhập
+            return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
         }
     }
+//        //
+    @PostMapping("/save")
+    public String addArticle(@ModelAttribute("article") Article article, RedirectAttributes redirectAttributes, @RequestParam("files")MultipartFile wordFile, @RequestParam("image") MultipartFile imageFile ) throws IOException {
+        LocalDate currentDate = (LocalDate.now());
+        Date ClosureDate = (article.getAcademicYear().getClosureDate());
+        Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
+        String errors = "";
+        System.out.println("Closure Date: "+ClosureDate);
+        System.out.println("Current date: "+sqlCurrentDate);
+
+        if (ClosureDate.before(sqlCurrentDate)) {
+                errors += " Article must be submit before closure date!<br>";
+            }
+            if(imageFile.isEmpty()){
+                errors += " Article must be add image file before submit!<br>";
+
+            }
+            if(wordFile.isEmpty()){
+                errors += " Article must be add word file before submit!<br>";
+            }
+            if(article.getTitle().isEmpty()){
+                errors += " Article must be add title before submit!<br>";
+            }
+            if(article.getDiscription().isEmpty()){
+                errors += " Article must be add discription before submit!<br>";
+            }
+
+            if(errors!=""){
+                redirectAttributes.addFlashAttribute("hasError", true);
+                redirectAttributes.addFlashAttribute("error", errors);
+                return "redirect:/article/showForm";
+            }
+
+            else {
+                String wordFileName = StringUtils.cleanPath(wordFile.getOriginalFilename());
+                String imageFileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+
+                //set file into article
+                article.setFileName(wordFileName);
+                article.setImageArticle(imageFileName);
+                this.articleService.save(article);
+
+                //word file
+                String uploadDirectory = DIRECTORY;
+                FileUpload.saveFile(uploadDirectory, wordFileName, wordFile);
+
+                //image file
+                String imageDirectory = "src/main/resources/static/articleImage/" + article.getId();
+                FileUpload.saveFile(imageDirectory, imageFileName, imageFile);
+
+                this.articleService.save(article);
+                this.articleService.saveAndUpdate(article);
+
+                //get email address to send an email to coordinator of each faculty
+
+                String facultyName = article.getUser().getFaculty().getName();
+                Long userId = this.userService.findUserByFacultyAndRole(facultyName);
+                User user = this.userService.findById(userId);
+                String email = user.getEmail();
+                redirectAttributes.addFlashAttribute("hasError", false);
+
+                this.mailService.sendMail(email, mailStructure);
+                return "redirect:/article";
+
+        }
+
+    }
 //
+@PostMapping("/saveUpdate")
+        public String updateArticle(@ModelAttribute("article") Article article, RedirectAttributes redirectAttributes, @RequestParam("files")MultipartFile wordFile, @RequestParam("image") MultipartFile imageFile ) throws IOException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        AcademicYear aca =academicYearService.findById(article.getAcademicYear().getId());
+        LocalDate currentDate = (LocalDate.now());
+        Date closureDate = (aca.getClosureDate());
+        Date finalClosureDate = (aca.getFinalClosureDate());
+        java.sql.Date sqlClosureDate = new java.sql.Date(closureDate.getTime());
+        java.sql.Date sqlFinalClosureDate = new java.sql.Date(finalClosureDate.getTime());
+    System.out.println("Article: "+article.getId());
+
+    System.out.println("Title: "+article.getTitle());
+    System.out.println("id: "+article.getId());
+    Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
+        String errors = "";
+
+    if (sqlFinalClosureDate.before(sqlCurrentDate)) {
+        errors += " Article must be edit before final closure date!<br>";
+    }
+    if(imageFile.isEmpty()){
+        errors += " Article must be add image file before submit!<br>";
+
+    }
+    if(wordFile.isEmpty()){
+        errors += " Article must be add word file before submit!<br>";
+    }
+    if(article.getTitle().isEmpty()){
+        errors += " Article must be add title before submit!<br>";
+    }
+    if(article.getDiscription().isEmpty()){
+        errors += " Article must be add discription before submit!<br>";
+    }
+
+
+    if(errors!=""){
+        redirectAttributes.addFlashAttribute("hasError", true);
+        redirectAttributes.addFlashAttribute("error",errors);
+        return "redirect:/article/showFormUpdate";
+    }
+
+    else {
+        System.out.println("Title 2: "+article.getTitle());
+        System.out.println("id 2: "+article.getId());
+        String wordFileName = StringUtils.cleanPath(wordFile.getOriginalFilename());
+        String imageFileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+
+        //set file into article
+        article.setFileName(wordFileName);
+        article.setImageArticle(imageFileName);
+        this.articleService.save(article);
+
+        //word file
+        String uploadDirectory = DIRECTORY;
+        FileUpload.saveFile(uploadDirectory, wordFileName, wordFile);
+
+        //image file
+        String imageDirectory = "src/main/resources/static/articleImage/" + article.getId();
+        FileUpload.saveFile(imageDirectory, imageFileName, imageFile);
+
+//        this.articleService.save(article);
+//        this.articleService.saveAndUpdate(article);
+        redirectAttributes.addFlashAttribute("error", errors);
+
+        //get email address to send an email to coordinator of each faculty
+
+        String facultyName = article.getUser().getFaculty().getName();
+        Long userId = this.userService.findUserByFacultyAndRole(facultyName);
+        User user = this.userService.findById(userId);
+        String email = user.getEmail();
+        this.mailService.sendMail(email, mailStructure);
+        return "redirect:/article";
+    }
+}
+//
+
+
     @GetMapping("/delete")
     public String deleteArticle(@RequestParam("id")Long id){
         this.articleService.deleteById(id);
@@ -257,14 +359,45 @@ public class ArticleController {
     }
 
     @GetMapping("/update")
-    public String updateArticle(@RequestParam("id")Long id, Model model, HttpServletRequest request){
-        Article article = this.articleService.findById(id);
-        List<AcademicYear> academicYears = academicYearService.findAll();
-        model.addAttribute("requestUri", request.getRequestURI());
-        model.addAttribute("article", article);
-        model.addAttribute("academicYears", academicYears);
+    public String updateArticle(@RequestParam("id")Long id, Model model,  HttpServletRequest request, @ModelAttribute("error")String error){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Article article = this.articleService.findById(id);
+            String username = userDetails.getUsername();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String currentDate = (LocalDate.now().format(formatter));
+            List<AcademicYear> academicYears = academicYearService.findAll();
+            article.setUploadDate(Date.valueOf(currentDate));
+            article.setUser(userService.findByUsername(username));
+//            article.setAcademicYear(article.getAcademicYear());
+            //                model.addAttribute("currentDate", currentDate);
 
-        return "User/student/addArticle";
+            model.addAttribute("academicYear", article.getAcademicYear());
+
+            model.addAttribute("error", error);
+            model.addAttribute("academicYears", academicYears);
+//            redirectAttributes.addFlashAttribute("article",article);
+            model.addAttribute("article", article);
+            model.addAttribute("requestUri", request.getRequestURI());
+            return "User/student/updateArticle";
+        } else {
+            // Chưa đăng nhập
+            return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
+        }
+
+
+//
+//        Article article = this.articleService.findById(id);
+//        article.setUploadDate(Date.valueOf(currentDate));
+//        article.setUser(userService.findByUsername(username));
+
+//        List<AcademicYear> academicYears = academicYearService.findAll();
+//        model.addAttribute("requestUri", request.getRequestURI());
+//        model.addAttribute("article", article);
+//        model.addAttribute("academicYears", academicYears);
+
+//        return "User/student/addArticle";
     }
 
 
