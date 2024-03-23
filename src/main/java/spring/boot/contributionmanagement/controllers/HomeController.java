@@ -84,5 +84,9 @@ public class HomeController {
 //        return "User/manager/approvalArticleManagement";
         return "Home/home";
     }
+    @GetMapping("/about")
+    public String About(){
 
+        return "Home/about";
+    }
 }

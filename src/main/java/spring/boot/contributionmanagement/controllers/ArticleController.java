@@ -288,6 +288,7 @@ public class ArticleController {
     System.out.println("Article: "+article.getId());
 
     System.out.println("Title: "+article.getTitle());
+    System.out.println("Status: "+article.isStatus());
     System.out.println("id: "+article.getId());
     Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
         String errors = "";
@@ -321,7 +322,7 @@ public class ArticleController {
         System.out.println("id 2: "+article.getId());
         String wordFileName = StringUtils.cleanPath(wordFile.getOriginalFilename());
         String imageFileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
-
+        article.setStatus(article.isStatus());
         //set file into article
         article.setFileName(wordFileName);
         article.setImageArticle(imageFileName);

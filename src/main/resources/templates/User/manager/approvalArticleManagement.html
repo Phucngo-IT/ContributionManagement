@@ -39,6 +39,7 @@
                 <thead>
                 <tr>
                     <th scope="col" width="50">STT</th>
+                    <th scope="col">Title</th>
                     <th scope="col">Description</th>
                     <th scope="col">Student Name</th>
                     <th scope="col">Coordinator</th>
@@ -49,10 +50,10 @@
                 <tbody>
                 <tr th:each="article : ${articles}">
                     <th scope="col" width="50">#</th>
+                    <td th:text="${article.title}">...</td>
                     <td th:text="${article.discription}">...</td>
                     <td th:text="${article.user.fullName}">...</td>
                     <td th:text="${coordinatorUser.fullName}">...</td>
-
                     <td>
                         <a th:href="@{/article/manager/detail_approval(id=${article.id})}" class="btn btn-info"> View Detail </a>
                     </td>

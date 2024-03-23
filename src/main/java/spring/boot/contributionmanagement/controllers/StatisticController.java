@@ -28,7 +28,7 @@ public class StatisticController {
         this.userService = userService;
         this.articleService = articleService;
     }
-    @GetMapping("/statistic")
+    @GetMapping("/statisticManagement")
     public String view(Model model){
         List<Article> allContributions = articleService.findAll();
         List<Article> selectedContributions = allContributions.stream()
@@ -83,8 +83,10 @@ public class StatisticController {
 //        System.out.println(facultyContributions.keySet()); //year
 
         model.addAttribute("facultyContributions", facultyContributions); // Đưa facultyContributions vào model
-        return "User/manager/statistic";
+        return "User/manager/statisticManagement";
     }
+
+
 
 
 
