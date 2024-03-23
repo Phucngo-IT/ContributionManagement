@@ -2,7 +2,7 @@ package spring.boot.contributionmanagement.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,7 @@ import spring.boot.contributionmanagement.services.ArticleService;
 import spring.boot.contributionmanagement.services.UserService;
 
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.List;
 
 @Controller
@@ -23,6 +23,7 @@ import java.util.List;
 public class HomeController {
     private final ArticleService articleService;
     private final UserService userService;
+
     @Autowired
     public HomeController(ArticleService articleService, UserService userService) {
         this.articleService = articleService;

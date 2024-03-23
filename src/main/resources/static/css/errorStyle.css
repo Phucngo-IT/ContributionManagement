@@ -9,7 +9,8 @@ section {
     column-gap: 20px;
 }
 .container img {
-    width: 420px;
+    width: 700px;
+    height: 800px;
 }
 .text {
     display: block;
