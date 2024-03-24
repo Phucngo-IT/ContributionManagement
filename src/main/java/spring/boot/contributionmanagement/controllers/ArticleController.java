@@ -60,32 +60,24 @@ public class ArticleController {
     public String list(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userAuth = (UserDetails) authentication.getPrincipal();
-
         if (userAuth != null) {
             Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
-
             boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
             boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
             boolean isAdmin = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
             boolean isManager = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_MANAGER"));
-
             if (isStudent) {
                 String username = userAuth.getUsername();
                 User user = this.userService.findByUsername(username);
-
                 List<Article> articles = user.getArticles();
                 model.addAttribute("articles", articles);
                 return "User/student/contributionManagement";
-
             } else if (isCoordinator) {
                 String username = userAuth.getUsername();
                 User user = this.userService.findByUsername(username);
                 String facultyName = user.getFaculty().getName();
-
                 List<Article> articles = this.articleService.findAll();
-
                 List<Article> articlesWithFacultyAuths = new ArrayList<>();
-
                 for (Article article:articles){
                     if (article.getUser().getFaculty().getName().equals(facultyName)){
                         articlesWithFacultyAuths.add(article);
@@ -93,48 +85,36 @@ public class ArticleController {
                 }
                 model.addAttribute("articles", articlesWithFacultyAuths);
                 return "User/coordinator/feedbackManagement";
-
             } else if (isAdmin) {
                 List<Article> articles = this.articleService.findAll();
                 model.addAttribute("articles", articles);
                 return "User/admin/contributionManagement";
             } else if (isManager) {
                 List<Article> articles = this.articleService.findAll();
-
                 List<Article> approvedArticles = new ArrayList<>();
-
                 List<String> fileNames = new ArrayList<>();//
-
                 String facultyName = null;
-
                 User coordinatorUser = null;
-
                 for (Article article : articles) {
-
                     if (article.isStatus()) {
                         approvedArticles.add(article);
                         fileNames.add(article.getFileName());
-
-                        facultyName = article.getUser().getFaculty().getName();
-                        Long userId = this.userService.findUserByFacultyAndRole(facultyName);
-                        coordinatorUser = this.userService.findById(userId);
+//                        facultyName.add(article.getUser().getFaculty().getName());
+//                        Long userId = this.userService.findUserByFacultyAndRole(facultyName);
+//                        coordinatorUser = this.userService.findById(userId);
                     }
                 }
                 String fileNamesString = String.join(",", fileNames);//make ArrayList file name into a single string
-
                 model.addAttribute("articles", approvedArticles);
-                model.addAttribute("coordinatorUser", coordinatorUser);
+//                model.addAttribute("coordinatorUser", coordinatorUser);
                 model.addAttribute("fileNames", fileNamesString);
-
                 return "User/manager/approvalArticleManagement";
-
             } else {
                 return "redirect:/login/403";//show error page
             }
         }else {
             return "redirect:/login/404"; //show error page
         }
-
     }
 
     @GetMapping("/admin/showDetail")//admin
@@ -173,8 +153,7 @@ public class ArticleController {
             model.addAttribute("requestUri", request.getRequestURI());
             return "User/student/addArticle";
         } else {
-            // Chưa đăng nhập
-            return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
+            return "redirect:/login";
         }
     }
 //    public String showFormArticle(Model model){
@@ -201,50 +180,41 @@ public class ArticleController {
 //    }
 ////    //
     @PostMapping("/save")
-    public String addArticle(RedirectAttributes redirectAttributes, @ModelAttribute("article") Article article, @RequestParam("files")MultipartFile wordFile, @RequestParam("image") MultipartFile imageFile ) throws IOException {
+    public String addArticle(RedirectAttributes redirectAttributes, @ModelAttribute("article") Article article,
+                             @RequestParam("files")MultipartFile wordFile, @RequestParam("image") MultipartFile imageFile ) throws IOException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate currentDate = LocalDate.now();
         String finalClosureDateStr = article.getAcademicYear().getFinalClosureDate().toString();
         LocalDate finalClosureDate = LocalDate.parse(finalClosureDateStr, formatter);
         String errors = "";
-
         if (finalClosureDate.isBefore(currentDate)) {
             errors +=" Article must be submit before final closure date!";
             redirectAttributes.addFlashAttribute("error",errors);
 //                redirectAttributes.addFlashAttribute("error",errors);
-
             System.out.println(finalClosureDate);
             System.out.println("Error!!!!!!!!!");
 //                return "redirect:/article?finalClosureDate=" + finalClosureDate;
-
             return "redirect:/article/showForm";
         } else {
             String wordFileName = StringUtils.cleanPath(wordFile.getOriginalFilename());
             String imageFileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
-
             //set file into article
             article.setFileName(wordFileName);
             article.setImageArticle(imageFileName);
             this.articleService.save(article);
-
             //word file
             String uploadDirectory = DIRECTORY;
             FileUpload.saveFile(uploadDirectory, wordFileName, wordFile);
-
             //image file
             String imageDirectory = "src/main/resources/static/articleImage/" + article.getId();
             FileUpload.saveFile(imageDirectory, imageFileName, imageFile);
-
             this.articleService.save(article);
             this.articleService.saveAndUpdate(article);
-
             //get email address to send an email to coordinator of each faculty
-
             String facultyName = article.getUser().getFaculty().getName();
             Long userId = this.userService.findUserByFacultyAndRole(facultyName);
             User user = this.userService.findById(userId);
             String email = user.getEmail();
-
             this.mailService.sendMail(email, mailStructure);
             return "redirect:/article";
         }

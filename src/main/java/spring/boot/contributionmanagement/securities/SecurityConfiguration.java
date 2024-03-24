@@ -38,34 +38,27 @@ public class SecurityConfiguration {
                     .requestMatchers( "/article/save").hasRole("STUDENT")
                     .requestMatchers( "/article/update").hasRole("STUDENT")
                     .requestMatchers( "/article/delete").hasRole("STUDENT")
-
                     //Coordinator
                     .requestMatchers( "/comment").hasAnyRole("STUDENT", "COORDINATOR")
                     .requestMatchers( "/comment/save/").hasRole("COORDINATOR")
-
                     //Manager
                     .requestMatchers( "/article/manager/detail_approval").hasRole("MANAGER")
                     .requestMatchers( "/log_download/**").hasRole("MANAGER")
-
                     //Admin
                     .requestMatchers( "/article/admin/showDetail").hasRole("ADMIN")
                     .requestMatchers( "/academic_year/**").hasRole("ADMIN")
                     .requestMatchers( "/faculty/**").hasRole("ADMIN")
-
                     .requestMatchers("/register").permitAll()
                     .requestMatchers("/register/save").permitAll()
                     .requestMatchers("/login").permitAll()
                     .requestMatchers("/logout").permitAll()
 //                    .requestMatchers("/home").permitAll()
                     .anyRequest().authenticated()
-
-
         ).formLogin(
                 form -> form.loginPage("/login")
                         .loginProcessingUrl("/authenticateTheUser")
                         .defaultSuccessUrl("/home", true)//after login successfully the system will redirect to home page
                         .permitAll()//change the login page by controller url
-
         ).logout(
                 logout -> logout.permitAll()
         ).exceptionHandling(
