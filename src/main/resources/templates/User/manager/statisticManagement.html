@@ -12,16 +12,219 @@
 </head>
 
 <body>
-<div class="d-flex" id="wrapper"   >
+<div class="d-flex" id="wrapper" th:style="'background-image: url(' + @{/image/University-of-Greenwich_out.png} + ')'">
     <!-- /#sidebar-wrapper -->
     <div th:replace="header :: header"></div>
     <!-- Page Content -->
     <div id="page-content-wrapper">
         <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
             <div class="d-flex align-items-center">
-                <h2 class="fs-2 m-0">Statistic Management</h2>
+                <div class="row">
+                    <h2 class="fs-2 m-0">Statistic Management</h2>
+                </div>
+
             </div>
         </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
+                </div>
+                <div class="col-md-6">
+                    <div id="container2" style="width: 550px; height: 400px; margin: 0 auto"></div>
+                </div>
+            </div>
+        </div>f
+
+
+
+
+        <script
+                src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script
+                src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+
+        <script th:inline="javascript">
+            $(function(){
+
+
+
+
+                // Lấy dữ liệu từ Spring Model
+                var facultyContributions2 = [[${facultyContributions}]] ;
+
+                // Chuẩn bị dữ liệu cho biểu đồ
+                var categories2 = Object.keys(facultyContributions2);
+                var seriesData2 = Object.entries(facultyContributions2).map(([year, contributions]) => {
+                    var totalContributions = Object.values(contributions).reduce((acc, val) => acc + val, 0);
+                    return {
+                        name: year,
+                        data: Object.entries(contributions).map(([faculty, count]) => ({ name: faculty, y: (count / totalContributions) * 100 })),
+                    };
+                });
+
+                // Tạo biểu đồ cột
+                Highcharts.chart('container2', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Percentage of contributions by each Faculty for any academic year'
+                    },
+                    xAxis: {
+                        categories: categories2, // Sử dụng tên của các ngành làm trục x
+                        crosshair: true,
+                        gridLineWidth: 1,
+                        labels: {
+                            rotation: -45, // Quay nhãn trục x một góc -45 độ để dễ đọc
+                            style: {
+                                fontSize: '10px' // Điều chỉnh kích thước của nhãn trục x
+                            },
+
+                        }
+                    },
+                    yAxis: {
+                        max: 100,
+                        min: 0,
+                        title: {
+                            text: 'Number of Contributions'
+                        }
+                    },
+
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                color: 'black', // Màu chữ của nhãn dữ liệu
+                                style: {
+                                    textOutline: 'none' // Loại bỏ viền chữ cho nhãn dữ liệu
+                                },
+                                formatter: function() {
+                                    return this.point.name;
+                                }
+                            }
+                        }
+                    },
+
+
+                    tooltip: {
+                        backgroundColor: '#FCFFC5',
+                        borderColor: 'black',
+                        borderRadius: 10,
+                        borderWidth: 3,
+                        pointFormatter: function () {
+                            return '<span style="color:' + this.series.color + '">\u25CF</span> ' + this.series.name + ': <b>' + Highcharts.numberFormat(this.y, 2) + '</b><br/>';
+                        }
+                    },
+                    series: seriesData2
+                });
+
+
+
+
+
+            });
+        </script>
+
+
+        <script th:inline="javascript">
+            $(function(){
+                var facultyContributions = [[${facultyContributions}]]; // Truyền dữ liệu từ Thymeleaf vào biến JavaScript
+
+                var categories = Object.keys(facultyContributions); // Danh sách tên ngành
+
+                var seriesData = [];
+
+                // Lặp qua mỗi năm học trong facultyContributions
+                for (var year in facultyContributions) {
+                    if (facultyContributions.hasOwnProperty(year)) {
+                        var data = [];
+                        // Lặp qua từng ngành
+                        for (var faculty in facultyContributions[year]) {
+                            if (facultyContributions[year].hasOwnProperty(faculty)) {
+                                // Thêm dữ liệu cho mỗi ngành
+                                data.push({
+                                    name: faculty, // Tên ngành
+                                    y: facultyContributions[year][faculty], // Số lượng cho ngành đó
+                                });
+                            }
+                        }
+                        // Thêm dữ liệu cho mỗi năm vào danh sách seriesData
+                        seriesData.push({
+                            name: year,
+                            data: data
+                        });
+                    }
+                }
+
+                Highcharts.chart('container', {
+                    chart: {
+                        type: 'column'
+                    },
+
+                    title: {
+                        text: 'Number of Contributions within each Faculty for each Academic Year'
+                    },
+                    xAxis: {
+                        categories: categories, // Sử dụng tên của các ngành làm trục x
+                        crosshair: true,
+                        gridLineWidth: 1,
+                        labels: {
+                            rotation: -45, // Quay nhãn trục x một góc -45 độ để dễ đọc
+                            style: {
+                                fontSize: '10px' // Điều chỉnh kích thước của nhãn trục x
+                            }
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Number of Contributions'
+                        }
+                    },
+
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                color: 'black', // Màu chữ của nhãn dữ liệu
+                                style: {
+                                    textOutline: 'none' // Loại bỏ viền chữ cho nhãn dữ liệu
+                                },
+                                formatter: function() {
+                                    return this.point.name;
+                                }
+                            }
+                        }
+                    },
+
+
+                    tooltip: {
+                        backgroundColor: '#FCFFC5',
+                        borderColor: 'black',
+                        borderRadius: 10,
+                        borderWidth: 3
+                    },
+                    series: seriesData
+                    // series: [{
+                    //     // name: {
+                    //     //     text: this.point.name // Sử dụng giá trị của this.point.name trong title
+                    //     // },
+                    //
+                    //     name: seriesData,
+                    //     data: seriesData,
+                    //     borderWidth: 1
+                    // }]
+                });
+
+            });
+
+
+        </script>
         <br>
         <br>
         <br>
