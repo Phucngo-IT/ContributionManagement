@@ -17,18 +17,12 @@
 
 <body>
 <div class="d-flex" id="wrapper">
-    <!-- Sidebar -->
-<!--    <div th:replace="header :: header"></div>-->
-    <!-- /#sidebar-wrapper -->
-
-    <!-- Page Content -->
     <div id="page-content-wrapper">
         <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
             <div class="d-flex align-items-center">
                 <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
                 <div th:if="${requestUri != null and requestUri.contains('/article/showForm')}">
                     <h2 class="fs-2 m-0">Add Article </h2>
-
                 </div>
                 <div th:if="${requestUri != null and requestUri.contains('/article/update')}">
                     <h2 class="fs-2 m-0">Edit Article </h2>
@@ -47,45 +41,36 @@
                 <div>
                     <input type="hidden"  th:value="*{article.user.id}" name="user" placeholder="UserID">
                 </div>
-
                 <div class="form-group row">
                     <label for="article">Article Title </label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" th:field="*{article.title}" id="article" placeholder="Enter article file">
                     </div>
                 </div>
-
                 <label >Article Description </label>
                 <div class="col-sm-10">
                     <input type="text"  th:field="*{article.discription}" class="form-control" placeholder="Enter article Description ">
                 </div>
-
                 <label >Article Word File</label>
                 <div class="col-sm-10">
-<!--                    <input type="file"  th:field="*{article.fileName}" class="form-control"  placeholder="">-->
                     <div class="input-box">
                         <input type="hidden"  th:field="*{article.fileName}" >
                         <input type="file" name="files" id="files">
                     </div>
                 </div>
-
                 <label>Article Image</label>
                 <div class="col-sm-10">
-<!--                    <input type="text"  th:field="*{article.imageArticle}" class="form-control"  placeholder="">-->
                     <div class="input-box">
                         <input type="hidden"  th:field="*{article.imageArticle}" >
                         <input type="file" name="image" id="image"  accept="image/png, image/jpg">
                     </div>
-
                 </div>
-
                 <label >Academic Year</label>
                 <div>
                     <select  th:field="*{article.academicYear}">
                         <option th:each="aca : ${academicYears}" th:value="${aca.id}"  th:text="${#strings.substring(aca.closureDate, 0, 4)} + '-' + ${#strings.substring(aca.finalClosureDate, 0, 4)}+' : '+${aca.title}"></option>
                     </select>
                 </div>
-
                 <div class="row pt-4">
                     <div class="">
                         <button type="submit" class="btn btn-primary">Save</button>
