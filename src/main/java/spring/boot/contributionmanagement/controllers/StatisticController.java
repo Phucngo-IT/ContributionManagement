@@ -33,13 +33,7 @@
 //        }
 //        @GetMapping("/statistic")
 //        public String view(Model model){
-<<<<<<< HEAD
-//            Map<String, Set<String>> facultyByYear = new HashMap            Map<,String Integer> articleCountByYear = new HashMap<>();
-//<>();
-=======
-//            Map<String, Integer> articleCountByYear = new HashMap<>();
-//            Map<String, Set<String>> facultyByYear = new HashMap<>();
->>>>>>> 558437d26aeb0f7ecfc11599fb8959de705d0385
+
 //            Map<String, Map<String, Integer>> facultyContributions = new HashMap<>(); // Tạo đối tượng facultyContributions
 //
 //            List<Article> articleListFinal = new ArrayList<>();
