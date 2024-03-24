@@ -46,7 +46,11 @@
                     <div class="col-md-2">
 
                         <label  class="form-label">Article Image</label>
-                        <div><img th:src="@{ ${article.articleImagePath} }" alt="" width="500px" height="250px"></div>
+                        <div><img th:src="@{${article.articleImagePath}}" alt="" width="500px" height="250px"></div>
+<!--                        <img th:src="@{ ${article.articleImagePath} }" class="card-img-top">-->
+<!--                        <script>-->
+<!--                            console.log("image: "+ [[${article.articleImagePath}]]);-->
+<!--                        </script>-->
                     </div>
                     <div class="row pt-4">
                         <div class="">
