@@ -85,4 +85,10 @@ public class HomeController {
         return "Home/home";
     }
 
+    @GetMapping("/about")
+    public String About(){
+
+        return "Home/about";
+    }
+
 }

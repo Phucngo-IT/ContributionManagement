@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
     <meta name="viewport" content="width=device-width , ontoal-scale=1.0">
-    <title>Home</title>
+    <title>About</title>
     <link rel="stylesheet" th:href="@{/css/homepage.css}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -16,7 +16,7 @@
         <img th:src="@{/image/Shool-name-Greenwich.png}" class="schoolName" />
         <ul>
             <li><a th:href="@{/home}">HOME</a></li>
-            <li><a th:href="@{/home/about}">ABOUT</a></li>
+            <li><a th:href="@{/about}">ABOUT</a></li>
             <li><a href="#">CONTACT</a></li>
         </ul>
         <img th:src="@{/image/Icon-Truong-Dai-hoc-Greenwich-Viet-Nam.ico}" class="user-pic" onclick="toggleMenu()">
@@ -30,25 +30,25 @@
                 <hr>
 
                 <a th:href="@{/faculty}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
-<!--                    <img th:src="@{/image/profile.png}" />-->
+                    <!--                    <img th:src="@{/image/profile.png}" />-->
                     <p>
                         Faculty
                     </p>
-<!--                    <span>></span>-->
+                    <!--                    <span>></span>-->
                 </a>
                 <a th:href="@{/academic_year}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
-<!--                    <img th:src="@{/image/settingICO.png}" />-->
+                    <!--                    <img th:src="@{/image/settingICO.png}" />-->
                     <p>
                         Annual Magazine Management
                     </p>
-<!--                    <span>></span>-->
+                    <!--                    <span>></span>-->
                 </a>
                 <a th:href="@{/article}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
-<!--                    <img th:src="@{/image/questionICO.png}" />-->
+                    <!--                    <img th:src="@{/image/questionICO.png}" />-->
                     <p>
                         Contribution Management
                     </p>
-<!--                    <span>></span>-->
+                    <!--                    <span>></span>-->
                 </a>
 
                 <a th:href="@{/statisticManagement}" sec:authorize="hasAnyRole('MANAGER')" class="sub-menu-link">
@@ -56,15 +56,15 @@
                     <p>
                         Statistic Management
                     </p>
-<!--                    <span>></span>-->
+                    <!--                    <span>></span>-->
                 </a>
 
                 <a th:href="@{/login?logout}" class="sub-menu-link">
-<!--                    <img src="log-out.png" />-->
+                    <!--                    <img src="log-out.png" />-->
                     <p>
                         Logout
                     </p>
-<!--                    <span>></span>-->
+                    <!--                    <span>></span>-->
                 </a>
 
             </div>
@@ -73,46 +73,21 @@
 
 
     </nav>
-
-
-
 </div>
 
-<div class="container">
-    <div class="overlay-content">
-        <div class="row">
-            <div th:each=" article :${articles}" class="col-md-3 pb-3">
-                <div  class="card">
-                    <div class="card-background"></div>
-                    <img th:src="@{ ${article.articleImagePath} }" class="card-img-top">
-                    <div class="card-body">
-                        <h5 th:text="${article.title}" class="card-title"></h5>
-                        <a th:href="@{'/file/download/' + ${article.fileName} }" class="btn btn-primary">Download</a>
-                    </div>
-                </div>
-            </div>
+<div class="container pt-5 pb-5">
+    <p style="font-size: 50px"><b>About Us</b></p>
+    <div class="row" style="justify-content: space-around ">
+        <div class="col-md-8 col-sd-12" >
+            <p>Welcome to the Greenwich University Magazine, your go-to platform for the latest insights, articles, and stories from the vibrant community of Greenwich University. As a premier institution of higher learning, Greenwich University prides itself on fostering a dynamic environment where students are encouraged to explore, create, and share their knowledge and experiences.
+            </p>
+            <p>Our magazine serves as a nexus for students, faculty, manager, and coordinator to come together and celebrate the diversity of talent and ideas within our university community. Whether you're interested in academic research, campus events, student achievements, or thought-provoking opinion pieces, you'll find it all here in our magazine.
+            </p>
         </div>
     </div>
 </div>
-
+<br> <br><br><br><br><br><br><br><br><br><br><br>
 <div th:replace="footer :: footer"></div>
-
-<!--<div class="hero">-->
-<!--    <footer th:fragment="footerFragment" th:style="'background-image: url(' + @{/image/UoG-WhiteHouse_out.png} + ')'">-->
-<!--        <div class="footer-content">-->
-<!--            <p>&copy; 2024 Manage Student</p>-->
-<!--            <ul class="footer-links">-->
-<!--                <li><a href="#">Privacy Policy</a></li>-->
-<!--                <li><a href="#">Terms of Service</a></li>-->
-<!--                <li><a href="#">Contact Us</a></li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </footer>-->
-<!--</div>-->
-
-
-
-
 <script  th:src="@{/js/homepage.js}" > </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -127,4 +102,14 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
 
