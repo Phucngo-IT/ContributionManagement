@@ -30,21 +30,21 @@
                 <hr>
 
                 <a th:href="@{/faculty}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
-<!--                    <img th:src="@{/image/profile.png}" />-->
+                    <img th:src="@{/image/profile.png}"/>
                     <p>
                         Faculty
                     </p>
 <!--                    <span>></span>-->
                 </a>
                 <a th:href="@{/academic_year}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
-<!--                    <img th:src="@{/image/settingICO.png}" />-->
+                    <img th:src="@{/image/profile.png}"/>
                     <p>
                         Annual Magazine Management
                     </p>
 <!--                    <span>></span>-->
                 </a>
                 <a th:href="@{/article}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
-<!--                    <img th:src="@{/image/questionICO.png}" />-->
+                    <img th:src="@{/image/profile.png}"/>
                     <p>
                         Contribution Management
                     </p>
@@ -52,15 +52,23 @@
                 </a>
 
                 <a th:href="@{/statisticManagement}" sec:authorize="hasAnyRole('MANAGER')" class="sub-menu-link">
-                    <img src="log-out.png" />
+                    <img th:src="@{/image/profile.png}"/>
                     <p>
                         Statistic Management
                     </p>
 <!--                    <span>></span>-->
                 </a>
 
+                <a th:href="@{home/profile}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Profile
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+
                 <a th:href="@{/login?logout}" class="sub-menu-link">
-<!--                    <img src="log-out.png" />-->
+                    <img th:src="@{/image/profile.png}"/>
                     <p>
                         Logout
                     </p>

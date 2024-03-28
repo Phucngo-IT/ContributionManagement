@@ -28,7 +28,9 @@
             <div class="logo" th:style="'background-image: url(' + @{/image/Shool-name-Greenwich.png} + ')'"></div>
             <h1 >Login</h1>
             <!-- show error message when login failed-->
-
+            <div th:if="${updateProfile}" class="alert alert-danger">
+                <span th:text="${updateProfile}"></span>
+            </div>
             <div class="input-box" th:if="${param.error}">
                 <span style="color: red">Login failed</span>
             </div>
