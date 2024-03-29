@@ -57,15 +57,18 @@
         </div>
         <br>
         <div class="wrapper">
-            <form action="#" th:action="@{/article/saveUpdate}" th:object="${article}"  method="post" enctype="multipart/form-data">
+            <form th:action="@{/article/saveUpdate}" th:object="${article}"  method="post" enctype="multipart/form-data">
                 <div>
-                    <input type="hidden"  th:field="*{id}" name="article">
+                    <input type="hidden"  th:value="*{id}" name="article">
+<!--                    <input type="hidden" th:name="id" th:value="${article.id}" />-->
+
                 </div>
                 <div>
                     <input type="hidden"  th:value="*{user.id}" name="user" placeholder="UserID">
                 </div>
+
                 <div>
-                    <input type="hidden"  th:value="*{isStatus}">
+                    <input type="hidden"  th:value="*{status}" name="status">
                 </div>
                 <div class="form-group row">
                     <label for="Title">Article Title </label>
@@ -102,15 +105,15 @@
 
                 <label >Academic Year</label>
                 <div>
-
+<!--                    <input type="text"  th:text="*{academicYear.name}" >-->
 
                     <select  th:field="*{academicYear.id}">
                         <option th:each="aca : ${academicYears}" th:value="${aca.id}"  th:text="${#strings.substring(aca.closureDate, 0, 4)} + '-' + ${#strings.substring(aca.finalClosureDate, 0, 4)}+' : '+${aca.title}"></option>
                     </select>
-
-
                 </div>
-
+<!--                 <div>-->
+<!--                     <input type="hidden"  th:value="*{academicYear}" >-->
+<!--                 </div>-->
 
 
 
