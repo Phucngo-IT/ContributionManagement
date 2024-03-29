@@ -226,17 +226,139 @@ public class ArticleController {
         return "redirect:/article";
     }
 
-    @GetMapping("/update")
-    public String updateArticle(@RequestParam("id")Long id, Model model, HttpServletRequest request){
-        Article article = this.articleService.findById(id);
-        List<AcademicYear> academicYears = academicYearService.findAll();
-        model.addAttribute("requestUri", request.getRequestURI());
-        model.addAttribute("article", article);
-        model.addAttribute("academicYears", academicYears);
+    @GetMapping("/showFormUpdate")
+    public String showFormUpdateArticle(Model model, HttpServletRequest request, @ModelAttribute("error")String error) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate currentDate = (LocalDate.now());
+            java.sql.Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
 
-        return "User/student/addArticle";
+            List<AcademicYear> academicYears = academicYearService.findAll();
+            Article article = new Article();
+            article.setUploadDate(Date.valueOf(currentDate));
+            article.setUser(userService.findByUsername(username));
+            //                model.addAttribute("currentDate", currentDate);
+
+            model.addAttribute("error", error);
+            model.addAttribute("academicYears", academicYears);
+//            redirectAttributes.addFlashAttribute("article",article);
+            model.addAttribute("article", article);
+            model.addAttribute("requestUri", request.getRequestURI());
+            return "User/student/updateArticle";
+        } else {
+            // Chưa đăng nhập
+            return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
+        }
     }
 
 
 
+    @PostMapping("/saveUpdate")
+    public String updateArticle(@ModelAttribute("article") Article article, RedirectAttributes redirectAttributes, @RequestParam("files")MultipartFile wordFile, @RequestParam("image") MultipartFile imageFile ) throws IOException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        AcademicYear aca =academicYearService.findById(article.getAcademicYear().getId());
+        LocalDate currentDate = (LocalDate.now());
+        Date closureDate = (aca.getClosureDate());
+        Date finalClosureDate = (aca.getFinalClosureDate());
+        java.sql.Date sqlClosureDate = new java.sql.Date(closureDate.getTime());
+        java.sql.Date sqlFinalClosureDate = new java.sql.Date(finalClosureDate.getTime());
+        System.out.println("Article: "+article.getId());
+
+        System.out.println("Title: "+article.getTitle());
+        System.out.println("Status: "+article.isStatus());
+        System.out.println("id: "+article.getId());
+        Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
+        String errors = "";
+
+        if (sqlFinalClosureDate.before(sqlCurrentDate)) {
+            errors += " Article must be edit before final closure date!<br>";
+        }
+        if(imageFile.isEmpty()){
+            errors += " Article must be add image file before submit!<br>";
+
+        }
+        if(wordFile.isEmpty()){
+            errors += " Article must be add word file before submit!<br>";
+        }
+        if(article.getTitle().isEmpty()){
+            errors += " Article must be add title before submit!<br>";
+        }
+        if(article.getDiscription().isEmpty()){
+            errors += " Article must be add discription before submit!<br>";
+        }
+
+
+        if(errors!=""){
+            redirectAttributes.addFlashAttribute("hasError", true);
+            redirectAttributes.addFlashAttribute("error",errors);
+            return "redirect:/article/showFormUpdate";
+        }
+
+        else {
+            System.out.println("Title 2: "+article.getTitle());
+            System.out.println("id 2: "+article.getId());
+            String wordFileName = StringUtils.cleanPath(wordFile.getOriginalFilename());
+            String imageFileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+            article.setStatus(article.isStatus());
+            //set file into article
+            article.setFileName(wordFileName);
+            article.setImageArticle(imageFileName);
+            this.articleService.save(article);
+
+            //word file
+            String uploadDirectory = DIRECTORY;
+            FileUpload.saveFile(uploadDirectory, wordFileName, wordFile);
+
+            //image file
+            String imageDirectory = "src/main/resources/static/articleImage/" + article.getId();
+            FileUpload.saveFile(imageDirectory, imageFileName, imageFile);
+
+//        this.articleService.save(article);
+//        this.articleService.saveAndUpdate(article);
+            redirectAttributes.addFlashAttribute("error", errors);
+
+            //get email address to send an email to coordinator of each faculty
+
+            String facultyName = article.getUser().getFaculty().getName();
+            Long userId = this.userService.findUserByFacultyAndRole(facultyName);
+            User user = this.userService.findById(userId);
+            String email = user.getEmail();
+            this.mailService.sendMail(email, mailStructure);
+            return "redirect:/article";
+        }
+    }
+
+
+    @GetMapping("/update")
+    public String updateArticle(@RequestParam("id")Long id, Model model,  HttpServletRequest request, @ModelAttribute("error")String error){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Article article = this.articleService.findById(id);
+            String username = userDetails.getUsername();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String currentDate = (LocalDate.now().format(formatter));
+            List<AcademicYear> academicYears = academicYearService.findAll();
+            article.setUploadDate(Date.valueOf(currentDate));
+            article.setUser(userService.findByUsername(username));
+//            article.setAcademicYear(article.getAcademicYear());
+            //                model.addAttribute("currentDate", currentDate);
+
+            model.addAttribute("academicYear", article.getAcademicYear());
+
+            model.addAttribute("error", error);
+            model.addAttribute("academicYears", academicYears);
+//            redirectAttributes.addFlashAttribute("article",article);
+            model.addAttribute("article", article);
+            model.addAttribute("requestUri", request.getRequestURI());
+            return "User/student/updateArticle";
+        } else {
+            // Chưa đăng nhập
+            return "redirect:/login"; // hoặc bất kỳ trang nào bạn muốn chuyển hướng đến
+        }
+
+    }
 }
