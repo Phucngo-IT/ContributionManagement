@@ -16,7 +16,6 @@ public class MailStructure {
         this.subject = subject;
         return this;
     }
-
     public String getMessage() {
         return message;
     }

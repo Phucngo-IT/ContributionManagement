@@ -50,14 +50,14 @@ public class RegisterController {
     }
 
     @PostMapping("/save")
-    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result,@RequestParam("image") MultipartFile multipartFile, Model model, HttpSession session) throws IOException {
+    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result,@RequestParam("image")
+    MultipartFile multipartFile, Model model, HttpSession session) throws IOException {
+
         if (result.hasErrors()){
             return "User/register";//if has any error, return register form
         }
-
         String username = user.getUsername();
         User userExisted = this.userService.findByUsername(username);
-
         if (userExisted == null) {
 
             BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
@@ -77,11 +77,8 @@ public class RegisterController {
                     this.userService.saveAndUpdate(user);
                 }
             }
-
             this.userService.save(user);
-
             session.setAttribute("showUser", user);
-
             return "redirect:/login";
         }
 

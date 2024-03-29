@@ -30,37 +30,43 @@
                 <hr>
 
                 <a th:href="@{/faculty}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
-                    <!--                    <img th:src="@{/image/profile.png}" />-->
+                    <img th:src="@{/image/profile.png}"/>
                     <p>
                         Faculty
                     </p>
                     <!--                    <span>></span>-->
                 </a>
                 <a th:href="@{/academic_year}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
-                    <!--                    <img th:src="@{/image/settingICO.png}" />-->
+                    <img th:src="@{/image/profile.png}"/>
                     <p>
                         Annual Magazine Management
                     </p>
                     <!--                    <span>></span>-->
                 </a>
                 <a th:href="@{/article}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
-                    <!--                    <img th:src="@{/image/questionICO.png}" />-->
+                    <img th:src="@{/image/profile.png}"/>
                     <p>
                         Contribution Management
                     </p>
                     <!--                    <span>></span>-->
                 </a>
 
-                <a th:href="@{/}" sec:authorize="hasAnyRole('MANAGER')" class="sub-menu-link">
-                    <img src="log-out.png" />
+                <a th:href="@{/statisticManagement}" sec:authorize="hasAnyRole('MANAGER')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
                     <p>
                         Statistic Management
                     </p>
                     <!--                    <span>></span>-->
                 </a>
-
+                <a th:href="@{home/profile}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Profile
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
                 <a th:href="@{/login?logout}" class="sub-menu-link">
-                    <!--                    <img src="log-out.png" />-->
+                    <img th:src="@{/image/profile.png}"/>
                     <p>
                         Logout
                     </p>
@@ -73,22 +79,18 @@
 
 
     </nav>
-
-
-
 </div>
 
 <div class="container pt-5 pb-5">
     <p style="font-size: 50px"><b>About Us</b></p>
-        <div class="row" style="justify-content: space-around ">
-            <div class="col-md-8 col-sd-12" >
-                <p>Welcome to the Greenwich University Magazine, your go-to platform for the latest insights, articles, and stories from the vibrant community of Greenwich University. As a premier institution of higher learning, Greenwich University prides itself on fostering a dynamic environment where students are encouraged to explore, create, and share their knowledge and experiences.
-                </p>
-                <p>Our magazine serves as a nexus for students, faculty, manager, and coordinator to come together and celebrate the diversity of talent and ideas within our university community. Whether you're interested in academic research, campus events, student achievements, or thought-provoking opinion pieces, you'll find it all here in our magazine.
-
-                </p>
-            </div>
+    <div class="row" style="justify-content: space-around ">
+        <div class="col-md-8 col-sd-12" >
+            <p>Welcome to the Greenwich University Magazine, your go-to platform for the latest insights, articles, and stories from the vibrant community of Greenwich University. As a premier institution of higher learning, Greenwich University prides itself on fostering a dynamic environment where students are encouraged to explore, create, and share their knowledge and experiences.
+            </p>
+            <p>Our magazine serves as a nexus for students, faculty, manager, and coordinator to come together and celebrate the diversity of talent and ideas within our university community. Whether you're interested in academic research, campus events, student achievements, or thought-provoking opinion pieces, you'll find it all here in our magazine.
+            </p>
         </div>
+    </div>
 </div>
 <br> <br><br><br><br><br><br><br><br><br><br><br>
 <div th:replace="footer :: footer"></div>
@@ -106,5 +108,14 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
 
 
