@@ -118,7 +118,7 @@ public class ArticleController {
     }
 
     @GetMapping("/admin/showDetail")//admin
-        public String showdetail(@PathParam("id") Long id, Model model){
+    public String showdetail(@PathParam("id") Long id, Model model){
         Article article = articleService.findById(id);
         model.addAttribute("article", article);
         return "User/admin/ViewdetailContribution";
@@ -358,8 +358,8 @@ public class ArticleController {
     @PostMapping("/saveUpdate")
     public String updateArticle(@ModelAttribute("article") Article article
             , RedirectAttributes redirectAttributes,
-             @RequestParam("files")MultipartFile wordFile,
-             @RequestParam("image") MultipartFile imageFile ) throws IOException {
+                                @RequestParam("files")MultipartFile wordFile,
+                                @RequestParam("image") MultipartFile imageFile ) throws IOException {
 //        System.out.println("0 Article: "+article.getId());
 //        System.out.println(article.getAcademicYear());
 //
@@ -391,30 +391,39 @@ public class ArticleController {
 //        }
         System.out.println("0 " +article.isStatus());
         if(article.isStatus()){
+            System.out.println("ERROR 1");
             errors += "Article was aprroved by Coordinator so you couldn't edit!<br>";
         }
         if (sqlFinalClosureDate.before(sqlCurrentDate)) {
+            System.out.println("ERROR 2");
             errors += " Article must be edit before final closure date!<br>";
         }
         if(imageFile.isEmpty()){
+            System.out.println("ERROR 3");
             errors += " Article must be add image file before submit!<br>";
 
         }
         if(wordFile.isEmpty()){
+            System.out.println("ERROR 4");
             errors += " Article must be add word file before submit!<br>";
         }
         if(article.getTitle().isEmpty()){
+            System.out.println("ERROR 5");
             errors += " Article must be add title before submit!<br>";
         }
         if(article.getDiscription().isEmpty()){
+            System.out.println("ERROR 6");
             errors += " Article must be add discription before submit!<br>";
         }
 
 
         if(errors!=""){
+            System.out.println("ERROR");
             redirectAttributes.addFlashAttribute("hasError", true);
+            System.out.println("ERROR");
             redirectAttributes.addFlashAttribute("error",errors);
-            return "redirect:/article/showFormUpdate";
+            System.out.println("ERROR");
+            return "redirect:/article/showFormUpdate?id=" + article.getId();
         }
 
         else {
