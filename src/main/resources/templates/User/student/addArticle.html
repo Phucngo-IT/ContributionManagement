@@ -51,6 +51,11 @@
                 <div class="col-sm-10">
                     <input type="text"  th:field="*{article.discription}" class="form-control" placeholder="Enter article Description ">
                 </div>
+
+                <div style="display: none;">
+                    <input type="date" class="input" th:value="*{article.uploadDate}" name="uploadDate" placeholder="Upload Date">
+                </div>
+
                 <label >Article Word File</label>
                 <div class="col-sm-10">
                     <div class="input-box">
