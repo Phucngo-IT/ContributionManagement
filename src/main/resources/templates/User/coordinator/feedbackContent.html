@@ -57,6 +57,7 @@
           <h2>Feedback Histories</h2>
           <div th:each="comment : ${comments}" >
           <div th:text="${comment.dateComment}">  </div>
+              <div th:text="${comment.user.fullName}">  </div>
           <textarea th:text="${comment.content}" class="content" name="content" rows="2" id="dlg-content-65ef480e554d8" aria-label="Add a comment..."
                     cols="20" ></textarea>
             </div>

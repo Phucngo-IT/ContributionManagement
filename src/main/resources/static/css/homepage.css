@@ -55,6 +55,12 @@ body.overlay-content {
     /*background-color: rgba(255, 255, 255, 0.8); !* Màu nền với độ mờ *!*/
     /*opacity: 1; !* Độ mờ của thẻ *!*/
 }
+.img{
+    width: 275px;
+    height: 365px;
+    margin: auto;
+}
+
 
 .logo{
     width: 120px;
@@ -112,7 +118,7 @@ nav ul li a{
 }
 
 .sub-menu{
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(180, 178, 178, 0.5);
     padding: 20px;
     margin: 10px;
 }

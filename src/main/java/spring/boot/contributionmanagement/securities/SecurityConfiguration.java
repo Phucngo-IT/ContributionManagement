@@ -39,10 +39,10 @@ public class SecurityConfiguration {
                     .requestMatchers( "/article/update").hasRole("STUDENT")
                     .requestMatchers( "/article/delete").hasRole("STUDENT")
                     //Coordinator
-                    .requestMatchers( "/comment").hasAnyRole("STUDENT", "COORDINATOR")
+                    .requestMatchers( "/comment").hasAnyRole("STUDENT", "COORDINATOR", "MANAGER")
                     .requestMatchers( "/comment/save/").hasRole("COORDINATOR")
                     //Manager
-                    .requestMatchers( "/article/manager/detail_approval").hasRole("MANAGER")
+//                    .requestMatchers( "/article/manager/detail_approval").hasRole("MANAGER")
                     .requestMatchers( "/log_download/**").hasRole("MANAGER")
                     //Admin
                     .requestMatchers( "/article/admin/showDetail").hasRole("ADMIN")

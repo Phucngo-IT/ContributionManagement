@@ -52,6 +52,7 @@ public class CommentController {
 
             boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
             boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
+            boolean isManager = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_MANAGER"));
 
             if (isStudent){
                 Article article = this.articleService.findById(id);
@@ -60,6 +61,7 @@ public class CommentController {
 
                 model.addAttribute("article", article);
                 model.addAttribute("comments", comments);
+                model.addAttribute("comment", new Comment());
                 return "User/student/detailFeedback";
 
             } else if (isCoordinator) {
@@ -71,6 +73,14 @@ public class CommentController {
                 model.addAttribute("comments", comments);
                 model.addAttribute("comment", new Comment());
                 return "User/coordinator/feedbackContent";
+            }else if (isManager) {
+                Article article = this.articleService.findById(id);
+
+                List<Comment> comments = article.getComments();
+
+                model.addAttribute("article", article);
+                model.addAttribute("comments", comments);
+                return "User/manager/viewdetailApproval";
             }else {
                 return null;
             }
