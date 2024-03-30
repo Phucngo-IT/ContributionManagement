@@ -91,11 +91,22 @@
             </div>
 
 
+
             <div class="input-box">
                 <label for="role">Role: </label>
-                <select id="role" th:field="*{role.id}">
-                    <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.roleName}"></option>
-                </select>
+
+                <div th:if="${roles instanceof T(java.util.List)}">
+                    <select id="roles" th:field="*{role.id}">
+                        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.roleName}"></option>
+                    </select>
+                </div>
+
+
+                <div th:unless="${role instanceof T(java.util.List)}">
+                    <select id="role" th:field="*{role.id}">
+                        <option th:each="r : ${role}" th:value="${r.id}" th:text="${r.roleName}"></option>
+                    </select>
+                </div>
             </div>
 
             <div class="input-box">

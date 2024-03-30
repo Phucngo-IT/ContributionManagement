@@ -85,11 +85,13 @@ public class ArticleController {
                 }
                 model.addAttribute("articles", articlesWithFacultyAuths);
                 return "User/coordinator/feedbackManagement";
-            } else if (isAdmin) {
-                List<Article> articles = this.articleService.findAll();
-                model.addAttribute("articles", articles);
-                return "User/admin/contributionManagement";
-            } else if (isManager) {
+            }
+//            else if (isAdmin) {
+//                List<Article> articles = this.articleService.findAll();
+//                model.addAttribute("articles", articles);
+//                return "User/admin/contributionManagement";
+//            }
+            else if (isManager) {
                 List<Article> articles = this.articleService.findAll();
                 List<Article> approvedArticles = new ArrayList<>();
                 List<String> fileNames = new ArrayList<>();//
@@ -117,20 +119,13 @@ public class ArticleController {
         }
     }
 
-    @GetMapping("/admin/showDetail")//admin
-    public String showdetail(@PathParam("id") Long id, Model model){
-        Article article = articleService.findById(id);
-        model.addAttribute("article", article);
-        return "User/admin/ViewdetailContribution";
-    }
+//    @GetMapping("/admin/showDetail")//admin
+//    public String showdetail(@PathParam("id") Long id, Model model){
+//        Article article = articleService.findById(id);
+//        model.addAttribute("article", article);
+//        return "User/admin/ViewdetailContribution";
+//    }
 
-
-    @GetMapping("/manager/detail_approval")//manager
-    public String showDetail(@PathParam("id") Long id,  Model model){
-        Article article = this.articleService.findById(id);
-        model.addAttribute("article", article);
-        return "User/manager/viewdetailApproval";
-    }
 
     @GetMapping("/showForm")
     public String showFormArticle(Model model, HttpServletRequest request, @ModelAttribute("error")String error){

@@ -46,7 +46,16 @@
                     </p>
 <!--                    <span>></span>-->
                 </a>
-                <a th:href="@{/article}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
+
+                <a th:href="@{/register/add_new_account}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Add More Account
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+
+                <a th:href="@{/article}" sec:authorize="hasAnyRole('COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
                         Contribution Management
@@ -62,7 +71,7 @@
 <!--                    <span>></span>-->
                 </a>
 
-                <a th:href="@{home/profile}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
+                <a th:href="@{home/profile}" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
                         Profile
@@ -98,9 +107,12 @@
                         <h5 th:text="${article.title}" class="card-title"></h5>
                     </div>
                     <div class="card-background"></div>
-                    <img th:src="@{ ${article.articleImagePath} }" class="card-img-top">
+                    <div class="img">
+                        <img th:src="@{ ${article.articleImagePath} }" class="card-img-top">
+                    </div>
+
                     <div class="card-body">
-                        <a th:href="@{'/file/download/' + ${article.fileName} }" class="btn btn-primary">Download</a>
+                        <a th:href="@{'/file/download/' + ${article.fileName} }" type="submit" class="btn btn-primary">Download</a>
                     </div>
                 </div>
             </div>
@@ -108,23 +120,19 @@
     </div>
 </div>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 <div th:replace="footer :: footer"></div>
-
-<!--<div class="hero">-->
-<!--    <footer th:fragment="footerFragment" th:style="'background-image: url(' + @{/image/UoG-WhiteHouse_out.png} + ')'">-->
-<!--        <div class="footer-content">-->
-<!--            <p>&copy; 2024 Manage Student</p>-->
-<!--            <ul class="footer-links">-->
-<!--                <li><a href="#">Privacy Policy</a></li>-->
-<!--                <li><a href="#">Terms of Service</a></li>-->
-<!--                <li><a href="#">Contact Us</a></li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </footer>-->
-<!--</div>-->
-
-
-
 
 <script  th:src="@{/js/homepage.js}" > </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>

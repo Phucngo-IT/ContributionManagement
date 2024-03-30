@@ -25,7 +25,9 @@
 
                 <a th:href="@{/academic_year}" sec:authorize="hasAnyRole('ADMIN')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Annual Magazine Management</a>
 
-                <a th:href="@{/article}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Contribution Management</a>
+                <a th:href="@{/register/add_new_account}" sec:authorize="hasAnyRole('ADMIN')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Add More Account</a>
+
+                <a th:href="@{/article}" sec:authorize="hasAnyRole('COORDINATOR', 'STUDENT', 'MANAGER')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Contribution Management</a>
 
                 <a th:href="@{/statisticManagement}" sec:authorize="hasAnyRole('MANAGER')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Statistic Management</a>
 

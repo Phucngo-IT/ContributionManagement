@@ -39,15 +39,31 @@ public class RegisterController {
 
     @GetMapping()
     public String registerForm(Model model){
+
         User user = new User();
+        List<Faculty> faculties = this.facultyService.findAll();
+        Role role = this.roleService.findById(5L);
+
+        model.addAttribute("role", role);
+        model.addAttribute("faculties", faculties);
+        model.addAttribute("user", user);
+
+        return "User/register";// "/register/create"
+    }
+
+    @GetMapping("/add_new_account")
+    public String addNewAcc(Model model){
+        User newAccount = new User();
         List<Faculty> faculties = this.facultyService.findAll();
         List<Role> roles = this.roleService.findAll();
 
         model.addAttribute("roles", roles);
         model.addAttribute("faculties", faculties);
-        model.addAttribute("user", user);
-        return "User/register";// "/register/create"
+        model.addAttribute("user", newAccount);
+
+        return "User/register";
     }
+
 
     @PostMapping("/save")
     public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result,@RequestParam("image")
