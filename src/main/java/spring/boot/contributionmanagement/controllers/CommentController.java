@@ -112,11 +112,17 @@ public class CommentController {
 
 
     @PostMapping("/approve/{id}")
-    public String approve(@PathVariable("id") Long id, RedirectAttributes redirectAttributes ){
+    public String approve(@PathVariable("id") Long id,@RequestParam("action")String action ,RedirectAttributes redirectAttributes ){
         Article article = articleService.findById(id);
         if (article != null) {
-            article.setStatus(true);
-            articleService.save(article);
+            if(action.equals("approve")){
+                article.setStatus(Article.Status.active);
+                articleService.save(article);
+            }
+            else {
+                article.setStatus(Article.Status.recheck);
+                articleService.save(article);
+            }
             return "redirect:/article";
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "The article dose not exist!");

@@ -32,7 +32,7 @@ public class StatisticController {
     public String view(Model model){
         List<Article> allContributions = articleService.findAll();
         List<Article> selectedContributions = allContributions.stream()
-                .filter(Article::isStatus) // Lọc ra các bài báo đã được phê duyệt
+                .filter(article->article.getStatus()== Article.Status.active) // Lọc ra các bài báo đã được phê duyệt
                 .collect(Collectors.toList()); // Thu thập vào một danh sách mới
 
 
