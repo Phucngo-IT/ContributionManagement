@@ -2,6 +2,9 @@
 package spring.boot.contributionmanagement.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +35,7 @@ public class StatisticController {
     public String view(Model model){
         List<Article> allContributions = articleService.findAll();
         List<Article> selectedContributions = allContributions.stream()
-                .filter(article->article.getStatus()== Article.Status.active) // Lọc ra các bài báo đã được phê duyệt
+                .filter(article->article.getStatus()== Article.Status.approved) // Lọc ra các bài báo đã được phê duyệt
                 .collect(Collectors.toList()); // Thu thập vào một danh sách mới
 
 
@@ -86,6 +89,31 @@ public class StatisticController {
         return "User/manager/statisticManagement";
     }
 
+        @GetMapping("statisticGuest")
+        public String statisticGuest(Model model){
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetails userAuth = (UserDetails) authentication.getPrincipal();
+            String username = userAuth.getUsername();
+            User user = this.userService.findByUsername(username);
+            String facultyName = user.getFaculty().getName();
+            List<Article> articles = articleService.findAll();
+            Long allApproved = articles.stream()
+                    .filter(article -> article.getStatus().equals(Article.Status.approved))
+                    .count();
+            long allRecheck = articles.stream()
+                    .filter(article -> article.getStatus().equals(Article.Status.recheck))
+                    .count();
+                    System.out.println(allRecheck);
+            System.out.println(allApproved);
+
+
+//            List<Article> allApproved = articleService.findAllApprovedArticle("approved");
+//            List<Article> allRecheck = articleService.findAllApprovedArticle("recheck");
+            model.addAttribute("approved",allApproved);
+            model.addAttribute("recheck",allRecheck);
+            model.addAttribute("faculty", facultyName);
+        return "User/guest/guestStatistic";
+        }
 
 
 

@@ -98,7 +98,7 @@ public class ArticleController {
                 String facultyName = null;
                 User coordinatorUser = null;
                 for (Article article : articles) {
-                    if (article.getStatus() == Article.Status.active) {
+                    if (article.getStatus() == Article.Status.approved) {
                         approvedArticles.add(article);
                         fileNames.add(article.getFileName());
 //                        facultyName.add(article.getUser().getFaculty().getName());
@@ -291,6 +291,10 @@ public class ArticleController {
         Date ClosureDate = (article.getAcademicYear().getClosureDate());
         Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
         String errors = "";
+        System.out.println();
+        System.out.println("Error Wordfile: "+wordFile);
+        System.out.println("Wordfile: "+article.getFileName());
+        System.out.println();
 
         if (ClosureDate.before(sqlCurrentDate)) {
             errors += " Article must be submit before closure date!<br>";
@@ -359,40 +363,22 @@ public class ArticleController {
             , RedirectAttributes redirectAttributes,
                                 @RequestParam("files")MultipartFile wordFile,
                                 @RequestParam("image") MultipartFile imageFile ) throws IOException {
-//        System.out.println("0 Article: "+article.getId());
-//        System.out.println(article.getAcademicYear());
-//
-//        System.out.println("0 Title: "+article.getTitle());
-//        System.out.println("0 Status: "+article.isStatus());
-//        System.out.println("0 id: "+article.getId());
-
         AcademicYear aca =academicYearService.findById(article.getAcademicYear().getId());
         LocalDate currentDate = (LocalDate.now());
-//        System.out.println(aca);
-//        LocalDate finalClosureDate = (article.getAcademicYear().getFinalClosureDate()).toLocalDate();
-//        Date sqlFinalClosureDate= java.sql.Date.valueOf(finalClosureDate);
         Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
 
-//        Date closureDate = (aca.getClosureDate());
         Date finalClosureDate = (aca.getFinalClosureDate());
-//        java.sql.Date sqlClosureDate = new java.sql.Date(closureDate.getTime());
         java.sql.Date sqlFinalClosureDate = new java.sql.Date(finalClosureDate.getTime());
-//        System.out.println("Article: "+article.getId());
-//
-//        System.out.println("Title: "+article.getTitle());
-//        System.out.println("Status: "+article.isStatus());
-//        System.out.println("id: "+article.getId());
-//        Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
         String errors = "";
 
 //        if(sqlClosureDate.before(sqlCurrentDate)) {
 //            errors += " Article must be submit before closure date!<br>";
 //        }
-//        System.out.println("0 " +article.isStatus());
-        if(article.getStatus().equals(Article.Status.active)){
+        System.out.println("Wordfile: "+wordFile);
+        if(article.getStatus().equals(Article.Status.approved)){
             System.out.println("ERROR 1");
             System.out.println(article.getStatus());
-            System.out.println(Article.Status.active);
+            System.out.println(Article.Status.approved);
             errors += "Article was aprroved by Coordinator so you couldn't edit!<br>";
         }
         if (sqlFinalClosureDate.before(sqlCurrentDate)) {

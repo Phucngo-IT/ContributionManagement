@@ -65,7 +65,7 @@ public class HomeController {
 //        User coordinatorUser = null;
 
         for (Article article : articles) {
-            if (article.getStatus() == Article.Status.active) {
+            if (article.getStatus() == Article.Status.approved) {
                 approvedArticles.add(article);
 
 //                fileNames.add(article.getFileName());

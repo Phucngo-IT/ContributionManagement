@@ -70,7 +70,13 @@
                     </p>
 <!--                    <span>></span>-->
                 </a>
-
+                <a th:href="@{/statisticGuest}" sec:authorize="hasAnyRole('GUEST')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Statistic Guest
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
                 <a th:href="@{home/profile}" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>

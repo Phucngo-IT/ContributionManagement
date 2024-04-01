@@ -63,7 +63,7 @@ public class Article {
     }
 
     public enum Status{
-        active,
+        approved,
         recheck,
         pending
     }

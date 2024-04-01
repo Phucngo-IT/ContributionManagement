@@ -116,7 +116,7 @@ public class CommentController {
         Article article = articleService.findById(id);
         if (article != null) {
             if(action.equals("approve")){
-                article.setStatus(Article.Status.active);
+                article.setStatus(Article.Status.approved);
                 articleService.save(article);
             }
             else {
