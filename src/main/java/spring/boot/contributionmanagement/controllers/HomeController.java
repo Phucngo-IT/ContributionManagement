@@ -99,6 +99,11 @@ public class HomeController {
 
         return "Home/about";
     }
+    @GetMapping("/contact")
+    public String contact(){
+
+        return "Home/contact";
+    }
     @GetMapping("/profile")
     public String Profile(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
