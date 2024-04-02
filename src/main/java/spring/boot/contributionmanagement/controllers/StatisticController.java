@@ -99,6 +99,16 @@ public class StatisticController {
 
 //        System.out.println("Faculty Contributions: " + facultyContributions);
 //        System.out.println(facultyContributions.keySet()); //year
+        // Tính tổng số lượng contributions của mỗi khoa từ tất cả các năm
+        Map<String, Integer> totalContributionsByFaculty = new HashMap<>();
+        for (Map<String, Integer> facultyContributionMap : facultyContributions.values()) {
+            for (Map.Entry<String, Integer> entry : facultyContributionMap.entrySet()) {
+                String faculty = entry.getKey();
+                int contributionCount = entry.getValue();
+                totalContributionsByFaculty.put(faculty, totalContributionsByFaculty.getOrDefault(faculty, 0) + contributionCount);
+            }
+        }
+        model.addAttribute("totalContributionsByFaculty", totalContributionsByFaculty);
         model.addAttribute("facultyContributors", facultyContributors);
         model.addAttribute("facultyContributions", facultyContributions); // Đưa facultyContributions vào model
         return "User/manager/statisticManagement";
