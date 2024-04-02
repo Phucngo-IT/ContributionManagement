@@ -34,29 +34,30 @@ public class StatisticController {
     @GetMapping("/statisticManagement")
     public String view(Model model){
         List<Article> allContributions = articleService.findAll();
-        List<Article> selectedContributions = allContributions.stream()
-                .filter(article->article.getStatus()== Article.Status.approved) // Lọc ra các bài báo đã được phê duyệt
-                .collect(Collectors.toList()); // Thu thập vào một danh sách mới
-
-
+//        List<Article> selectedContributions = allContributions.stream()
+//                .filter(article->article.getStatus()== Article.Status.approved) // Lọc ra các bài báo đã được phê duyệt
+//                .collect(Collectors.toList()); // Thu thập vào một danh sách mới
 
         Map<String, Integer> articleCountByYear = new HashMap<>();
         Map<String, Set<String>> facultyByYear = new HashMap<>();
         Map<String, Map<String, Integer>> facultyContributions = new HashMap<>(); // Tạo đối tượng facultyContributions
+        Map<String, Map<String, Set<String>>> facultyContributors = new HashMap<>();
+
 
         List<Article> articleListFinal = new ArrayList<>();
-        for (Article contribution : selectedContributions) {
+        for (Article contribution : allContributions) {
             Article article = articleService.findById(contribution.getId());
 
             if (article != null) {
                 AcademicYear academicYear = article.getAcademicYear();
                 Faculty faculty = article.getUser().getFaculty();
+                String studentName = article.getUser().getUsername(); // Assume student name is stored in User entity
                 if (academicYear != null) {
                     String closure = academicYear.getClosureDate().toString().substring(0, 4);
                     String finalClosure = academicYear.getFinalClosureDate().toString().substring(0, 4);
                     String concatenatedYear = closure + "-" + finalClosure;
                     articleCountByYear.put(concatenatedYear, articleCountByYear.getOrDefault(concatenatedYear, 0) + 1);
-                    if (faculty != null) {
+                    if (faculty != null && studentName!=null) {
                         Set<String> fas = facultyByYear.getOrDefault(concatenatedYear, new HashSet<>());
                         fas.add(faculty.getName());
                         facultyByYear.put(concatenatedYear, fas);
@@ -66,25 +67,39 @@ public class StatisticController {
                         int contributionCount = facultyContributionMap.getOrDefault(faculty.getName(), 0);
                         facultyContributionMap.put(faculty.getName(), contributionCount + 1);
                         facultyContributions.put(concatenatedYear, facultyContributionMap);
+
+                        // Cập nhật số lượng người đóng góp cho từng khoa trong từng năm
+                        // Khởi tạo hoặc lấy ra map cho năm học được nối
+                        Map<String, Set<String>> yearFacultyContributors = facultyContributors.getOrDefault(concatenatedYear, new HashMap<>());
+                        // Khởi tạo hoặc lấy ra set cho khoa
+                        Set<String> facultyStudents = yearFacultyContributors.getOrDefault(faculty.getName(), new HashSet<>());
+                        // Thêm tên sinh viên vào set cho khoa
+                        facultyStudents.add(studentName);
+                        // Cập nhật set cho khoa trong map cho năm học được nối
+                        yearFacultyContributors.put(faculty.getName(), facultyStudents);
+                        // Cập nhật map cho năm học được nối trong map chính
+                        facultyContributors.put(concatenatedYear, yearFacultyContributors);
                     }
                 }
             }
         }
 
         // Kiểm tra và thêm tất cả các khoa vào facultyContributions
-        for (Map<String, Integer> contributionMap : facultyContributions.values()) {
-            for (Set<String> facultyNames : facultyByYear.values()) {
-                for (String facultyName : facultyNames) {
-                    if (!contributionMap.containsKey(facultyName)) {
-                        contributionMap.put(facultyName, 0);
-                    }
-                }
-            }
-        }
+//        for (Map<String, Integer> contributionMap : facultyContributions.values()) {
+//            for (Set<String> facultyNames : facultyByYear.values()) {
+//                for (String facultyName : facultyNames) {
+//                    if (!contributionMap.containsKey(facultyName)) {
+//                        contributionMap.put(facultyName, 0);
+//                    }
+//                }
+//            }
+//        }
+//        Long allContributor = allContributions.stream()
+//                .count();
 
 //        System.out.println("Faculty Contributions: " + facultyContributions);
 //        System.out.println(facultyContributions.keySet()); //year
-
+        model.addAttribute("facultyContributors", facultyContributors);
         model.addAttribute("facultyContributions", facultyContributions); // Đưa facultyContributions vào model
         return "User/manager/statisticManagement";
     }
