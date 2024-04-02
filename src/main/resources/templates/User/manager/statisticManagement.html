@@ -34,6 +34,15 @@
                     <div id="container2" style="width: 550px; height: 400px; margin: 0 auto"></div>
                 </div>
             </div>
+
+            <div class="row pt-2">
+                <div class="col-md-6">
+                    <div id="container3" style="width: 550px; height: 400px; margin: 0 auto"></div>
+                </div>
+                <div class="col-md-6">
+                    <div id="container4" style="width: 550px; height: 400px; margin: 0 auto"></div>
+                </div>
+            </div>
         </div>
 
 
@@ -47,13 +56,87 @@
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
+        <script th:inline="javascript">
+            $(function(){
+                var facultyContributors = [[${facultyContributors}]] ;
+
+                // Chuẩn bị dữ liệu cho biểu đồ
+                var categories = Object.keys(facultyContributors);
+                var seriesData = Object.entries(facultyContributors).map(([year, contributors]) => {
+                    return {
+                        name: year,
+                        data: Object.entries(contributors).map(([faculty, students]) => [faculty, students.length]),
+                    };
+                });
+
+                Highcharts.chart('container3', {
+                    chart: {
+                        type: 'column'
+                    },
+
+                    title: {
+                        text: 'Number of Contributions within each Faculty for each Academic Year'
+                    },
+                    xAxis: {
+                        categories: categories, // Sử dụng tên của các ngành làm trục x
+                        crosshair: true,
+                        gridLineWidth: 1,
+                        labels: {
+                            rotation: -45, // Quay nhãn trục x một góc -45 độ để dễ đọc
+                            style: {
+                                fontSize: '10px' // Điều chỉnh kích thước của nhãn trục x
+                            }
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Number of Contributors'
+                        }
+                    },
+
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                color: 'black', // Màu chữ của nhãn dữ liệu
+                                style: {
+                                    textOutline: 'none' // Loại bỏ viền chữ cho nhãn dữ liệu
+                                },
+                                formatter: function() {
+                                    return this.point.name;
+                                }
+                            }
+                        }
+                    },
+
+
+                    tooltip: {
+                        backgroundColor: '#FCFFC5',
+                        borderColor: 'black',
+                        borderRadius: 10,
+                        borderWidth: 3
+                    },
+                    series: seriesData
+                    // series: [{
+                    //     // name: {
+                    //     //     text: this.point.name // Sử dụng giá trị của this.point.name trong title
+                    //     // },
+                    //
+                    //     name: seriesData,
+                    //     data: seriesData,
+                    //     borderWidth: 1
+                    // }]
+                });
+
+            });
+
+
+        </script>
+
 
         <script th:inline="javascript">
             $(function(){
-
-
-
-
                 // Lấy dữ liệu từ Spring Model
                 var facultyContributions2 = [[${facultyContributions}]] ;
 
@@ -161,6 +244,8 @@
                     }
                 }
 
+
+
                 Highcharts.chart('container', {
                     chart: {
                         type: 'column'
@@ -222,9 +307,57 @@
                 });
 
             });
-
-
         </script>
+
+
+        <script th:inline="javascript">
+            $(function() {
+                var totalContributionsByFaculty = /*[[${totalContributionsByFaculty}]]*/ {}; // Dữ liệu từ Spring Model
+
+                // Chuẩn bị dữ liệu cho biểu đồ
+                var categories = Object.keys(totalContributionsByFaculty);
+                var seriesData = [{
+                    name: 'Contributions',
+                    data: Object.values(totalContributionsByFaculty),
+                }];
+
+                // Vẽ biểu đồ
+                Highcharts.chart('container4', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Total Contributions by Faculty'
+                    },
+                    xAxis: {
+                        categories: categories,
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Total Contributions'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                            '<td style="padding:0"><b>{point.y} contributions</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: seriesData
+                });
+            });
+        </script>
+
         <br>
         <br>
         <br>

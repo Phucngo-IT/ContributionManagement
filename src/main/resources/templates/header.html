@@ -31,6 +31,8 @@
 
                 <a th:href="@{/statisticManagement}" sec:authorize="hasAnyRole('MANAGER')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Statistic Management</a>
 
+                <a th:href="@{/statisticGuest}" sec:authorize="hasAnyRole('GUEST')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Statistic Guest</a>
+
                 <a th:href="@{/login?logout}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">Log out</a>
 
             </div>

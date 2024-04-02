@@ -33,7 +33,7 @@ public class Article {
     private String imageArticle;
 
     @Column(name = "status")
-    private boolean status;
+    private Status status  ;
 
     @Column(name = "upload_date")
     private Date uploadDate;
@@ -60,6 +60,12 @@ public class Article {
 
 
     public Article() {
+    }
+
+    public enum Status{
+        approved,
+        recheck,
+        pending
     }
 
     public Long getId() {
@@ -116,13 +122,12 @@ public class Article {
         return this;
     }
 
-    public boolean isStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public Article setStatus(boolean status) {
+    public void setStatus(Status status) {
         this.status = status;
-        return this;
     }
 
     public Date getUploadDate() {

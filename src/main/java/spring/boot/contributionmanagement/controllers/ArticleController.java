@@ -98,7 +98,7 @@ public class ArticleController {
                 String facultyName = null;
                 User coordinatorUser = null;
                 for (Article article : articles) {
-                    if (article.isStatus()) {
+                    if (article.getStatus() == Article.Status.approved) {
                         approvedArticles.add(article);
                         fileNames.add(article.getFileName());
 //                        facultyName.add(article.getUser().getFaculty().getName());
@@ -266,9 +266,9 @@ public class ArticleController {
             java.sql.Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
             List<AcademicYear> academicYears = academicYearService.findAll();
             article.setUploadDate(Date.valueOf(currentDate));
-            article.setStatus(article.isStatus());
+//            article.setStatus(Article.Status.active);
             article.setUser(userService.findByUsername(username));
-            System.out.println("showFormUpdate: "+article.isStatus());
+//            System.out.println("showFormUpdate: "+article.isStatus());
 
             model.addAttribute("error", error);
             model.addAttribute("academicYears", academicYears);
@@ -291,6 +291,10 @@ public class ArticleController {
         Date ClosureDate = (article.getAcademicYear().getClosureDate());
         Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
         String errors = "";
+        System.out.println();
+        System.out.println("Error Wordfile: "+wordFile);
+        System.out.println("Wordfile: "+article.getFileName());
+        System.out.println();
 
         if (ClosureDate.before(sqlCurrentDate)) {
             errors += " Article must be submit before closure date!<br>";
@@ -320,6 +324,8 @@ public class ArticleController {
             String imageFileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
 
             //set file into article
+
+//            article.setStatus();
             article.setFileName(wordFileName);
             article.setImageArticle(imageFileName);
             this.articleService.save(article);
@@ -331,6 +337,8 @@ public class ArticleController {
             //image file
             String imageDirectory = "src/main/resources/static/articleImage/" + article.getId();
             FileUpload.saveFile(imageDirectory, imageFileName, imageFile);
+
+            article.setStatus(Article.Status.pending);
 
             this.articleService.save(article);
             this.articleService.saveAndUpdate(article);
@@ -355,38 +363,22 @@ public class ArticleController {
             , RedirectAttributes redirectAttributes,
                                 @RequestParam("files")MultipartFile wordFile,
                                 @RequestParam("image") MultipartFile imageFile ) throws IOException {
-//        System.out.println("0 Article: "+article.getId());
-//        System.out.println(article.getAcademicYear());
-//
-//        System.out.println("0 Title: "+article.getTitle());
-//        System.out.println("0 Status: "+article.isStatus());
-//        System.out.println("0 id: "+article.getId());
-
         AcademicYear aca =academicYearService.findById(article.getAcademicYear().getId());
         LocalDate currentDate = (LocalDate.now());
-//        System.out.println(aca);
-//        LocalDate finalClosureDate = (article.getAcademicYear().getFinalClosureDate()).toLocalDate();
-//        Date sqlFinalClosureDate= java.sql.Date.valueOf(finalClosureDate);
         Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
 
-//        Date closureDate = (aca.getClosureDate());
         Date finalClosureDate = (aca.getFinalClosureDate());
-//        java.sql.Date sqlClosureDate = new java.sql.Date(closureDate.getTime());
         java.sql.Date sqlFinalClosureDate = new java.sql.Date(finalClosureDate.getTime());
-//        System.out.println("Article: "+article.getId());
-//
-//        System.out.println("Title: "+article.getTitle());
-//        System.out.println("Status: "+article.isStatus());
-//        System.out.println("id: "+article.getId());
-//        Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
         String errors = "";
 
 //        if(sqlClosureDate.before(sqlCurrentDate)) {
 //            errors += " Article must be submit before closure date!<br>";
 //        }
-        System.out.println("0 " +article.isStatus());
-        if(article.isStatus()){
+        System.out.println("Wordfile: "+wordFile);
+        if(article.getStatus().equals(Article.Status.approved)){
             System.out.println("ERROR 1");
+            System.out.println(article.getStatus());
+            System.out.println(Article.Status.approved);
             errors += "Article was aprroved by Coordinator so you couldn't edit!<br>";
         }
         if (sqlFinalClosureDate.before(sqlCurrentDate)) {
@@ -427,7 +419,7 @@ public class ArticleController {
             String wordFileName = StringUtils.cleanPath(wordFile.getOriginalFilename());
             String imageFileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
             //set file into article
-            article.setStatus(article.isStatus());
+//            article.setStatus();
             article.setFileName(wordFileName);
             article.setImageArticle(imageFileName);
             article.setAcademicYear(aca);

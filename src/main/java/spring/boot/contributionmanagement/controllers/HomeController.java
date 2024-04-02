@@ -65,7 +65,7 @@ public class HomeController {
 //        User coordinatorUser = null;
 
         for (Article article : articles) {
-            if (article.isStatus()) {
+            if (article.getStatus() == Article.Status.approved) {
                 approvedArticles.add(article);
 
 //                fileNames.add(article.getFileName());
@@ -98,6 +98,11 @@ public class HomeController {
     public String About(){
 
         return "Home/about";
+    }
+    @GetMapping("/contact")
+    public String contact(){
+
+        return "Home/contact";
     }
     @GetMapping("/profile")
     public String Profile(Model model){
