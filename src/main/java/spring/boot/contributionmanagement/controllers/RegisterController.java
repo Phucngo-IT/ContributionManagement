@@ -112,5 +112,14 @@ public class RegisterController {
     }
 
 
+    @GetMapping("/account_management")
+    public String showAccount(Model model){
+        model.addAttribute("accounts", this.userService.findAll());
+
+        return "User/admin/accountManagement";
+    }
+
+
+
 
 }
