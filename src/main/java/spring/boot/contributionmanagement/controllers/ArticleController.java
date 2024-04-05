@@ -1,7 +1,6 @@
 package spring.boot.contributionmanagement.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -86,12 +85,9 @@ public class ArticleController {
                 model.addAttribute("articles", articlesWithFacultyAuths);
                 return "User/coordinator/feedbackManagement";
             }
-//            else if (isAdmin) {
-//                List<Article> articles = this.articleService.findAll();
-//                model.addAttribute("articles", articles);
-//                return "User/admin/contributionManagement";
-//            }
             else if (isManager) {
+
+                List<AcademicYear> academicYears = this.academicYearService.findAll();
                 List<Article> articles = this.articleService.findAll();
                 List<Article> approvedArticles = new ArrayList<>();
                 List<String> fileNames = new ArrayList<>();//
@@ -101,15 +97,12 @@ public class ArticleController {
                     if (article.getStatus() == Article.Status.approved) {
                         approvedArticles.add(article);
                         fileNames.add(article.getFileName());
-//                        facultyName.add(article.getUser().getFaculty().getName());
-//                        Long userId = this.userService.findUserByFacultyAndRole(facultyName);
-//                        coordinatorUser = this.userService.findById(userId);
                     }
                 }
                 String fileNamesString = String.join(",", fileNames);//make ArrayList file name into a single string
                 model.addAttribute("articles", approvedArticles);
-//                model.addAttribute("coordinatorUser", coordinatorUser);
                 model.addAttribute("fileNames", fileNamesString);
+                model.addAttribute("academicYears", academicYears);
                 return "User/manager/approvalArticleManagement";
             } else {
                 return "redirect:/login/403";//show error page
@@ -119,12 +112,28 @@ public class ArticleController {
         }
     }
 
-//    @GetMapping("/admin/showDetail")//admin
-//    public String showdetail(@PathParam("id") Long id, Model model){
-//        Article article = articleService.findById(id);
-//        model.addAttribute("article", article);
-//        return "User/admin/ViewdetailContribution";
-//    }
+    @GetMapping("/search")//admin
+    public String search(@RequestParam("academicYearId") Long id, Model model){
+        AcademicYear academicYear = this.academicYearService.findById(id);
+
+        List<AcademicYear> academicYears = this.academicYearService.findAll();
+        List<Article> articles = academicYear.getArticles();
+        List<Article> approvedArticles = new ArrayList<>();
+        List<String> fileNames = new ArrayList<>();//
+        String facultyName = null;
+        User coordinatorUser = null;
+        for (Article article : articles) {
+            if (article.getStatus() == Article.Status.approved) {
+                approvedArticles.add(article);
+                fileNames.add(article.getFileName());
+            }
+        }
+        String fileNamesString = String.join(",", fileNames);//make ArrayList file name into a single string
+        model.addAttribute("articles", approvedArticles);
+        model.addAttribute("fileNames", fileNamesString);
+        model.addAttribute("academicYears", academicYears);
+        return "User/manager/approvalArticleManagement";
+    }
 
 
     @GetMapping("/showForm")
@@ -313,47 +322,61 @@ public class ArticleController {
             errors += " Article must be add discription before submit!<br>";
         }
 
+        if (!wordFile.isEmpty()) {
+            String fileName = wordFile.getOriginalFilename();
+            if (!(fileName.toLowerCase().endsWith(".doc") || fileName.toLowerCase().endsWith(".docx"))) {
+                errors += "Word file must be .doc or .docx format!<br>";
+            }
+        }
+
+        if (!imageFile.isEmpty()) {
+            String fileName = imageFile.getOriginalFilename();
+            if (!(fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".png"))) {
+                errors += "Image file must be .jpg or .png format!<br>";
+            }
+        }
+
         if(errors!=""){
             redirectAttributes.addFlashAttribute("hasError", true);
             redirectAttributes.addFlashAttribute("error", errors);
             return "redirect:/article/showForm";
         }
 
-        else {
-            String wordFileName = StringUtils.cleanPath(wordFile.getOriginalFilename());
-            String imageFileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
 
-            //set file into article
+
+        else {
+                String wordFileName = StringUtils.cleanPath(wordFile.getOriginalFilename());
+                String imageFileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+
+                //set file into article
 
 //            article.setStatus();
-            article.setFileName(wordFileName);
-            article.setImageArticle(imageFileName);
-            this.articleService.save(article);
+                article.setFileName(wordFileName);
+                article.setImageArticle(imageFileName);
+                this.articleService.save(article);
 
-            //word file
-            String uploadDirectory = DIRECTORY;
-            FileUpload.saveFile(uploadDirectory, wordFileName, wordFile);
+                //word file
+                String uploadDirectory = DIRECTORY;
+                FileUpload.saveFile(uploadDirectory, wordFileName, wordFile);
 
-            //image file
-            String imageDirectory = "src/main/resources/static/articleImage/" + article.getId();
-            FileUpload.saveFile(imageDirectory, imageFileName, imageFile);
+                //image file
+                String imageDirectory = "src/main/resources/static/articleImage/" + article.getId();
+                FileUpload.saveFile(imageDirectory, imageFileName, imageFile);
 
-            article.setStatus(Article.Status.pending);
+                article.setStatus(Article.Status.pending);
 
-            this.articleService.save(article);
-            this.articleService.saveAndUpdate(article);
+                this.articleService.save(article);
+                this.articleService.saveAndUpdate(article);
 
-            //get email address to send an email to coordinator of each faculty
+                //get email address to send an email to coordinator of each faculty
 
-            String facultyName = article.getUser().getFaculty().getName();
-            Long userId = this.userService.findUserByFacultyAndRole(facultyName);
-            User user = this.userService.findById(userId);
-            String email = user.getEmail();
-            this.mailService.sendMail(email, mailStructure);
-            return "redirect:/article";
-
-        }
-
+                String facultyName = article.getUser().getFaculty().getName();
+                Long userId = this.userService.findUserByFacultyAndRole(facultyName);
+                User user = this.userService.findById(userId);
+                String email = user.getEmail();
+                this.mailService.sendMail(email, mailStructure);
+                return "redirect:/article";
+            }
     }
 
 
@@ -363,7 +386,7 @@ public class ArticleController {
             , RedirectAttributes redirectAttributes,
                                 @RequestParam("files")MultipartFile wordFile,
                                 @RequestParam("image") MultipartFile imageFile ) throws IOException {
-        AcademicYear aca =academicYearService.findById(article.getAcademicYear().getId());
+        AcademicYear aca =this.academicYearService.findById(article.getAcademicYear().getId());
         LocalDate currentDate = (LocalDate.now());
         Date sqlCurrentDate = java.sql.Date.valueOf(currentDate);
 
