@@ -99,6 +99,12 @@ public class HomeController {
 
         return "Home/about";
     }
+
+    @GetMapping("/term")
+    public String Term(){
+
+        return "Home/terms";
+    }
     @GetMapping("/contact")
     public String contact(){
 
