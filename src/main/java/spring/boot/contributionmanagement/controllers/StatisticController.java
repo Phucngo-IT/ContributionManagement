@@ -68,6 +68,7 @@ public class StatisticController {
                         facultyContributionMap.put(faculty.getName(), contributionCount + 1);
                         facultyContributions.put(concatenatedYear, facultyContributionMap);
 
+
                         // Cập nhật số lượng người đóng góp cho từng khoa trong từng năm
                         // Khởi tạo hoặc lấy ra map cho năm học được nối
                         Map<String, Set<String>> yearFacultyContributors = facultyContributors.getOrDefault(concatenatedYear, new HashMap<>());
@@ -83,6 +84,7 @@ public class StatisticController {
                 }
             }
         }
+        System.out.println(facultyContributions);
 
         // Kiểm tra và thêm tất cả các khoa vào facultyContributions
 //        for (Map<String, Integer> contributionMap : facultyContributions.values()) {
@@ -124,16 +126,65 @@ public class StatisticController {
             List<Article> articles = articleService.findAll();
             Long allApproved = articles.stream()
                     .filter(article -> article.getStatus().equals(Article.Status.approved))
+                    .filter(article -> article.getUser().getFaculty().getName().equals(facultyName))
                     .count();
             long allRecheck = articles.stream()
                     .filter(article -> article.getStatus().equals(Article.Status.recheck))
+                    .filter(article -> article.getUser().getFaculty().getName().equals(facultyName))
                     .count();
-                    System.out.println(allRecheck);
-            System.out.println(allApproved);
+//                    System.out.println(allRecheck);
+            long allPendding = articles.stream()
+                    .filter(article -> article.getStatus().equals(Article.Status.pending))
+                    .filter(article -> article.getUser().getFaculty().getName().equals(facultyName))
+                    .count();
 
 
-//            List<Article> allApproved = articleService.findAllApprovedArticle("approved");
-//            List<Article> allRecheck = articleService.findAllApprovedArticle("recheck");
+//            Map<String, Map<String, Long>> approvedArticlesByYear = new HashMap<>();
+//            Map<String, Map<String, Long>> recheckArticlesByYear = new HashMap<>();
+            List<Article> allContributions = articleService.findAll();
+            Map<String, Map<String, Long>> articlesByYear = new HashMap<>();
+
+            for (Article article : allContributions) {
+                if (article.getStatus().equals(Article.Status.approved) || article.getStatus().equals(Article.Status.recheck)) {
+                    AcademicYear academicYear = article.getAcademicYear();
+                    if (academicYear != null) {
+                        String closure = academicYear.getClosureDate().toString().substring(0, 4);
+                        String finalClosure = academicYear.getFinalClosureDate().toString().substring(0, 4);
+                        String concatenatedYear = closure + "-" + finalClosure;
+
+                        // Kiểm tra xem bài báo đã được phê duyệt hay cần kiểm tra lại
+//                        Map<String, Long> yearApprovedArticles = approvedArticlesByYear.getOrDefault(concatenatedYear, new HashMap<>());
+//                        Map<String, Long> yearRecheckArticles = recheckArticlesByYear.getOrDefault(concatenatedYear, new HashMap<>());
+//
+//                        if (article.getStatus().equals(Article.Status.approved)) {
+//                            yearApprovedArticles.put(concatenatedYear, yearApprovedArticles.getOrDefault(concatenatedYear, 0L) + 1);
+//                        } else if (article.getStatus().equals(Article.Status.recheck)) {
+//                            yearRecheckArticles.put(concatenatedYear, yearRecheckArticles.getOrDefault(concatenatedYear, 0L) + 1);
+//                        }
+
+//                        approvedArticlesByYear.put(concatenatedYear, yearApprovedArticles);
+//                        recheckArticlesByYear.put(concatenatedYear, yearRecheckArticles);
+
+                        // Lấy map cho năm hiện tại
+                        Map<String, Long> yearData = articlesByYear.getOrDefault(concatenatedYear, new HashMap<>());
+
+                        // Tăng số bài báo tương ứng (approved hoặc recheck)
+                        String status = article.getStatus().toString();
+                        yearData.put(status, yearData.getOrDefault(status, 0L) + 1);
+
+                        // Cập nhật lại dữ liệu cho năm hiện tại
+                        articlesByYear.put(concatenatedYear, yearData);
+                    }
+                }
+            }
+            System.out.println(articlesByYear);
+//            System.out.println(recheckArticlesByYear);
+//            model.addAttribute("approvedArticlesByYear", approvedArticlesByYear);
+//            model.addAttribute("recheckArticlesByYear", recheckArticlesByYear);
+
+            model.addAttribute("articlesByYear",articlesByYear);
+
+            model.addAttribute("pendding",allPendding);
             model.addAttribute("approved",allApproved);
             model.addAttribute("recheck",allRecheck);
             model.addAttribute("faculty", facultyName);

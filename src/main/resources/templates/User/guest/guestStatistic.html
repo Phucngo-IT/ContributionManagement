@@ -53,7 +53,7 @@
                 var facultyName = [[${faculty}]]; // Truyền dữ liệu từ Thymeleaf vào biến JavaScript
                 var approved = [[${approved}]]; // Truyền dữ liệu từ Thymeleaf vào biến JavaScript
                 var  recheck = [[${recheck}]]; // Truyền dữ liệu từ Thymeleaf vào biến JavaScript
-
+                var  pendding = [[${pendding}]];
 
                 // Lặp qua mỗi năm học trong facultyContributions
                 Highcharts.chart('container', {
@@ -64,7 +64,7 @@
                         text: 'Percentage distribution of articles of ' + facultyName
                     },
                     series: [{
-                        name: 'Số lượng bài báo',
+                        name: 'Number Of Articles: ',
                         colorByPoint: true,
                         data: [{
                             name: 'Approved',
@@ -74,13 +74,182 @@
                         }, {
                             name: 'Recheck',
                             y: recheck
-                        }]
+                        },{
+                            name: 'Pendding',
+                            y: pendding
+                        }
+
+
+                        ]
                     }]
                 });
             });
 
 
         </script>
+
+<!--        <script th:inline="javascript">-->
+<!--            $(function(){-->
+<!--                var approvedArticlesByYear = [[${approvedArticlesByYear}]];-->
+<!--                var recheckArticlesByYear = [[${recheckArticlesByYear}]];-->
+
+<!--                // Chuyển đổi dữ liệu cho biểu đồ-->
+<!--                var categories = Object.keys(approvedArticlesByYear);-->
+<!--                var seriesData = categories.map(year => {-->
+<!--                    return {-->
+<!--                        name: year,-->
+<!--                        data: [approvedArticlesByYear[year]]-->
+<!--                    };-->
+<!--                });-->
+<!--                var seriesData2 = categories.map(year => {-->
+<!--                    return {-->
+<!--                        name: year,-->
+<!--                        data: [recheckArticlesByYear[year]]-->
+<!--                    };-->
+<!--                });-->
+
+<!--                // Tạo biểu đồ Highcharts-->
+<!--                Highcharts.chart('container2', {-->
+<!--                    chart: {-->
+<!--                        type: 'column'-->
+<!--                    },-->
+<!--                    title: {-->
+<!--                        text: 'Number of Approved and Recheck Articles within Each Year'-->
+<!--                    },-->
+<!--                    xAxis: {-->
+<!--                        categories: categories,-->
+<!--                        crosshair: true,-->
+<!--                        gridLineWidth: 1,-->
+<!--                        labels: {-->
+<!--                            rotation: -45,-->
+<!--                            style: {-->
+<!--                                fontSize: '10px'-->
+<!--                            }-->
+<!--                        }-->
+<!--                    },-->
+<!--                    yAxis: {-->
+<!--                        min: 0,-->
+<!--                        title: {-->
+<!--                            text: 'Number of Articles'-->
+<!--                        }-->
+<!--                    },-->
+<!--                    plotOptions: {-->
+<!--                        column: {-->
+<!--                            dataLabels: {-->
+<!--                                enabled: true,-->
+<!--                                color: 'black',-->
+<!--                                style: {-->
+<!--                                    textOutline: 'none'-->
+<!--                                },-->
+<!--                                formatter: function() {-->
+<!--                                    return this.point.name;-->
+<!--                                }-->
+<!--                            }-->
+<!--                        }-->
+<!--                    },-->
+<!--                    tooltip: {-->
+<!--                        backgroundColor: '#FCFFC5',-->
+<!--                        borderColor: 'black',-->
+<!--                        borderRadius: 10,-->
+<!--                        borderWidth: 3-->
+<!--                    },-->
+<!--                    series: [{-->
+<!--                        name: 'Approved Articles',-->
+<!--                        data: seriesData-->
+<!--                    }, {-->
+<!--                        name: 'Recheck Articles',-->
+<!--                        data: seriesData2-->
+<!--                    }]-->
+<!--                });-->
+
+<!--            });-->
+<!--        </script>-->
+        <script th:inline="javascript">
+            $(function(){
+                var articlesByYear = [[${articlesByYear}]];
+                console.log(articlesByYear);
+
+                // Chuyển đổi dữ liệu cho biểu đồ
+                var categories = Object.keys(articlesByYear); // Mảng chứa các năm học
+
+                // Mảng chứa dữ liệu cho số lượng bài báo được phê duyệt và cần kiểm tra lại
+                var seriesData = [];
+
+                // Duyệt qua từng năm học
+                categories.forEach(function(year) {
+                    var data = [];
+                    // Duyệt qua từng ngành trong từng năm học
+                    for (var faculty in articlesByYear[year]) {
+                        if (articlesByYear[year].hasOwnProperty(faculty)) {
+                            // Lấy số lượng bài báo theo trạng thái cho từng ngành
+                            var totalCount = articlesByYear[year][faculty];
+                            data.push({
+                                name: faculty,
+                                y: totalCount
+                            });
+                        }
+                    }
+                    // Thêm dữ liệu vào mảng seriesData
+                    seriesData.push({
+                        name: year,
+                        data: data
+                    });
+                });
+
+                // Tạo biểu đồ Highcharts
+                Highcharts.chart('container2', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Number of Articles by Status within Each Year'
+                    },
+                    xAxis: {
+                        categories: categories,
+                        crosshair: true,
+                        gridLineWidth: 1,
+                        labels: {
+                            rotation: -45,
+                            style: {
+                                fontSize: '10px'
+                            }
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Number of Articles'
+                        }
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                color: 'black',
+                                style: {
+                                    textOutline: 'none'
+                                },
+                                formatter: function() {
+                                    return this.point.name;
+                                }
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#FCFFC5',
+                        borderColor: 'black',
+                        borderRadius: 10,
+                        borderWidth: 3,
+                        formatter: function() {
+                            return this.series.name + ': ' + this.y;
+                        }
+                    },
+                    series: seriesData
+                });
+
+            });
+        </script>
+
         <br>
         <br>
         <br>
