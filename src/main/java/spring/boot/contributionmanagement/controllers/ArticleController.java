@@ -1,6 +1,7 @@
 package spring.boot.contributionmanagement.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -133,6 +134,16 @@ public class ArticleController {
         model.addAttribute("fileNames", fileNamesString);
         model.addAttribute("academicYears", academicYears);
         return "User/manager/approvalArticleManagement";
+    }
+
+    @GetMapping("/publish")
+    public String publish(@RequestParam("id") Long id){
+        Article article = articleService.findById(id);
+        if (article.getStatus() != Article.Status.publish) {
+            article.setStatus(Article.Status.publish);
+            this.articleService.save(article);
+        }
+        return "redirect:/article";
     }
 
 

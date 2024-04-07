@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +24,7 @@ import spring.boot.contributionmanagement.services.UserService;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -42,57 +44,44 @@ public class HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userAuth = (UserDetails) authentication.getPrincipal();
 
-        String username = userAuth.getUsername();
-        User user = this.userService.findByUsername(username);
-        String facultyName = user.getFaculty().getName();
 
-//        Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
-//
-//        boolean isManager = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_MANAGER"));
-//
-
-        List<Article> articles = this.articleService.findAll();
-
-        List<Article> approvedArticles = new ArrayList<>();
-
-        List<Article> articlesWithFacultyAuths = new ArrayList<>();
-
-//        List<String> fileNames = new ArrayList<>();//
+        if (userAuth != null){
+            String username = userAuth.getUsername();
+            User user = this.userService.findByUsername(username);
+            String facultyName = user.getFaculty().getName();
 
 
-//        String facultyName = null;
+            Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
+            boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
+            boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
+            boolean isGuest = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_GUEST"));
+            boolean isManager = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_MANAGER"));
+            boolean isAdmin = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+            List<Article> articles = this.articleService.findAll();
 
-//        User coordinatorUser = null;
+            List<Article> articlesPublished = new ArrayList<>();
 
-        for (Article article : articles) {
-            if (article.getStatus() == Article.Status.approved) {
-                approvedArticles.add(article);
-
-//                fileNames.add(article.getFileName());
-//
-//                facultyName = article.getUser().getFaculty().getName();
-//                Long userId = this.userService.findUserByFacultyAndRole(facultyName);
-//                coordinatorUser = this.userService.findById(userId);
+            if (isStudent || isCoordinator || isGuest){
+                for (Article article : articles){
+                    if (article.getStatus() == Article.Status.publish && article.getUser().getFaculty().getName().equals(facultyName)){
+                        articlesPublished.add(article);
+                    }
+                }
             }
-        }
-
-        for (Article article : approvedArticles){
-            if (article.getUser().getFaculty().getName().equals(facultyName)) {
-                articlesWithFacultyAuths.add(article);
+            if (isManager || isAdmin){
+                for (Article article : articles){
+                    if (article.getStatus() == Article.Status.publish){
+                        articlesPublished.add(article);
+                    }
+                }
             }
 
+            model.addAttribute("articles",articlesPublished);
+            return "Home/home";
         }
-
-
-//        String fileNamesString = String.join(",", fileNames);//make ArrayList file name into a single string
-
-        model.addAttribute("articles",articlesWithFacultyAuths);
-//        model.addAttribute("coordinatorUser", coordinatorUser);
-//        model.addAttribute("fileNames", fileNamesString);
-
-//        return "User/manager/approvalArticleManagement";
-        return "Home/home";
+        return "redirect:/login/404";
     }
+
 
     @GetMapping("/about")
     public String About(){

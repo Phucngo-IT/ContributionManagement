@@ -65,7 +65,8 @@ public class Article {
     public enum Status{
         approved,
         recheck,
-        pending
+        pending,
+        publish
     }
 
     public Long getId() {
