@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<head>
+    <meta name="viewport" content="width=device-width , ontoal-scale=1.0">
+    <title>About</title>
+    <link rel="stylesheet" th:href="@{/css/homepage.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<div class="hero">
+
+    <nav th:style="'background-image: url(' + @{/image/University-of-Greenwich_out.png} + ')'">
+        <img th:src="@{/image/Shool-name-Greenwich.png}" class="schoolName" />
+        <ul>
+            <li><a th:href="@{/home}">HOME</a></li>
+            <li><a th:href="@{/home/about}">ABOUT</a></li>
+            <li><a th:href="@{/home/contact}">CONTACT</a></li>
+        </ul>
+        <img th:src="@{/image/Icon-Truong-Dai-hoc-Greenwich-Viet-Nam.ico}" class="user-pic" onclick="toggleMenu()">
+        <div class="sub-menu-wrap" id="subMenu">
+            <div class="sub-menu">
+                <div class="user-info">
+                    <h2></h2>
+                    <img src="logo.png" alt="" />
+
+                </div>
+                <hr>
+                <a th:href="@{/article}" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Contribution Management
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+
+                <a th:href="@{home/profile}" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Profile
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+                <a th:href="@{/login?logout}" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Logout
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+
+            </div>
+        </div>
+
+
+
+    </nav>
+</div>
+
+<div class="container pt-5 pb-5">
+    <p style="font-size: 50px"><b>Terms and Conditions for Student Contributions</b></p>
+    <div class="row" style="justify-content: space-around ">
+        <div class="col-md-8 col-sd-12" >
+            <p>
+                Welcome to our website! Greenwich University always welcomes contributions and opinions from the student community. In submitting contributions to our website system, you need to understand and adhere to the following terms and conditions:
+            </p>
+            <p>
+                <b> Ownership and Usage Rights</b>
+                <br>
+                By submitting contributions, you agree that all content you provide (including text, images, videos, or any other materials) becomes the property of Greenwich University.
+                You acknowledge that the university has the right to use, modify, reuse, and distribute the content you submit for educational and promotional purposes of the university.
+            </p>
+
+            <p>
+                <b>Content Commitment</b>
+                <br>
+                You commit that all content you provide does not infringe upon any intellectual property rights, privacy rights, or other rights of any individuals or organizations.
+                You commit not to submit unlawful, obscene, defamatory, or incendiary content.
+            </p>
+
+            <p>
+               <b>Content Moderation</b>
+                <br>
+                Greenwich University reserves the right to moderate, edit, or remove any content you submit if deemed inappropriate, infringing, or controversial.
+                We are not responsible for any content you submit, and you will be fully responsible for your own content.
+            </p>
+
+
+            <p>
+                <b>Privacy</b>
+                <br>
+                You are not allowed to share any personal information of other students when submitting contributions.
+                You are responsible for safeguarding your own personal information and not using any unauthorized information.
+            </p>
+
+            <p>
+                <b>Updates and Changes</b>
+                <br>
+                Greenwich University reserves the right to update or change these terms and conditions at any time without prior notice.
+                Continued use and contribution to our website will be understood as your acceptance of the new terms and conditions.
+            </p>
+
+        </div>
+    </div>
+</div>
+<br> <br><br><br><br><br><br><br><br><br><br><br>
+<div th:replace="footer :: footer"></div>
+<script  th:src="@{/js/homepage.js}" > </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var el = document.getElementById("wrapper");
+    var toggleButton = document.getElementById("menu-toggle");
+
+    toggleButton.onclick = function () {
+        el.classList.toggle("toggled");
+    };
+</script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+

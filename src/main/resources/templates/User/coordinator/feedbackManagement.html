@@ -12,9 +12,9 @@
 </head>
 
 <body>
-<div class="d-flex" id="wrapper">
+<div class="d-flex" id="wrapper" th:style="'background-image: url(' + @{/image/University-of-Greenwich_out.png} + ')'">
     <!-- Sidebar -->
-
+    <div th:replace="header :: header"></div>
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
@@ -43,7 +43,7 @@
                     <td th:text="${article.user.fullName}"></td>
                     <td th:text="${article.title}"></td>
                     <td th:text="${article.uploadDate}"></td>
-                    <td th:text="${article.status}"></td>
+                    <td><span th:text="${article.status}"></span></td>
                     <td>
                         <a th:href="@{/comment(id=${article.id})}"><button class="btn btn-info">View Detail</button></a>
                     </td>

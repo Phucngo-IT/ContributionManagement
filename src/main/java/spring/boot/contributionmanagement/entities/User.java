@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @Entity
@@ -14,6 +14,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    //show image
+    @Transient
+    public String getAvatarPath(){
+        if (avatar == null || id == null) return null;
+        return "/src/main/resources/static/userAvatar/" + id +"/" +avatar;
+        //<img th:src="@{ ${user.avatarPath} }" alt="" width="500px" height="250px">
+    }
 
     @Column(name = "full_name")
     @NotBlank(message = "You cannot leave this section blank")

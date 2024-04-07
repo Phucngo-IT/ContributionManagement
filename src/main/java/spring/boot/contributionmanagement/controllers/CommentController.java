@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.boot.contributionmanagement.entities.Article;
 import spring.boot.contributionmanagement.entities.Comment;
 import spring.boot.contributionmanagement.entities.User;
@@ -50,8 +51,8 @@ public class CommentController {
             Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
             boolean isStudent = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_STUDENT"));
-
             boolean isCoordinator = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_COORDINATOR"));
+            boolean isManager = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_MANAGER"));
 
             if (isStudent){
                 Article article = this.articleService.findById(id);
@@ -60,6 +61,7 @@ public class CommentController {
 
                 model.addAttribute("article", article);
                 model.addAttribute("comments", comments);
+                model.addAttribute("comment", new Comment());
                 return "User/student/detailFeedback";
 
             } else if (isCoordinator) {
@@ -71,6 +73,14 @@ public class CommentController {
                 model.addAttribute("comments", comments);
                 model.addAttribute("comment", new Comment());
                 return "User/coordinator/feedbackContent";
+            }else if (isManager) {
+                Article article = this.articleService.findById(id);
+
+                List<Comment> comments = article.getComments();
+
+                model.addAttribute("article", article);
+                model.addAttribute("comments", comments);
+                return "User/manager/viewdetailApproval";
             }else {
                 return null;
             }
@@ -98,6 +108,26 @@ public class CommentController {
         this.commentService.saveAndUpdate(comment);
 
         return "redirect:/article";
+    }
+
+
+    @PostMapping("/approve/{id}")
+    public String approve(@PathVariable("id") Long id,@RequestParam("action")String action ,RedirectAttributes redirectAttributes ){
+        Article article = articleService.findById(id);
+        if (article != null) {
+            if(action.equals("approve")){
+                article.setStatus(Article.Status.approved);
+                articleService.save(article);
+            }
+            else {
+                article.setStatus(Article.Status.recheck);
+                articleService.save(article);
+            }
+            return "redirect:/article";
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "The article dose not exist!");
+            return "redirect:/article";
+        }
     }
 
 }

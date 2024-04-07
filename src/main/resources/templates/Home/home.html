@@ -5,75 +5,150 @@
     <title>Home</title>
     <link rel="stylesheet" th:href="@{/css/homepage.css}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="hero">
 
-    <nav>
-        <img th:src="@{/backgroundImage/Greenwich.jpg}" class=" logo" />
+    <nav th:style="'background-image: url(' + @{/image/University-of-Greenwich_out.png} + ')'">
+        <img th:src="@{/image/Shool-name-Greenwich.png}" class="schoolName" />
         <ul>
-            <li><a href="#">HOME</a></li>
-            <li><a href="#">ABOUT</a></li>
-            <li><a href="#">SERVICE</a></li>
-            <li><a href="#">MANAGE</a></li>
-            <li><a href="#">CONTACT</a></li>
-            <li><a href="#">LOGIN</a></li>
-            <li><a href="#">REGISTER</a></li>
-
-
+            <li><a th:href="@{/home}">HOME</a></li>
+            <li><a th:href="@{/home/about}">ABOUT</a></li>
+            <li><a th:href="@{/home/contact}">CONTACT</a></li>
         </ul>
-        <img th:src="@{/backgroundImage/Greenwich.jpg}" class="user-pic" onclick="toggleMenu()">
+        <img th:src="@{/image/Icon-Truong-Dai-hoc-Greenwich-Viet-Nam.ico}" class="user-pic" onclick="toggleMenu()">
         <div class="sub-menu-wrap" id="subMenu">
             <div class="sub-menu">
                 <div class="user-info">
-                    <h2 sec:authentication="principal.username"></h2>
-                    <br>
-                    <h2 sec:authentication="principal.authorities"></h2>
+                    <h2></h2>
                     <img src="logo.png" alt="" />
 
                 </div>
                 <hr>
 
-                <a href="#" class="sub-menu-link">
-                    <img th:src="@{/backgroundImage/profile.png}" />
+                <a th:href="@{/faculty}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
                     <p>
-                        Edit Profile
+                        Faculty
                     </p>
-                    <span>></span>
+<!--                    <span>></span>-->
                 </a>
-                <a href="#" class="sub-menu-link">
-                    <img th:src="@{/backgroundImage/settingICO.png}" />
+                <a th:href="@{/academic_year}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
                     <p>
-                        Setting & Privacy
+                        Annual Magazine Management
                     </p>
-                    <span>></span>
+<!--                    <span>></span>-->
                 </a>
-                <a href="#" class="sub-menu-link">
-                    <img th:src="@{/backgroundImage/questionICO.png}" />
-                    <p>
-                        Help & Support
-                    </p>
-                    <span>></span>
-                </a>
-                <form th:action="@{/logout}" method="post">
-                    <button class="sub-menu-link">
-                        <img src="log-out.png" />
-                        <p>
-                            Logout
-                        </p>
 
-                    </button>
-                </form>
+                <a th:href="@{/register/account_management}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Account Management
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
 
+                <a th:href="@{/article}" sec:authorize="hasAnyRole('COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Contribution Management
+                    </p>
+<!--                    <span>></span>-->
+                </a>
+
+                <a th:href="@{/statisticManagement}" sec:authorize="hasAnyRole('MANAGER')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Statistic Management
+                    </p>
+<!--                    <span>></span>-->
+                </a>
+                <a th:href="@{/statisticGuest}" sec:authorize="hasAnyRole('GUEST')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Statistic Guest
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+                <a th:href="@{home/profile}" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Profile
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+
+                <a th:href="@{/login?logout}" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Logout
+                    </p>
+<!--                    <span>></span>-->
+                </a>
 
             </div>
         </div>
+
+
+
     </nav>
 
+
+
 </div>
-<div class="d-flex" id="wrapper">
-    <div th:replace="header :: header"></div>
+
+<div class="container">
+    <div class="overlay-content">
+        <div class="row">
+            <div th:each=" article :${articles}" class="col-md-3 pb-3">
+                <div  class="card">
+                    <div class="card-body">
+                        <h5 th:text="${article.title}" class="card-title"></h5>
+                    </div>
+                    <div class="card-background"></div>
+                    <div class="img">
+                        <img th:src="@{ ${article.articleImagePath} }" class="card-img-top">
+                    </div>
+
+                    <div class="card-body">
+                        <a th:href="@{'/file/download/' + ${article.fileName} }" type="submit" class="btn btn-primary">Download</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+<div th:replace="footer :: footer"></div>
 
 <script  th:src="@{/js/homepage.js}" > </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
@@ -85,9 +160,8 @@
         el.classList.toggle("toggled");
     };
 </script>
-    <h1>Home Page 1234</h1>
+
 </body>
 
 </html>
-
 

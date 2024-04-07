@@ -39,25 +39,41 @@ public class RegisterController {
 
     @GetMapping()
     public String registerForm(Model model){
+
         User user = new User();
+        List<Faculty> faculties = this.facultyService.findAll();
+        Role role = this.roleService.findById(5L);
+
+        model.addAttribute("role", role);
+        model.addAttribute("faculties", faculties);
+        model.addAttribute("user", user);
+
+        return "User/register";// "/register/create"
+    }
+
+    @GetMapping("/add_new_account")
+    public String addNewAcc(Model model){
+        User newAccount = new User();
         List<Faculty> faculties = this.facultyService.findAll();
         List<Role> roles = this.roleService.findAll();
 
         model.addAttribute("roles", roles);
         model.addAttribute("faculties", faculties);
-        model.addAttribute("user", user);
-        return "User/register";// "/register/create"
+        model.addAttribute("user", newAccount);
+
+        return "User/register";
     }
 
+
     @PostMapping("/save")
-    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result,@RequestParam("image") MultipartFile multipartFile, Model model, HttpSession session) throws IOException {
+    public String saveUser(@Valid @ModelAttribute("user") User user, BindingResult result,@RequestParam("image")
+    MultipartFile multipartFile, Model model, HttpSession session) throws IOException {
+
         if (result.hasErrors()){
             return "User/register";//if has any error, return register form
         }
-
         String username = user.getUsername();
         User userExisted = this.userService.findByUsername(username);
-
         if (userExisted == null) {
 
             BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
@@ -76,11 +92,8 @@ public class RegisterController {
                     this.userService.saveAndUpdate(user);
                 }
             }
-
             this.userService.save(user);
-
             session.setAttribute("showUser", user);
-
             return "redirect:/login";
         }
 
@@ -97,6 +110,15 @@ public class RegisterController {
 
         return "User/register";// "/register/create"
     }
+
+
+    @GetMapping("/account_management")
+    public String showAccount(Model model){
+        model.addAttribute("accounts", this.userService.findAll());
+
+        return "User/admin/accountManagement";
+    }
+
 
 
 

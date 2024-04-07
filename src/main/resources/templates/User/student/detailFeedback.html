@@ -15,7 +15,7 @@
 <body>
 <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
-    <div th:replace="header :: header"></div>
+<!--    <div th:replace="header :: header"></div>-->
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
@@ -25,8 +25,6 @@
                 <h2 class="fs-2 m-0">Detail Feedback</h2>
             </div>
         </nav>
-
-
 
         <br>
         <br>
@@ -52,17 +50,26 @@
 
                 </tbody>
             </table>
-            <h2>Content</h2>
+            <h2>Replying Feedback</h2>
+            <form action="#" th:action="@{'/comment/save/' + ${article.id}}" th:object="${comment}" method="post">
+                <input type="text" th:field="*{content}" class="content"  ></input>
+
+                <button class="btn btn-primary"> Send feedback </button>
+            </form>
+
+
+            <h2>Feedback Histories</h2>
             <div th:each="comment : ${comments}">
                 <div th:text="${comment.dateComment}">  </div>
+                <div th:text="${comment.user.fullName}">  </div>
                 <textarea th:text="${comment.content}" class="content" name="content" rows="2" id="dlg-content-65ef480e554d8" aria-label="Add a comment..."
                         cols="20" ></textarea>
             </div>
 
             <div class="dropdown">
-                <button th:href="@{/comment}" class="btn btn-primary " type="button"  aria-expanded="false">
-                    Return
-                </button>
+                <a th:href="@{/article}" class="btn btn-primary " type="button"  aria-expanded="false">
+                    Close
+                </a>
             </div>
         </div>
 

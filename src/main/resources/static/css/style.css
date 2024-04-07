@@ -1,9 +1,18 @@
+
+.content{
+    color: grey;
+    width: 673px;
+    height: 150px;
+    border-radius: 5px;
+}
+
 :root {
     --main-bg-color: #009d63;
     --main-text-color: #009d63;
     --second-text-color: #bbbec5;
     --second-bg-color: #15ee9f;
 }
+
 
 .primary-text {
     color: var(--main-text-color);
