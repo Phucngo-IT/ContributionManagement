@@ -54,4 +54,13 @@ public class ArticleServiceImpl implements ArticleService {
         query.setParameter("status", status);
         return query.getResultList();
     }
+
+    @Override
+    public List<Article> findAllByFacultyName(String facultyName) {
+        String jpqlQuery = "SELECT a FROM Article a WHERE a.user.faculty.name = :facultyName";
+        TypedQuery<Article> query = entityManager.createQuery(jpqlQuery, Article.class);
+        query.setParameter("facultyName", facultyName);
+        return query.getResultList();
+    }
+
 }

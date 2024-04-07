@@ -15,4 +15,8 @@ public interface ArticleService {
     public void deleteById(Long id);
 
     public List<Article> findAllApprovedArticle(String status);
+    List<Article> findAllByFacultyName(String facultyName);
+
+
+
 }

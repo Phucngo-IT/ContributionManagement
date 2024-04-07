@@ -141,7 +141,9 @@ public class StatisticController {
 
 //            Map<String, Map<String, Long>> approvedArticlesByYear = new HashMap<>();
 //            Map<String, Map<String, Long>> recheckArticlesByYear = new HashMap<>();
-            List<Article> allContributions = articleService.findAll();
+//            List<Article> allContributions = articleService.findAll();
+            List<Article> allContributions = articleService.findAllByFacultyName(facultyName);
+
             Map<String, Map<String, Long>> articlesByYear = new HashMap<>();
 
             for (Article article : allContributions) {
