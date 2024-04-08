@@ -23,16 +23,20 @@ public class StatisticController {
     private final FacultyService facultyService;
     private final ArticleService articleService;
     private final UserService userService;
+    private final CommentService commentService;
+
     @Autowired
-    public StatisticController(AcademicYearService academicYearService
-            , FacultyService facultyService, ArticleService articleService, UserService userService){
-        this.academicYearService =academicYearService;
-        this.facultyService=facultyService;
+    public StatisticController(AcademicYearService academicYearService, CommentService commentService
+            , FacultyService facultyService, ArticleService articleService, UserService userService) {
+        this.academicYearService = academicYearService;
+        this.commentService = commentService;
+        this.facultyService = facultyService;
         this.userService = userService;
         this.articleService = articleService;
     }
+
     @GetMapping("/statisticManagement")
-    public String view(Model model){
+    public String view(Model model) {
         List<Article> allContributions = articleService.findAll();
 //        List<Article> selectedContributions = allContributions.stream()
 //                .filter(article->article.getStatus()== Article.Status.approved) // Lọc ra các bài báo đã được phê duyệt
@@ -57,7 +61,7 @@ public class StatisticController {
                     String finalClosure = academicYear.getFinalClosureDate().toString().substring(0, 4);
                     String concatenatedYear = closure + "-" + finalClosure;
                     articleCountByYear.put(concatenatedYear, articleCountByYear.getOrDefault(concatenatedYear, 0) + 1);
-                    if (faculty != null && studentName!=null) {
+                    if (faculty != null && studentName != null) {
                         Set<String> fas = facultyByYear.getOrDefault(concatenatedYear, new HashSet<>());
                         fas.add(faculty.getName());
                         facultyByYear.put(concatenatedYear, fas);
@@ -110,51 +114,101 @@ public class StatisticController {
                 totalContributionsByFaculty.put(faculty, totalContributionsByFaculty.getOrDefault(faculty, 0) + contributionCount);
             }
         }
+
+
+        List<Comment> allComments = commentService.findAll();
+        int articlesByNotComments = 0;
+        int articlesByNotCommentsAfter14Days = 0;
+
+        Set<Long> checkedArticleIds = new HashSet<>(); // Tập hợp các id của bài báo đã được kiểm tra
+
+        for (Article article : allContributions) {
+            // Kiểm tra xem bài báo đã được kiểm tra chưa
+            if (!checkedArticleIds.contains(article.getId())) {
+                boolean hasComment = false;
+                for (Comment comment : allComments) {
+                    // Kiểm tra xem bình luận có thuộc id của bài báo không
+                    if (article.getId().equals(comment.getArticle().getId())) {
+                        hasComment = true;
+                        // Thêm id của bài báo vào tập hợp đã kiểm tra
+                        checkedArticleIds.add(article.getId());
+                        break;
+                    }
+                }
+
+                // Nếu không có bình luận cho bài báo
+                if (!hasComment) {
+                    articlesByNotComments++;
+                    LocalDate finalClosureDate = article.getAcademicYear().getFinalClosureDate().toLocalDate();
+                    LocalDate finalClosureDateAfter14 = finalClosureDate.plusDays(14);
+                    LocalDate currentDate = LocalDate.now();
+                    System.out.println(article.getTitle());
+
+                    System.out.println("finalClosureDate: " + finalClosureDate);
+
+                    System.out.println("finalClosureDateAfter14: " + finalClosureDateAfter14);
+                    System.out.println("currentDate: " + currentDate);
+
+                    System.out.println(finalClosureDateAfter14.isBefore(currentDate));
+
+                    // Kiểm tra xem ngày closure date của bài báo và 14 ngày sau ngày đó
+                    // có lớn hơn ngày hiện tại hay không
+                    if (finalClosureDateAfter14.isBefore(currentDate)) {
+                        articlesByNotCommentsAfter14Days++;
+                    }
+                }
+            }
+        }
+
+        // Truyền dữ liệu sang view
+        model.addAttribute("articlesByNotComments", articlesByNotComments);
+        model.addAttribute("articlesByNotCommentsAfter14Days", articlesByNotCommentsAfter14Days);
+
         model.addAttribute("totalContributionsByFaculty", totalContributionsByFaculty);
         model.addAttribute("facultyContributors", facultyContributors);
         model.addAttribute("facultyContributions", facultyContributions); // Đưa facultyContributions vào model
         return "User/manager/statisticManagement";
     }
 
-        @GetMapping("statisticGuest")
-        public String statisticGuest(Model model){
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            UserDetails userAuth = (UserDetails) authentication.getPrincipal();
-            String username = userAuth.getUsername();
-            User user = this.userService.findByUsername(username);
-            String facultyName = user.getFaculty().getName();
-            List<Article> articles = articleService.findAll();
-            Long allApproved = articles.stream()
-                    .filter(article -> article.getStatus().equals(Article.Status.approved))
-                    .filter(article -> article.getUser().getFaculty().getName().equals(facultyName))
-                    .count();
-            long allRecheck = articles.stream()
-                    .filter(article -> article.getStatus().equals(Article.Status.recheck))
-                    .filter(article -> article.getUser().getFaculty().getName().equals(facultyName))
-                    .count();
+    @GetMapping("statisticGuest")
+    public String statisticGuest(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userAuth = (UserDetails) authentication.getPrincipal();
+        String username = userAuth.getUsername();
+        User user = this.userService.findByUsername(username);
+        String facultyName = user.getFaculty().getName();
+        List<Article> articles = articleService.findAll();
+        Long allApproved = articles.stream()
+                .filter(article -> article.getStatus().equals(Article.Status.approved))
+                .filter(article -> article.getUser().getFaculty().getName().equals(facultyName))
+                .count();
+        long allRecheck = articles.stream()
+                .filter(article -> article.getStatus().equals(Article.Status.recheck))
+                .filter(article -> article.getUser().getFaculty().getName().equals(facultyName))
+                .count();
 //                    System.out.println(allRecheck);
-            long allPendding = articles.stream()
-                    .filter(article -> article.getStatus().equals(Article.Status.pending))
-                    .filter(article -> article.getUser().getFaculty().getName().equals(facultyName))
-                    .count();
+        long allPendding = articles.stream()
+                .filter(article -> article.getStatus().equals(Article.Status.pending))
+                .filter(article -> article.getUser().getFaculty().getName().equals(facultyName))
+                .count();
 
 
 //            Map<String, Map<String, Long>> approvedArticlesByYear = new HashMap<>();
 //            Map<String, Map<String, Long>> recheckArticlesByYear = new HashMap<>();
 //            List<Article> allContributions = articleService.findAll();
-            List<Article> allContributions = articleService.findAllByFacultyName(facultyName);
+        List<Article> allContributions = articleService.findAllByFacultyName(facultyName);
 
-            Map<String, Map<String, Long>> articlesByYear = new HashMap<>();
+        Map<String, Map<String, Long>> articlesByYear = new HashMap<>();
 
-            for (Article article : allContributions) {
-                if (article.getStatus().equals(Article.Status.approved) || article.getStatus().equals(Article.Status.recheck)) {
-                    AcademicYear academicYear = article.getAcademicYear();
-                    if (academicYear != null) {
-                        String closure = academicYear.getClosureDate().toString().substring(0, 4);
-                        String finalClosure = academicYear.getFinalClosureDate().toString().substring(0, 4);
-                        String concatenatedYear = closure + "-" + finalClosure;
+        for (Article article : allContributions) {
+            if (article.getStatus().equals(Article.Status.approved) || article.getStatus().equals(Article.Status.recheck)) {
+                AcademicYear academicYear = article.getAcademicYear();
+                if (academicYear != null) {
+                    String closure = academicYear.getClosureDate().toString().substring(0, 4);
+                    String finalClosure = academicYear.getFinalClosureDate().toString().substring(0, 4);
+                    String concatenatedYear = closure + "-" + finalClosure;
 
-                        // Kiểm tra xem bài báo đã được phê duyệt hay cần kiểm tra lại
+                    // Kiểm tra xem bài báo đã được phê duyệt hay cần kiểm tra lại
 //                        Map<String, Long> yearApprovedArticles = approvedArticlesByYear.getOrDefault(concatenatedYear, new HashMap<>());
 //                        Map<String, Long> yearRecheckArticles = recheckArticlesByYear.getOrDefault(concatenatedYear, new HashMap<>());
 //
@@ -167,25 +221,24 @@ public class StatisticController {
 //                        approvedArticlesByYear.put(concatenatedYear, yearApprovedArticles);
 //                        recheckArticlesByYear.put(concatenatedYear, yearRecheckArticles);
 
-                        // Lấy map cho năm hiện tại
-                        Map<String, Long> yearData = articlesByYear.getOrDefault(concatenatedYear, new HashMap<>());
+                    // Lấy map cho năm hiện tại
+                    Map<String, Long> yearData = articlesByYear.getOrDefault(concatenatedYear, new HashMap<>());
 
-                        // Tăng số bài báo tương ứng (approved hoặc recheck)
-                        String status = article.getStatus().toString();
-                        yearData.put(status, yearData.getOrDefault(status, 0L) + 1);
+                    // Tăng số bài báo tương ứng (approved hoặc recheck)
+                    String status = article.getStatus().toString();
+                    yearData.put(status, yearData.getOrDefault(status, 0L) + 1);
 
-                        // Cập nhật lại dữ liệu cho năm hiện tại
-                        articlesByYear.put(concatenatedYear, yearData);
-                    }
+                    // Cập nhật lại dữ liệu cho năm hiện tại
+                    articlesByYear.put(concatenatedYear, yearData);
                 }
             }
-            System.out.println(articlesByYear);
+        }
+        System.out.println(articlesByYear);
 //            System.out.println(recheckArticlesByYear);
 //            model.addAttribute("approvedArticlesByYear", approvedArticlesByYear);
 //            model.addAttribute("recheckArticlesByYear", recheckArticlesByYear);
 
             model.addAttribute("articlesByYear",articlesByYear);
-
             model.addAttribute("pendding",allPendding);
             model.addAttribute("approved",allApproved);
             model.addAttribute("recheck",allRecheck);

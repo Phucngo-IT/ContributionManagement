@@ -43,6 +43,15 @@
                     <div id="container4" style="width: 550px; height: 400px; margin: 0 auto"></div>
                 </div>
             </div>
+
+            <div class="row pt-2">
+                <div class="col-md-6">
+                    <div id="container5" style="width: 550px; height: 400px; margin: 0 auto"></div>
+                </div>
+                <div class="col-md-6">
+                    <div id="container6" style="width: 550px; height: 400px; margin: 0 auto"></div>
+                </div>
+            </div>
         </div>
 
 
@@ -78,14 +87,8 @@
                         text: 'Number of Contributors within each Faculty for each Academic Year'
                     },
                     xAxis: {
-                        categories: categories, // Sử dụng tên của các ngành làm trục x
-                        crosshair: true,
-                        gridLineWidth: 1,
                         labels: {
-                            rotation: -45, // Quay nhãn trục x một góc -45 độ để dễ đọc
-                            style: {
-                                fontSize: '10px' // Điều chỉnh kích thước của nhãn trục x
-                            }
+                            enabled: false // Tắt nhãn trục x
                         }
                     },
                     yAxis: {
@@ -159,15 +162,8 @@
                         text: 'Percentage of contributions by each Faculty for any academic year'
                     },
                     xAxis: {
-                        categories: categories2, // Sử dụng tên của các ngành làm trục x
-                        crosshair: true,
-                        gridLineWidth: 1,
                         labels: {
-                            rotation: -45, // Quay nhãn trục x một góc -45 độ để dễ đọc
-                            style: {
-                                fontSize: '10px' // Điều chỉnh kích thước của nhãn trục x
-                            },
-
+                            enabled: false // Tắt nhãn trục x
                         }
                     },
                     yAxis: {
@@ -255,14 +251,8 @@
                         text: 'Number of Contributions within each Faculty for each Academic Year'
                     },
                     xAxis: {
-                        categories: categories, // Sử dụng tên của các ngành làm trục x
-                        crosshair: true,
-                        gridLineWidth: 1,
                         labels: {
-                            rotation: -45, // Quay nhãn trục x một góc -45 độ để dễ đọc
-                            style: {
-                                fontSize: '10px' // Điều chỉnh kích thước của nhãn trục x
-                            }
+                            enabled: false // Tắt nhãn trục x
                         }
                     },
                     yAxis: {
@@ -310,15 +300,64 @@
         </script>
 
 
+<!--        <script th:inline="javascript">-->
+<!--            $(function() {-->
+<!--                var totalContributionsByFaculty = /*[[${totalContributionsByFaculty}]]*/ {}; // Dữ liệu từ Spring Model-->
+
+<!--                // Chuẩn bị dữ liệu cho biểu đồ-->
+<!--                var categories = Object.keys(totalContributionsByFaculty);-->
+<!--                var seriesData = [{-->
+<!--                    name: 'Contributions',-->
+<!--                    data: Object.values(totalContributionsByFaculty),-->
+<!--                }];-->
+
+<!--                // Vẽ biểu đồ-->
+<!--                Highcharts.chart('container4', {-->
+<!--                    chart: {-->
+<!--                        type: 'column'-->
+<!--                    },-->
+<!--                    title: {-->
+<!--                        text: 'Total Contributions by Faculty'-->
+<!--                    },-->
+<!--                    xAxis: {-->
+<!--                        categories: categories,-->
+<!--                        crosshair: true-->
+<!--                    },-->
+<!--                    yAxis: {-->
+<!--                        min: 0,-->
+<!--                        title: {-->
+<!--                            text: 'Total Contributions'-->
+<!--                        }-->
+<!--                    },-->
+<!--                    tooltip: {-->
+<!--                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',-->
+<!--                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +-->
+<!--                            '<td style="padding:0"><b>{point.y} contributions</b></td></tr>',-->
+<!--                        footerFormat: '</table>',-->
+<!--                        shared: true,-->
+<!--                        useHTML: true-->
+<!--                    },-->
+<!--                    plotOptions: {-->
+<!--                        column: {-->
+<!--                            pointPadding: 0.2,-->
+<!--                            borderWidth: 0-->
+<!--                        }-->
+<!--                    },-->
+<!--                    series: seriesData-->
+<!--                });-->
+<!--            });-->
+<!--        </script>-->
+
         <script th:inline="javascript">
             $(function() {
-                var totalContributionsByFaculty = /*[[${totalContributionsByFaculty}]]*/ {}; // Dữ liệu từ Spring Model
+                var articlesByNotComments = [[${articlesByNotComments}]] ; // Số lượng bài báo chưa có bình luận
+                var articlesByNotCommentsAfter14Days = /*[[${articlesByNotCommentsAfter14Days}]]*/ 0; // Số lượng bài báo chưa có bình luận sau 14 ngày
 
                 // Chuẩn bị dữ liệu cho biểu đồ
-                var categories = Object.keys(totalContributionsByFaculty);
+                var categories = ['All Articles By Not Comments', 'Articles By Not Comments After 14 Days'];
                 var seriesData = [{
-                    name: 'Contributions',
-                    data: Object.values(totalContributionsByFaculty),
+                    name: 'Number of Articles',
+                    data: [articlesByNotComments, articlesByNotCommentsAfter14Days]
                 }];
 
                 // Vẽ biểu đồ
@@ -327,7 +366,7 @@
                         type: 'column'
                     },
                     title: {
-                        text: 'Total Contributions by Faculty'
+                        text: 'Articles By Not Comments and After 14 Days'
                     },
                     xAxis: {
                         categories: categories,
@@ -336,13 +375,13 @@
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'Total Contributions'
+                            text: 'Number of Articles'
                         }
                     },
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                            '<td style="padding:0"><b>{point.y} contributions</b></td></tr>',
+                            '<td style="padding:0"><b>{point.y} articles</b></td></tr>',
                         footerFormat: '</table>',
                         shared: true,
                         useHTML: true
@@ -357,6 +396,7 @@
                 });
             });
         </script>
+
 
         <br>
         <br>

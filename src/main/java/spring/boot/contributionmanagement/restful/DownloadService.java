@@ -1,12 +1,20 @@
 package spring.boot.contributionmanagement.restful;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import spring.boot.contributionmanagement.entities.Article;
+import spring.boot.contributionmanagement.mailService.MailService;
+import spring.boot.contributionmanagement.mailService.MailStructure;
+import spring.boot.contributionmanagement.services.AcademicYearService;
+import spring.boot.contributionmanagement.services.ArticleService;
+import spring.boot.contributionmanagement.services.UserService;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -25,10 +33,16 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 @RestController
 @RequestMapping("/file")
 public class DownloadService {
+    private final ArticleService articleService;
+    @Autowired
+    public DownloadService(ArticleService articleService) {
+        this.articleService = articleService;
+
+    }
     public static final String DIRECTORY = System.getProperty("user.home") + "/OneDrive - Phucngocomputer/Desktop/ContributionManagement/src/main/resources/static/wordFiles/";
 
     @GetMapping("/download/{fileName}")
-    public ResponseEntity<Resource> downloadFiles(@PathVariable("fileName") String fileName) throws IOException {
+    public ResponseEntity<Resource> downloadFiles(Model model, @PathVariable("fileName") String fileName) throws IOException {
         Path filePath = get(DIRECTORY).toAbsolutePath().normalize().resolve(fileName);
 
         if (!Files.exists(filePath)){
