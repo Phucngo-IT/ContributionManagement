@@ -120,7 +120,7 @@ public class CommentController {
                 articleService.save(article);
             }
             else {
-                article.setStatus(Article.Status.recheck);
+                article.setStatus(Article.Status.rejeck);
                 articleService.save(article);
             }
             return "redirect:/article";
