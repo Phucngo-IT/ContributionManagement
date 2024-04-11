@@ -7,28 +7,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-  <link rel="stylesheet" th:href="@{/css/contribution.css}" />
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
   <title>ArticleManagement</title>
 </head>
 
-<body>
-<div class="d-flex" id="wrapper" th:style="'background-image: url(' + @{/image/University-of-Greenwich_out.png} + ')'">
-  <!-- Sidebar -->
-<!--  <div th:replace="header :: header"></div>-->
-  <!-- /#sidebar-wrapper -->
+<body th:style="'background-image: url(' + @{/image/University-of-Greenwich_out.png} + ')'">
+<div th:replace="header :: header"></div>
 
-  <!-- Page Content -->
-  <div id="page-content-wrapper">
-    <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
-      <div class="d-flex align-items-center">
-        <h2 class="fs-2 m-0">ContributionManagement</h2>
-      </div>
-    </nav>
+<div class="container">
+    <div >
+      <h2>ContributionManagement</h2>
+    </div>
 
-    <br>
     <br>
     <div class="col-md">
       <a th:href="@{/article/showForm}"><button class="btn btn-primary">Add Article</button></a>
+      <br>
+      <br>
       <table class="table bg-white rounded shadow-sm  table-hover">
         <thead>
         <tr>
@@ -50,8 +45,6 @@
             <td><a th:href="@{/article/showFormUpdate(id=${article.id})  }"><button class="btn btn-primary">Edit</button></a>
             <a th:href="@{/article/delete(id=${article.id})  }"><button class="btn btn-danger">Delete</button></a>
             <a th:href="@{/comment(id=${article.id})}"><button class="btn btn-info">View Detail</button></a></td>
-          </td>
-
         </tr>
 
         </tbody>
@@ -60,11 +53,18 @@
     </div>
   </div>
 
-</div>
 <!--<div th:replace="footer :: footer"></div>-->
 
-
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  window.addEventListener('scroll', function () {
+    var header = document.querySelector('header');
+    header.classList.toggle('sticky', window.scrollY > 0);
+  });
+</script>
 <script>
   var el = document.getElementById("wrapper");
   var toggleButton = document.getElementById("menu-toggle");

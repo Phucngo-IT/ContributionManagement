@@ -12,16 +12,16 @@
     <title>Approved Article Management</title>
 </head>
 
-<body>
-<div class="d-flex" id="wrapper" th:style="'background-image: url(' + @{/image/University-of-Greenwich_out.png} + ')'">
+<body th:style="'background-image: url(' + @{/image/University-of-Greenwich_out.png} + ')'">
+<div >
     <div th:replace="header :: header"></div>
     <!-- Page Content -->
-    <div id="page-content-wrapper">
-        <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
-            <div class="d-flex align-items-center">
-                <h2 class="fs-2 m-0">Approved Article Management</h2>
-            </div>
-        </nav>
+    <div class="container">
+
+        <div class="d-flex align-items-center">
+            <h2 class="fs-0 m-0">Approved Article Management</h2>
+        </div>
+
         <br>
         <form id="academicYearForm" th:action="@{/article/search}" method="get">
             <div class="btn btn-secondary btn-sm dropdown-toggle">
@@ -34,7 +34,6 @@
             <button id="submitFormBtn" style="display: none;"></button>
         </form>
 
-        <br>
         <br>
         <div class="col">
             <table class="table bg-white rounded shadow-sm  table-hover">
@@ -74,6 +73,15 @@
         </form>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    window.addEventListener('scroll', function () {
+        var header = document.querySelector('header');
+        header.classList.toggle('sticky', window.scrollY > 0);
+    });
+</script>
 
 <script>
     window.onload = function() {

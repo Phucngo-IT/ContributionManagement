@@ -56,9 +56,14 @@ public class CommentController {
 
             if (isStudent){
                 Article article = this.articleService.findById(id);
+                //convert date from sql date to local date
+                LocalDate uploadDate = article.getUploadDate().toLocalDate();
+                LocalDate over14Days = uploadDate.plusDays(14);//plus more 14 days
+                LocalDate currentDate = LocalDate.now();
 
                 List<Comment> comments = article.getComments();
-
+                model.addAttribute("curentDate", currentDate);
+                model.addAttribute("uploadDate", over14Days);
                 model.addAttribute("article", article);
                 model.addAttribute("comments", comments);
                 model.addAttribute("comment", new Comment());
@@ -66,9 +71,14 @@ public class CommentController {
 
             } else if (isCoordinator) {
                 Article article = this.articleService.findById(id);
+                //convert date from sql date to local date
+                LocalDate uploadDate = article.getUploadDate().toLocalDate();
+                LocalDate over14Days = uploadDate.plusDays(14);//plus more 14 days
 
+                LocalDate currentDate = LocalDate.now();
                 List<Comment> comments = article.getComments();
-
+                model.addAttribute("curentDate", currentDate);
+                model.addAttribute("uploadDate", over14Days);
                 model.addAttribute("article", article);
                 model.addAttribute("comments", comments);
                 model.addAttribute("comment", new Comment());
@@ -91,7 +101,9 @@ public class CommentController {
 
     }
     @PostMapping("/save/{id}")
-    public String save(@PathVariable("id") Long id, @ModelAttribute("comment") Comment comment){
+    public String save(@PathVariable("id") Long id, @ModelAttribute("comment") Comment comment, Model model){
+
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails user = (UserDetails) authentication.getPrincipal();
         //get User by username
@@ -99,9 +111,10 @@ public class CommentController {
         //get
         Article article = this.articleService.findById(id);
 
-        LocalDate currentDate = LocalDate.now();
 
-        comment.setDateComment(Date.valueOf(currentDate));
+        LocalDate getCurrentDate = LocalDate.now();
+
+        comment.setDateComment(Date.valueOf(getCurrentDate));
         comment.setUser(userObj);
         comment.setArticle(article);
 
