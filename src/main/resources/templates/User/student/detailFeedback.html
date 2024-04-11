@@ -54,7 +54,12 @@
             <form action="#" th:action="@{'/comment/save/' + ${article.id}}" th:object="${comment}" method="post">
                 <input type="text" th:field="*{content}" class="content"  ></input>
 
-                <button class="btn btn-primary"> Send feedback </button>
+                <div th:if="${curentDate < uploadDate}">
+                    <button class="btn btn-primary" id="sendFeedback"> Send feedback </button>
+                </div>
+                <div th:unless="${curentDate < uploadDate}">
+                    <h6 style="color: orangered">You cannot Reply this article, Because it has submitted over 14 days!</h6>
+                </div>
             </form>
 
 
