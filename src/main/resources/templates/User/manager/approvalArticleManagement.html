@@ -37,11 +37,10 @@
         <br>
         <br>
         <div class="col">
-
             <table class="table bg-white rounded shadow-sm  table-hover">
                 <thead>
                 <tr>
-                    <th scope="col" width="50">STT</th>
+                    <th scope="col" width="50" >STT</th>
                     <th scope="col">Title</th>
                     <th scope="col">Description</th>
                     <th scope="col">Student Name</th>
@@ -52,7 +51,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="article : ${articles}">
-                    <th scope="col" width="50">#</th>
+                    <th scope="col" width="50" class="id"></th>
                     <td th:text="${article.title}">...</td>
                     <td th:text="${article.discription}">...</td>
                     <td th:text="${article.user.fullName}">...</td>
@@ -62,35 +61,51 @@
                         <a th:href="@{/comment(id=${article.id})}" class="btn btn-info"> View Detail </a>
                         <a th:href="@{/article/publish(id=${article.id})  }" class="btn btn-success">Publish</a>
                     </td>
-
                 </tr>
 
                 </tbody>
-                <tr>
-                    <form th:action="@{/file/multi-download}" method="get" enctype="multipart/form-data">
-
-                        <input type="hidden" th:attr="value=${fileNames}" name="fileNames" id="fileNames">
-
-                        <button class="btn btn-info">Download</button>
-                    </form>
-<!--                        <a th:href="@{/article/multi-download}" class="btn btn-info"> Download </a>-->
-
-                </tr>
             </table>
         </div>
-    </div>
+        <form th:action="@{/file/multi-download}" method="get" enctype="multipart/form-data">
 
+            <input type="hidden" th:attr="value=${fileNames}" name="fileNames" id="fileNames">
+
+            <button class="btn btn-info" id="down-btn" >Download</button>
+        </form>
+    </div>
 </div>
+
+<script>
+    window.onload = function() {
+        let tr = document.querySelectorAll("tbody tr");
+        let downloadButton = document.getElementById("down-btn");
+
+        const idItems = document.querySelectorAll('.id')
+
+        if (tr.length === 0) {
+            downloadButton.style.display = "none";
+            console.log("appear");
+        } else {
+            console.log("No");
+            downloadButton.style.display = "block";
+        }
+
+        idItems.forEach( (idItem, index) => {
+            idItem.innerText = index+1
+        } )
+
+    };
+</script>
 
 <script th:inline="javascript">
     $(document).ready(function(){
         $('#academic').change(function(){
-            $('#submitFormBtn').click(); // Khi dropdown thay đổi, tự động gửi form
+            $('#submitFormBtn').click();
         });
 
         $('#submitFormBtn').click(function() {
-            $('#academicYearForm').attr('action', '/article/search'); // Sửa action của form thành trang hiện tại
-            $('#academicYearForm').submit(); // Gửi form
+            $('#academicYearForm').attr('action', '/article/search');
+            $('#academicYearForm').submit();
         });
     });
 

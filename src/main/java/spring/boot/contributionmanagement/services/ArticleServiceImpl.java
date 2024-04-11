@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.boot.contributionmanagement.entities.Article;
 import spring.boot.contributionmanagement.repositories.ArticleRepository;
 
@@ -32,16 +33,19 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @Transactional
     public void saveAndUpdate(Article article) {
         this.articleRepository.saveAndFlush(article);
     }
 
     @Override
+    @Transactional
     public void save(Article article) {
         this.articleRepository.save(article);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         this.articleRepository.deleteById(id);
     }

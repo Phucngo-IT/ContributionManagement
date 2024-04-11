@@ -53,6 +53,7 @@
     -moz-transition: margin 0.25s ease-out;
     -o-transition: margin 0.25s ease-out;
     transition: margin 0.25s ease-out;
+    position: fixed;
 }
 
 #sidebar-wrapper .sidebar-heading {

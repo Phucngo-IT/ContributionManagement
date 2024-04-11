@@ -2,6 +2,7 @@ package spring.boot.contributionmanagement.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.boot.contributionmanagement.entities.Comment;
 import spring.boot.contributionmanagement.repositories.CommentRepository;
 
@@ -28,11 +29,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public void saveAndUpdate(Comment comment) {
         this.commentRepository.saveAndFlush(comment);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         this.commentRepository.deleteById(id);
     }

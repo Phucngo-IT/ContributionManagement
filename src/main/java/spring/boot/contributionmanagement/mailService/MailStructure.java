@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MailStructure {
     private String subject = "Submit article Successfully!!!";
-    private String message = "submited an article successfully, Please check and give some feedbacks to this article within 15 days!!!";
+    private String message = "submited an article successfully, Please check and give some feedbacks to this article within 14 days!!!";
 
     public String getSubject() {
         return subject;

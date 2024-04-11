@@ -2,6 +2,7 @@ package spring.boot.contributionmanagement.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.boot.contributionmanagement.entities.Faculty;
 import spring.boot.contributionmanagement.repositories.FacultyRepository;
 
@@ -28,11 +29,13 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
+    @Transactional
     public void saveAndUpdate(Faculty faculty) {
         this.facultyRepository.saveAndFlush(faculty);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         this.facultyRepository.deleteById(id);
     }

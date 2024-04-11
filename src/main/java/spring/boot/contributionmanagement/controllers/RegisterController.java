@@ -2,6 +2,9 @@ package spring.boot.contributionmanagement.controllers;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import spring.boot.contributionmanagement.entities.Faculty;
 import spring.boot.contributionmanagement.entities.Role;
 import spring.boot.contributionmanagement.entities.User;
+import spring.boot.contributionmanagement.mailService.MailService;
 import spring.boot.contributionmanagement.services.FacultyService;
 import spring.boot.contributionmanagement.services.FileUpload;
 import spring.boot.contributionmanagement.services.RoleService;
@@ -29,12 +33,15 @@ public class RegisterController {
     private final FacultyService facultyService;
     private final RoleService roleService;
 
+    private final MailService mailService;
+
 
     @Autowired
-    public RegisterController(UserService userService, FacultyService facultyService, RoleService roleService) {
+    public RegisterController(UserService userService, FacultyService facultyService, RoleService roleService, MailService mailService) {
         this.userService = userService;
         this.facultyService = facultyService;
         this.roleService = roleService;
+        this.mailService = mailService;
     }
 
     @GetMapping()
@@ -74,8 +81,8 @@ public class RegisterController {
         }
         String username = user.getUsername();
         User userExisted = this.userService.findByUsername(username);
-        if (userExisted == null) {
 
+        if (userExisted == null) {
             BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
             user.setPassword(bCrypt.encode(user.getPassword()));
 
@@ -119,6 +126,70 @@ public class RegisterController {
         return "User/admin/accountManagement";
     }
 
+
+    @GetMapping("/forgot")
+    public String forgotPassword (){
+//        model.addAttribute("user", new User());
+        return "User/forgotPassword";
+    }
+
+    @GetMapping("/send_otp")
+    public String verifyEmail(@RequestParam("username") String username, Model model){
+        User user = this.userService.findByUsername(username);
+        if (user != null){
+            String email = user.getEmail();
+            this.mailService.sendOtp(email);
+
+            model.addAttribute("username", username);
+            model.addAttribute("email", email);
+            return "User/verifyOTP";
+        }
+        model.addAttribute("notExist", "This username does not exist");
+        return "User/forgotPassword";
+    }
+
+    @GetMapping("/update_password")
+    public String mail(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userAuth = (UserDetails) authentication.getPrincipal();
+        String username = userAuth.getUsername();
+        User user = this.userService.findByUsername(username);
+        if (user != null){
+            String email = user.getEmail();
+            this.mailService.sendOtp(email);
+
+            model.addAttribute("username", username);
+            model.addAttribute("email", email);
+            return "User/verifyOTP";
+        }
+        model.addAttribute("notExist", "This username does not exist");
+        return "User/forgotPassword";
+    }
+
+
+    @GetMapping("/verify")
+    public String verifyOTP(@RequestParam("otp") String otp, @RequestParam("username") String username, @RequestParam("email") String email, Model model){
+
+        if(this.mailService.verifyOtp(email, otp)){
+            model.addAttribute("user", this.userService.findByUsername(username));
+            return "User/changePassword";
+        }
+        model.addAttribute("username", username);
+        model.addAttribute("email", email);
+        model.addAttribute("error", "This OTP was wrong!!!");
+
+        return "User/verifyOTP";
+    }
+
+
+    @PostMapping("/save_change_password")
+    public String changePass(@ModelAttribute("user") User user){
+        BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
+        user.setPassword(bCrypt.encode(user.getPassword()));
+
+        this.userService.saveAndUpdate(user);
+        return "redirect:/login";
+    }
 
 
 

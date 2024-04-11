@@ -2,6 +2,7 @@ package spring.boot.contributionmanagement.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.boot.contributionmanagement.entities.AcademicYear;
 import spring.boot.contributionmanagement.repositories.AcademicYearRepository;
 
@@ -27,11 +28,13 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     }
 
     @Override
+    @Transactional
     public void saveAndUpdate(AcademicYear academicYear) {
         this.academicYearRepository.saveAndFlush(academicYear);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         this.academicYearRepository.deleteById(id);
     }

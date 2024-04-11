@@ -14,7 +14,7 @@
 <body>
 <div class="d-flex" id="wrapper" th:style="'background-image: url(' + @{/image/University-of-Greenwich_out.png} + ')'">
   <!-- Sidebar -->
-  <div th:replace="header :: header"></div>
+<!--  <div th:replace="header :: header"></div>-->
   <!-- /#sidebar-wrapper -->
 
   <!-- Page Content -->
@@ -27,7 +27,7 @@
 
     <br>
     <br>
-    <div class="col">
+    <div class="col-md">
       <a th:href="@{/article/showForm}"><button class="btn btn-primary">Add Article</button></a>
       <table class="table bg-white rounded shadow-sm  table-hover">
         <thead>
@@ -61,7 +61,7 @@
   </div>
 
 </div>
-<div th:replace="footer :: footer"></div>
+<!--<div th:replace="footer :: footer"></div>-->
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>

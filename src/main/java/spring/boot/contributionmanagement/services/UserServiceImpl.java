@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.boot.contributionmanagement.entities.Role;
 import spring.boot.contributionmanagement.entities.User;
 import spring.boot.contributionmanagement.repositories.RoleRepository;
@@ -75,17 +76,21 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.findById(id).get();
     }
 
+
     @Override
+    @Transactional
     public void save(User user) {
         this.userRepository.save(user);
     }
 
     @Override
+    @Transactional
     public void saveAndUpdate(User user) {
         this.userRepository.saveAndFlush(user);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         this.userRepository.deleteById(id);
     }

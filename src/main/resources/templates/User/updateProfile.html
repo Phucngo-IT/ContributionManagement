@@ -284,15 +284,23 @@
                         </div>
                     </div>
                 </div>
+
+
+                <!-- Avatar -->
+<!--                <div class="row">-->
+                    <div class="col-md-6 mt-4">
+                        <div class="input-box">
+                            <label>Avatar</label>
+                            <input type="file" name="image" id="image" class="form-control-file" accept="image/png, image/jpg">
+                        </div>
+                    </div>
+<!--                </div>-->
             </div>
 
-            <!-- Avatar -->
-            <div class="row pt-2">
-                <div class="col-md-6">
-                    <div class="input-box">
-                        <label>Avatar</label>
-                        <input type="file" name="image" id="image" class="form-control-file" accept="image/png, image/jpg">
-                    </div>
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6 mt-4">
+                    <a th:href="@{/register/update_password}"><h5> Change password </h5></a>
                 </div>
             </div>
 
@@ -301,10 +309,12 @@
                 <input type="hidden" th:field="*{faculty.id}">
             </div>
 
-            <div class="row pt-2">
-                <div class="col-md-6"></div>
+            <div class="row">
                 <div class="col-md-6">
                     <button class="btn btn-primary">Update</button>
+                </div>
+                <div class="col-md-6">
+
                 </div>
             </div>
         </form>
