@@ -139,21 +139,23 @@ public class StatisticController {
                 // Nếu không có bình luận cho bài báo
                 if (!hasComment) {
                     articlesByNotComments++;
-                    LocalDate finalClosureDate = article.getAcademicYear().getFinalClosureDate().toLocalDate();
-                    LocalDate finalClosureDateAfter14 = finalClosureDate.plusDays(14);
+                    LocalDate uploadDate = article.getUploadDate().toLocalDate();
+                    LocalDate uploadDateAfter14 = uploadDate.plusDays(14);
+//                    LocalDate finalClosureDate = article.getAcademicYear().getFinalClosureDate().toLocalDate();
+//                    LocalDate finalClosureDateAfter14 = finalClosureDate.plusDays(14);
                     LocalDate currentDate = LocalDate.now();
                     System.out.println(article.getTitle());
 
-                    System.out.println("finalClosureDate: " + finalClosureDate);
+                    System.out.println("finalClosureDate: " + uploadDate);
 
-                    System.out.println("finalClosureDateAfter14: " + finalClosureDateAfter14);
+                    System.out.println("finalClosureDateAfter14: " + uploadDateAfter14);
                     System.out.println("currentDate: " + currentDate);
 
-                    System.out.println(finalClosureDateAfter14.isBefore(currentDate));
+                    System.out.println(uploadDateAfter14.isBefore(currentDate));
 
                     // Kiểm tra xem ngày closure date của bài báo và 14 ngày sau ngày đó
                     // có lớn hơn ngày hiện tại hay không
-                    if (finalClosureDateAfter14.isBefore(currentDate)) {
+                    if (uploadDateAfter14.isBefore(currentDate)) {
                         articlesByNotCommentsAfter14Days++;
                     }
                 }
