@@ -58,7 +58,7 @@
           <td th:text="${account.role.roleName}"></td>
           <td> <img th:src="@{ ${account.avatarPath} }" alt="" width="70px" height="90px"> </td>
 
-          <td><a href="#"> <button class="btn btn-primary">Edit</button></a>
+          <td><a th:href="@{/}"> <button class="btn btn-primary">Edit</button></a>
 <!--          </td>-->
         </tr>
 
