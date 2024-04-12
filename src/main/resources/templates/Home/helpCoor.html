@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
     <meta name="viewport" content="width=device-width , ontoal-scale=1.0">
-    <title>About</title>
+    <title>Help about function</title>
     <link rel="stylesheet" th:href="@{/css/homepage.css}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -30,7 +30,22 @@
 
                 </div>
                 <hr>
-                <a th:href="@{/article}" class="sub-menu-link">
+
+                <a th:href="@{/faculty}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Faculty
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+                <a th:href="@{/academic_year}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Annual Magazine Management
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+                <a th:href="@{/article}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
                         Contribution Management
@@ -38,10 +53,24 @@
                     <!--                    <span>></span>-->
                 </a>
 
-                <a th:href="@{home/profile}" class="sub-menu-link">
+                <a th:href="@{/statisticManagement}" sec:authorize="hasAnyRole('MANAGER')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Statistic Management
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+                <a th:href="@{home/profile}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
                         Profile
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+                <a th:href="@{home/helpCoor}" sec:authorize="hasAnyRole('COORDINATOR')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Help about function
                     </p>
                     <!--                    <span>></span>-->
                 </a>
@@ -62,52 +91,23 @@
 </div>
 
 <div class="container pt-5 pb-5">
-    <p style="font-size: 50px"><b>Terms and Conditions for Student Contributions</b></p>
-    <div class="row" style="justify-content: space-around ">
+    <p style="font-size: 50px"><b>Help With Role Coordinator</b></p>
+    <div class="row pt-5" style="justify-content: space-around ">
         <div class="col-md-8 col-sd-12" >
-            <p>
-                Welcome to our website! Greenwich University always welcomes contributions and opinions from the student community. In submitting contributions to our website system, you need to understand and adhere to the following terms and conditions:
+            <h3>View detail article and feedback function</h3>
+            <img th:src="@{/image/feedbackCoordinator.png}" style="width: 80%"/>
+            <p>Step 1: Click the View detail button in feedback management page.
             </p>
-            <p>
-                <b> Ownership and Usage Rights</b>
-                <br>
-                By submitting contributions, you agree that all content you provide (including text, images, videos, or any other materials) becomes the property of Greenwich University.
-                You acknowledge that the university has the right to use, modify, reuse, and distribute the content you submit for educational and promotional purposes of the university.
+            <p>Step 2: Sau khi đã có giao diện như bên dưới thì coordinator có thể xem và điền feedback vào ô Replying Feedback
             </p>
-
-            <p>
-                <b>Content Commitment</b>
-                <br>
-                You commit that all content you provide does not infringe upon any intellectual property rights, privacy rights, or other rights of any individuals or organizations.
-                You commit not to submit unlawful, obscene, defamatory, or incendiary content.
-            </p>
-
-            <p>
-               <b>Content Moderation</b>
-                <br>
-                Greenwich University reserves the right to moderate, edit, or remove any content you submit if deemed inappropriate, infringing, or controversial.
-                We are not responsible for any content you submit, and you will be fully responsible for your own content.
-            </p>
-
-
-            <p>
-                <b>Privacy</b>
-                <br>
-                You are not allowed to share any personal information of other students when submitting contributions.
-                You are responsible for safeguarding your own personal information and not using any unauthorized information.
-            </p>
-
-            <p>
-                <b>Updates and Changes</b>
-                <br>
-                Greenwich University reserves the right to update or change these terms and conditions at any time without prior notice.
-                Continued use and contribution to our website will be understood as your acceptance of the new terms and conditions.
-            </p>
+            <img th:src="@{/image/feedbackStudent.png}" style="width: 80%"/>
+            <p>Step 3: Click the Send Feedback button.</p>
+            <p>Step 4: Ngoài ra coordinator có thể nhấn approved nếu bài báo được duyệt và rejeck nếu bài báo chưa được duyệt</p>
 
         </div>
     </div>
 </div>
-<br> <br><br><br><br><br><br><br><br><br><br><br>
+<!--<br> <br><br><br><br><br><br><br><br><br><br><br>-->
 <div th:replace="footer :: footer"></div>
 <script  th:src="@{/js/homepage.js}" > </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>

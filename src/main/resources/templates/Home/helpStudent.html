@@ -2,15 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
     <meta name="viewport" content="width=device-width , ontoal-scale=1.0">
-    <title>Home</title>
+    <title>Help about function</title>
     <link rel="stylesheet" th:href="@{/css/homepage.css}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="hero">
@@ -39,30 +36,21 @@
                     <p>
                         Faculty
                     </p>
-<!--                    <span>></span>-->
+                    <!--                    <span>></span>-->
                 </a>
                 <a th:href="@{/academic_year}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
                         Annual Magazine Management
                     </p>
-<!--                    <span>></span>-->
-                </a>
-
-                <a th:href="@{/register/account_management}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
-                    <img th:src="@{/image/profile.png}"/>
-                    <p>
-                        Account Management
-                    </p>
                     <!--                    <span>></span>-->
                 </a>
-
-                <a th:href="@{/article}" sec:authorize="hasAnyRole('COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
+                <a th:href="@{/article}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
                         Contribution Management
                     </p>
-<!--                    <span>></span>-->
+                    <!--                    <span>></span>-->
                 </a>
 
                 <a th:href="@{/statisticManagement}" sec:authorize="hasAnyRole('MANAGER')" class="sub-menu-link">
@@ -70,16 +58,9 @@
                     <p>
                         Statistic Management
                     </p>
-<!--                    <span>></span>-->
-                </a>
-                <a th:href="@{/statisticGuest}" sec:authorize="hasAnyRole('GUEST')" class="sub-menu-link">
-                    <img th:src="@{/image/profile.png}"/>
-                    <p>
-                        Statistic Guest
-                    </p>
                     <!--                    <span>></span>-->
                 </a>
-                <a th:href="@{home/profile}" class="sub-menu-link">
+                <a th:href="@{home/profile}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
                         Profile
@@ -93,34 +74,12 @@
                     </p>
                     <!--                    <span>></span>-->
                 </a>
-                <a th:href="@{home/helpCoor}" sec:authorize="hasAnyRole('COORDINATOR')" class="sub-menu-link">
-                    <img th:src="@{/image/profile.png}"/>
-                    <p>
-                        Help about function
-                    </p>
-                    <!--                    <span>></span>-->
-                </a>
-                <a th:href="@{home/helpGuest}" sec:authorize="hasAnyRole('GUEST')" class="sub-menu-link">
-                    <img th:src="@{/image/profile.png}"/>
-                    <p>
-                        Help about function
-                    </p>
-                    <!--                    <span>></span>-->
-                </a>
-                <a th:href="@{home/helpManager}" sec:authorize="hasAnyRole('MANAGER')" class="sub-menu-link">
-                    <img th:src="@{/image/profile.png}"/>
-                    <p>
-                        Help about function
-                    </p>
-                    <!--                    <span>></span>-->
-                </a>
-
                 <a th:href="@{/login?logout}" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
                         Logout
                     </p>
-<!--                    <span>></span>-->
+                    <!--                    <span>></span>-->
                 </a>
 
             </div>
@@ -129,57 +88,60 @@
 
 
     </nav>
-
-
-
 </div>
 
-<div class="container">
-    <div class="overlay-content">
-        <div class="row">
-            <div th:each=" article :${articles}" class="col-md-3 pb-3">
-                <div  class="card">
-                    <div class="card-body">
-                        <h5 th:text="${article.title}" class="card-title"></h5>
-                    </div>
-                    <div class="card-background"></div>
-                    <div class="img">
-                        <img th:src="@{ ${article.articleImagePath} }" class="card-img-top">
-                    </div>
+<div class="container pt-5 pb-5">
+    <p style="font-size: 50px"><b>Help With Role Student</b></p>
+    <div class="row" style="justify-content: space-around ">
+        <div class="col-md-8 col-sd-12" >
+            <h3>Add function</h3>
+            <img th:src="@{/image/contributionStudent.png}" style="width: 80%"/>
+            <p>Step 1: Vào trang quản lý contribution</p>
+            <p>Step 2: Chọn nút Add Article, sau đó nó sẽ hiện giao diện như bên dưới và điền thông tin đúng</p>
+            <img th:src="@{/image/addArticle.png}" style="width: 80%"/>
+            <p>Step 3: Chọn vào chấp nhận các điều khoản.</p>
+            <p>Step 4: Click the Save</p>
 
-                    <div class="card-body">
-                        <a th:href="@{'/file/download/' + ${article.fileName} }" type="submit" class="btn btn-primary">Download</a>
-                    </div>
-                </div>
-            </div>
+
+        </div>
+    </div>
+    <div class="row pt-5" style="justify-content: space-around ">
+        <div class="col-md-8 col-sd-12" >
+            <h3>Edit function</h3>
+            <img th:src="@{/image/contributionStudent.png}" style="width: 80%"/>
+            <p>Step 1: Click the edit button in contribution management page.
+            </p>
+            <p>Step 2: Sau khi đã có giao diện như bên dưới thì điền thông tin vào
+            </p>
+            <img th:src="@{/image/editStudent.png}" style="width: 80%"/>
+            <p>Step 3: Click the save button.</p>
+
+        </div>
+    </div>
+    <div class="row pt-5" style="justify-content: space-around ">
+        <div class="col-md-8 col-sd-12" >
+            <h3>Delete function</h3>
+            <img th:src="@{/image/contributionStudent.png}" style="width: 80%"/>
+            <p>To delete a article so click the delete button in contribution management page.
+            </p>
+        </div>
+    </div>
+    <div class="row pt-5" style="justify-content: space-around ">
+        <div class="col-md-8 col-sd-12" >
+            <h3>View detail article and feedback function</h3>
+            <img th:src="@{/image/contributionStudent.png}" style="width: 80%"/>
+            <p>Step 1: Click the View detail button in contribution management page.
+            </p>
+            <p>Step 2: Sau khi đã có giao diện như bên dưới thì sinh viên có thể xem và điền feedback vào ô Replying Feedback
+            </p>
+            <img th:src="@{/image/feedbackStudent.png}" style="width: 80%"/>
+            <p>Step 3: Click the Send Feedback button.</p>
+
         </div>
     </div>
 </div>
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
+<!--<br> <br><br><br><br><br><br><br><br><br><br><br>-->
 <div th:replace="footer :: footer"></div>
-
 <script  th:src="@{/js/homepage.js}" > </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -194,4 +156,14 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
 

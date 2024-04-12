@@ -18,9 +18,78 @@
             <li><a th:href="@{/home}">HOME</a></li>
             <li><a th:href="@{/home/about}">ABOUT</a></li>
             <li><a th:href="@{/home/contact}">CONTACT</a></li>
+            <li><a th:href="@{/home/help}">HELP</a></li>
+
         </ul>
         <img th:src="@{/image/Icon-Truong-Dai-hoc-Greenwich-Viet-Nam.ico}" class="user-pic" onclick="toggleMenu()">
         <div class="sub-menu-wrap" id="subMenu">
+<!--            <div class="sub-menu">-->
+<!--                <div class="user-info">-->
+<!--                    <h2></h2>-->
+<!--                    <img src="logo.png" alt="" />-->
+
+<!--                </div>-->
+<!--                <hr>-->
+
+<!--                <a th:href="@{/faculty}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">-->
+<!--                    <img th:src="@{/image/profile.png}"/>-->
+<!--                    <p>-->
+<!--                        Faculty-->
+<!--                    </p>-->
+<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
+<!--                </a>-->
+<!--                <a th:href="@{/academic_year}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">-->
+<!--                    <img th:src="@{/image/profile.png}"/>-->
+<!--                    <p>-->
+<!--                        Annual Magazine Management-->
+<!--                    </p>-->
+<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
+<!--                </a>-->
+<!--                <a th:href="@{/article}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">-->
+<!--                    <img th:src="@{/image/profile.png}"/>-->
+<!--                    <p>-->
+<!--                        Contribution Management-->
+<!--                    </p>-->
+<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
+<!--                </a>-->
+
+<!--                <a th:href="@{/statisticManagement}" sec:authorize="hasAnyRole('MANAGER')" class="sub-menu-link">-->
+<!--                    <img th:src="@{/image/profile.png}"/>-->
+<!--                    <p>-->
+<!--                        Statistic Management-->
+<!--                    </p>-->
+<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
+<!--                </a>-->
+<!--                <a th:href="@{home/profile}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">-->
+<!--                    <img th:src="@{/image/profile.png}"/>-->
+<!--                    <p>-->
+<!--                        Profile-->
+<!--                    </p>-->
+<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
+<!--                </a>-->
+<!--                <a th:href="@{home/helpStudent}" sec:authorize="hasAnyRole('STUDENT')" class="sub-menu-link">-->
+<!--                    <img th:src="@{/image/profile.png}"/>-->
+<!--                    <p>-->
+<!--                        Help about function-->
+<!--                    </p>-->
+<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
+<!--                </a>-->
+<!--                <a th:href="@{home/helpCoor}" sec:authorize="hasAnyRole('COORDINATOR')" class="sub-menu-link">-->
+<!--                    <img th:src="@{/image/profile.png}"/>-->
+<!--                    <p>-->
+<!--                        Help about function-->
+<!--                    </p>-->
+<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
+<!--                </a>-->
+<!--                <a th:href="@{/login?logout}" class="sub-menu-link">-->
+<!--                    <img th:src="@{/image/profile.png}"/>-->
+<!--                    <p>-->
+<!--                        Logout-->
+<!--                    </p>-->
+<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
+<!--                </a>-->
+
+<!--            </div>-->
             <div class="sub-menu">
                 <div class="user-info">
                     <h2></h2>
@@ -43,7 +112,16 @@
                     </p>
                     <!--                    <span>></span>-->
                 </a>
-                <a th:href="@{/article}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
+
+                <a th:href="@{/register/account_management}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Account Management
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+
+                <a th:href="@{/article}" sec:authorize="hasAnyRole('COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
                         Contribution Management
@@ -58,13 +136,49 @@
                     </p>
                     <!--                    <span>></span>-->
                 </a>
-                <a th:href="@{home/profile}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
+                <a th:href="@{/statisticGuest}" sec:authorize="hasAnyRole('GUEST')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Statistic Guest
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+                <a th:href="@{home/profile}" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
                         Profile
                     </p>
                     <!--                    <span>></span>-->
                 </a>
+                <a th:href="@{home/helpStudent}" sec:authorize="hasAnyRole('STUDENT')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Help about function
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+                <a th:href="@{home/helpCoor}" sec:authorize="hasAnyRole('COORDINATOR')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Help about function
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+                <a th:href="@{home/helpManager}" sec:authorize="hasAnyRole('MANAGER')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Help about function
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+                <a th:href="@{home/helpGuest}" sec:authorize="hasAnyRole('GUEST')" class="sub-menu-link">
+                    <img th:src="@{/image/profile.png}"/>
+                    <p>
+                        Help about function
+                    </p>
+                    <!--                    <span>></span>-->
+                </a>
+
                 <a th:href="@{/login?logout}" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
@@ -74,6 +188,7 @@
                 </a>
 
             </div>
+
         </div>
 
 

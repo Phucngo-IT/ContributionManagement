@@ -88,7 +88,31 @@ public class HomeController {
 
         return "Home/about";
     }
+    @GetMapping("/help")
+    public String help(){
+        return "Home/help";
+    }
+    @GetMapping("/helpAdmin")
+    public String helpAdmin(){
+        return "Home/helpAdmin";
+    }
+    @GetMapping("/helpStudent")
+    public String helpStudent(){
+        return "Home/helpStudent";
+    }
+    @GetMapping("/helpCoor")
+    public String helpCoordinator(){
+        return "Home/helpCoor";
+    }
+    @GetMapping("/helpGuest")
+    public String helpGuest(){
+        return "Home/helpGuest";
+    }
 
+    @GetMapping("/helpManager")
+    public String helpManager(){
+        return "Home/helpManager";
+    }
     @GetMapping("/term")
     public String Term(){
 

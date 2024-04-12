@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
     <meta name="viewport" content="width=device-width , ontoal-scale=1.0">
-    <title>About</title>
+    <title>Help about function</title>
     <link rel="stylesheet" th:href="@{/css/homepage.css}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -23,73 +23,6 @@
         </ul>
         <img th:src="@{/image/Icon-Truong-Dai-hoc-Greenwich-Viet-Nam.ico}" class="user-pic" onclick="toggleMenu()">
         <div class="sub-menu-wrap" id="subMenu">
-<!--            <div class="sub-menu">-->
-<!--                <div class="user-info">-->
-<!--                    <h2></h2>-->
-<!--                    <img src="logo.png" alt="" />-->
-
-<!--                </div>-->
-<!--                <hr>-->
-
-<!--                <a th:href="@{/faculty}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">-->
-<!--                    <img th:src="@{/image/profile.png}"/>-->
-<!--                    <p>-->
-<!--                        Faculty-->
-<!--                    </p>-->
-<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
-<!--                </a>-->
-<!--                <a th:href="@{/academic_year}" sec:authorize="hasAnyRole('ADMIN')" class="sub-menu-link">-->
-<!--                    <img th:src="@{/image/profile.png}"/>-->
-<!--                    <p>-->
-<!--                        Annual Magazine Management-->
-<!--                    </p>-->
-<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
-<!--                </a>-->
-<!--                <a th:href="@{/article}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">-->
-<!--                    <img th:src="@{/image/profile.png}"/>-->
-<!--                    <p>-->
-<!--                        Contribution Management-->
-<!--                    </p>-->
-<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
-<!--                </a>-->
-
-<!--                <a th:href="@{/statisticManagement}" sec:authorize="hasAnyRole('MANAGER')" class="sub-menu-link">-->
-<!--                    <img th:src="@{/image/profile.png}"/>-->
-<!--                    <p>-->
-<!--                        Statistic Management-->
-<!--                    </p>-->
-<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
-<!--                </a>-->
-<!--                <a th:href="@{home/profile}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">-->
-<!--                    <img th:src="@{/image/profile.png}"/>-->
-<!--                    <p>-->
-<!--                        Profile-->
-<!--                    </p>-->
-<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
-<!--                </a>-->
-<!--                <a th:href="@{home/helpStudent}" sec:authorize="hasAnyRole('STUDENT')" class="sub-menu-link">-->
-<!--                    <img th:src="@{/image/profile.png}"/>-->
-<!--                    <p>-->
-<!--                        Help about function-->
-<!--                    </p>-->
-<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
-<!--                </a>-->
-<!--                <a th:href="@{home/helpCoor}" sec:authorize="hasAnyRole('COORDINATOR')" class="sub-menu-link">-->
-<!--                    <img th:src="@{/image/profile.png}"/>-->
-<!--                    <p>-->
-<!--                        Help about function-->
-<!--                    </p>-->
-<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
-<!--                </a>-->
-<!--                <a th:href="@{/login?logout}" class="sub-menu-link">-->
-<!--                    <img th:src="@{/image/profile.png}"/>-->
-<!--                    <p>-->
-<!--                        Logout-->
-<!--                    </p>-->
-<!--                    &lt;!&ndash;                    <span>></span>&ndash;&gt;-->
-<!--                </a>-->
-
-<!--            </div>-->
             <div class="sub-menu">
                 <div class="user-info">
                     <h2></h2>
@@ -171,13 +104,7 @@
                     </p>
                     <!--                    <span>></span>-->
                 </a>
-                <a th:href="@{home/helpManager}" sec:authorize="hasAnyRole('MANAGER')" class="sub-menu-link">
-                    <img th:src="@{/image/profile.png}"/>
-                    <p>
-                        Help about function
-                    </p>
-                    <!--                    <span>></span>-->
-                </a>
+
                 <a th:href="@{/login?logout}" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
@@ -187,7 +114,6 @@
                 </a>
 
             </div>
-
         </div>
 
 
@@ -195,37 +121,21 @@
     </nav>
 </div>
 
-<div class="container-a">
-<!--    <p style="font-size: 50px"><b>About Us</b></p>-->
-<!--    <div class="row" style="justify-content: space-around ">-->
-<!--        <div class="col-md-8 col-sd-12" >-->
-<!--            <p>Welcome to the Greenwich University Magazine, your go-to platform for the latest insights, articles, and stories from the vibrant community of Greenwich University. As a premier institution of higher learning, Greenwich University prides itself on fostering a dynamic environment where students are encouraged to explore, create, and share their knowledge and experiences.-->
-<!--            </p>-->
-<!--            <p>Our magazine serves as a nexus for students, faculty, manager, and coordinator to come together and celebrate the diversity of talent and ideas within our university community. Whether you're interested in academic research, campus events, student achievements, or thought-provoking opinion pieces, you'll find it all here in our magazine.-->
-<!--            </p>-->
-<!--        </div>-->
-<!--    </div>-->
-    <h1>Contact</h1>
-    <div class="contact-info">
-        <div>
-            <i class="fab fa-facebook"></i>
-            <a href="https://www.facebook.com/GreenwichVietnam"> Facebook</a>
-        </div>
-        <div>
-            <i class="fas fa-phone"></i>
-            <span>Phone: 0123 456 789</span>
-        </div>
-        <div>
-            <i class="fas fa-map-marker-alt"></i>
-            <span>Address: 160, 30/4 Street, An Phu Ward, Ninh Kieu District, Can Tho City</span>
-        </div>
-        <div>
-            <i class="fa fa-envelope "></i>
-            <span>Email: acad.gre.ct@fe.edu.vn </span>
+<div class="container pt-5 pb-5">
+    <p style="font-size: 50px"><b>Help With Role Guest</b></p>
+    <div class="row pt-5" style="justify-content: space-around ">
+        <div class="col-md-8 col-sd-12" >
+            <h3>View statistic in faculty function</h3>
+            <p>Step 1: Click Statistic Guest in logo of home page.
+            </p>
+            <img th:src="@{/image/homeGuest.png}" style="width: 80%"/>
+            <p>Step 2: Sau khi đã nhấn thì nó sẽ show trang statistic
+            </p>
+            <img th:src="@{/image/statisticGuest.png}" style="width: 80%"/>
         </div>
     </div>
 </div>
-<br> <br><br><br><br><br><br><br><br><br><br><br>
+<!--<br> <br><br><br><br><br><br><br><br><br><br><br>-->
 <div th:replace="footer :: footer"></div>
 <script  th:src="@{/js/homepage.js}" > </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
