@@ -12,10 +12,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
-<body>
+<body th:style="'background-image: url(' + @{/image/article-exhibition.jpg} + ')'">
 <div class="hero">
 
-    <nav th:style="'background-image: url(' + @{/image/University-of-Greenwich_out.png} + ')'">
+    <nav>
         <img th:src="@{/image/Shool-name-Greenwich.png}" class="schoolName" />
         <ul>
             <li><a th:href="@{/home}">HOME</a></li>
@@ -139,16 +139,14 @@
         <div class="row">
             <div th:each=" article :${articles}" class="col-md-3 pb-3">
                 <div  class="card">
-                    <div class="card-body">
-                        <h5 th:text="${article.title}" class="card-title"></h5>
-                    </div>
                     <div class="card-background"></div>
                     <div class="img">
                         <img th:src="@{ ${article.articleImagePath} }" class="card-img-top">
                     </div>
 
                     <div class="card-body">
-                        <a th:href="@{'/file/download/' + ${article.fileName} }" type="submit" class="btn btn-primary">Download</a>
+                        <h5 th:text="${article.title}" class="card-title"></h5>
+                        <a th:href="@{'/file/download/' + ${article.fileName} }" type="submit" class="btn btn-info">Download</a>
                     </div>
                 </div>
             </div>
@@ -156,13 +154,6 @@
     </div>
 </div>
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 <br>
 <br>
 <br>
