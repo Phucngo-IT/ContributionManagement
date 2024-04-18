@@ -65,7 +65,7 @@
                     </p>
                     <!--                    <span>></span>-->
                 </a>
-                <a th:href="@{home/profile}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
+                <a th:href="@{/home/profile}" sec:authorize="hasAnyRole('ADMIN', 'COORDINATOR', 'STUDENT', 'MANAGER')" class="sub-menu-link">
                     <img th:src="@{/image/profile.png}"/>
                     <p>
                         Profile

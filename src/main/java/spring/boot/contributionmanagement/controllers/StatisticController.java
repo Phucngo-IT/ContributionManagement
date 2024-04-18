@@ -185,7 +185,7 @@ public class StatisticController {
                 .filter(article -> article.getUser().getFaculty().getName().equals(facultyName))
                 .count();
         long allRecheck = articles.stream()
-                .filter(article -> article.getStatus().equals(Article.Status.rejeck))
+                .filter(article -> article.getStatus().equals(Article.Status.reject))
                 .filter(article -> article.getUser().getFaculty().getName().equals(facultyName))
                 .count();
 //                    System.out.println(allRecheck);
@@ -203,7 +203,7 @@ public class StatisticController {
         Map<String, Map<String, Long>> articlesByYear = new HashMap<>();
 
         for (Article article : allContributions) {
-            if (article.getStatus().equals(Article.Status.approved) || article.getStatus().equals(Article.Status.rejeck)) {
+            if (article.getStatus().equals(Article.Status.approved) || article.getStatus().equals(Article.Status.reject)) {
                 AcademicYear academicYear = article.getAcademicYear();
                 if (academicYear != null) {
                     String closure = academicYear.getClosureDate().toString().substring(0, 4);

@@ -64,7 +64,7 @@ public class Article {
 
     public enum Status{
         approved,
-        rejeck,
+        reject,
 
         pending,
         publish

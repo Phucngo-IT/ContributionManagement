@@ -69,8 +69,8 @@
 
           <div class="dropdown">
               <form th:action="@{/comment/approve/{id}(id=${article.id})}" method="post">
-                  <button class="btn btn-primary" name="action" value="approve"  type="submit" aria-expanded="false" >Approved</button>
-                  <button class="btn btn-primary" name="action" value="recheck"  type="submit" aria-expanded="false" >Recheck</button>
+                  <button class="btn btn-primary" name="action" value="approve"  type="submit" aria-expanded="false" >Approve</button>
+                  <button class="btn btn-primary" name="action" value="recheck"  type="submit" aria-expanded="false" >Reject</button>
                   <a class="btn btn-primary" th:href="@{/article}" type="submit" aria-expanded="false">Close</a>
               </form>
 
